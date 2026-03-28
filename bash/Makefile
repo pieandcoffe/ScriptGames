@@ -1,18 +1,18 @@
 # Makefile for a tic tac toe game by Kyrylo Pylinskyi
 
-GAEM_DIR	:= tictactoe
+GAME_DIR	:= .
 ENTRY		:= main.sh
 BINARY		:= tictactoe
 BUNDLE		:= tictactoe.run
 APP		:= tictactoe.app
-SACES_DIR	:= $(GAME_DIR)/saves
+SAVES_DIR	:= $(GAME_DIR)/saves
 
-.PHONY: all run bindle binary clean install uninstall help
+.PHONY: all run bundle binary clean install uninstall help
 
 all: bundle
 
 run:
-	@bash $(GAME_DIR)/$(ENTRY)
+	@bash ./$(ENTRY)
 
 bundle:
 	@echo "Packaging Linux .run..."
@@ -69,10 +69,10 @@ uninstall:
 
 help:
 	@echo ""
-	@echo "  make run        → Run the game directly"
-	@echo "  make bundle     → Build .run package (makeself)"
-	@echo "  make binary     → Compile to binary (shc)"
-	@echo "  make install    → Build + install to /usr/local/bin"
-	@echo "  make uninstall  → Remove from /usr/local/bin"
-	@echo "  make clean      → Remove build artifacts"
+	@echo "  make run        Run the game directly"
+	@echo "  make bundle     Build .run package (makeself)"
+	@echo "  make binary     Compile to binary (shc)"
+	@echo "  make install    Build + install to /usr/local/bin"
+	@echo "  make uninstall  Remove from /usr/local/bin"
+	@echo "  make clean      Remove build artifacts"
 	@echo ""
