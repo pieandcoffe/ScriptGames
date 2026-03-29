@@ -14,8 +14,8 @@ draw_board ()
 	local top_sep="┌─────┬─────┬─────┐"
 	local mid_sep="├─────┼─────┼─────┤"
 	local bot_sep="└─────┴─────┴─────┘"
-
-    	echo "$top_sep"
+  
+  echo "$top_sep"
 	for row in 0 1 2; do
 		local i=$((row * BOARD_SIZE))
 		echo "│  ${BOARD[$i]}  │  ${BOARD[$i+1]}  │  ${BOARD[$i+2]}  │"
