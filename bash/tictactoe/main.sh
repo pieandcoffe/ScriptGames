@@ -1,7 +1,7 @@
 #!/bin/bash
 
-. ./lib/player.sh
 . ./lib/board.sh
+. ./lib/player.sh
 
 init_board
 current_player="X"

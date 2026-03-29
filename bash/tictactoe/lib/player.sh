@@ -1,7 +1,5 @@
 #!/bin/bash
 
-. ./board.sh
-
 cursor_row=0
 cursor_col=0
 
@@ -11,7 +9,7 @@ player_input ()
 {
   while true; do
     clear
-    echo "${current_player}'s turn"
+    echo "$(draw_cell "${current_player}")'s turn"
     draw_board $cursor_row $cursor_col
 
     read -rsn1 key
@@ -23,7 +21,7 @@ player_input ()
         '[C') (( cursor_col < 2 )) && (( cursor_col++ )) ;;
         '[D') (( cursor_col > 0 )) && (( cursor_col-- )) ;;
       esac
-    elif [[ $key == '' ]]; then
+    elif [[ $key == $'\n' || $key == $'\r' || $key == '' ]]; then
       if is_cell_empty $cursor_row $cursor_col; then
         update_board $cursor_row $cursor_col "$current_player"
         break

@@ -4,6 +4,15 @@ readonly BOARD_SIZE=3
 
 declare -a BOARD
 
+RED=$'\e[31m'
+BLUE=$'\e[34m'
+WHITE=$'\e[97m'
+GRAY=$'\e[90m'
+BOLD=$'\e[1m'
+
+HIGHLIGHT=$'\e[7m'
+RESET=$'\e[0m'
+
 init_board () 
 {
 	BOARD=(" " " " " " " " " " " " " " " " " ")
@@ -17,9 +26,6 @@ draw_board ()
   local top_sep="┌─────┬─────┬─────┐"
   local mid_sep="├─────┼─────┼─────┤"
   local bot_sep="└─────┴─────┴─────┘"
-  
-  local HIGHLIGHT=$'\e[7m'
-  local RESET=$'\e[0m'
 
   echo -e "$top_sep"
 	for row in 0 1 2; do
@@ -28,9 +34,9 @@ draw_board ()
       local idx=$(( row * BOARD_SIZE + col ))
       local cell="${BOARD[$idx]}"
       if [[ $row -eq $cur_row && $col -eq $cur_col ]]; then
-        line+="${HIGHLIGHT}  ${cell:- }  ${RESET}"
+        line+="  ${HIGHLIGHT}$(draw_cell "${cell:-}" )${RESET}  "
       else
-        line+="  ${cell:- }  "
+        line+="  $(draw_cell "${cell:- }")  "
       fi
       line+="│"
     done
@@ -40,6 +46,16 @@ draw_board ()
     fi
 	done
 	echo -e "$bot_sep"
+}
+
+draw_cell () 
+{
+  local cell=$1
+  case $cell in
+    X) printf "${BLUE}${BOLD}X${RESET}" ;;
+    O) printf "${RED}${BOLD}O${RESET}" ;;
+    *) printf " " ;;
+  esac
 }
 
 check_win () 
@@ -88,7 +104,7 @@ check ()
 {
 	local current_player=$1
 	if check_win "$current_player"; then
-    	echo "$current_player wins!"
+    	echo "$(draw_cell "${current_player}") wins!"
     	return 0
 	fi
 	if check_draw; then
