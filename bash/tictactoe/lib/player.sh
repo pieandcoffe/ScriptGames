@@ -27,6 +27,8 @@ player_input ()
       if is_cell_empty $cursor_row $cursor_col; then
         update_board $cursor_row $cursor_col "$current_player"
         break
+      else
+        printf '\a'
       fi
     fi
   done
