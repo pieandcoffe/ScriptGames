@@ -11,19 +11,35 @@ init_board ()
 
 draw_board ()
 {
-	local top_sep="┌─────┬─────┬─────┐"
-	local mid_sep="├─────┼─────┼─────┤"
-	local bot_sep="└─────┴─────┴─────┘"
+  local cur_row=$1
+  local cur_col=$2
+
+  local top_sep="┌─────┬─────┬─────┐"
+  local mid_sep="├─────┼─────┼─────┤"
+  local bot_sep="└─────┴─────┴─────┘"
   
-  echo "$top_sep"
+  local HIGHLIGHT=$'\e[7m'
+  local RESET=$'\e[0m'
+
+  echo -e "$top_sep"
 	for row in 0 1 2; do
-		local i=$((row * BOARD_SIZE))
-		echo "│  ${BOARD[$i]}  │  ${BOARD[$i+1]}  │  ${BOARD[$i+2]}  │"
-		if [[ $row -lt 2 ]]; then
-			echo "$mid_sep"
-		fi
+    local line="│"
+    for col in 0 1 2; do
+      local idx=$(( row * BOARD_SIZE + col ))
+      local cell="${BOARD[$idx]}"
+      if [[ $row -eq $cur_row && $col -eq $cur_col ]]; then
+        line+="${HIGHLIGHT}  ${cell:- }  ${RESET}"
+      else
+        line+="  ${cell:- }  "
+      fi
+      line+="│"
+    done
+    echo -e "$line"
+    if [[ $row -lt $((BOARD_SIZE - 1)) ]]; then
+      echo -e "$mid_sep"
+    fi
 	done
-	echo "$bot_sep"
+	echo -e "$bot_sep"
 }
 
 check_win () 
@@ -68,6 +84,21 @@ check_draw ()
 	return 0
 }
 
+check ()
+{
+	local current_player=$1
+	if check_win "$current_player"; then
+    	echo "$current_player wins!"
+    	return 0
+	fi
+	if check_draw; then
+		echo "Draw!"
+		return 0
+	fi
+
+	return 1
+}
+
 update_board () 
 {
 	local row=$1
@@ -89,5 +120,5 @@ coords_to_index ()
 {
 	local row=$1
 	local col=$2
-	echo $(( (row - 1) * BOARD_SIZE + (col - 1) ))
+	echo $(( row * BOARD_SIZE + col ))
 }
