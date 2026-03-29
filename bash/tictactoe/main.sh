@@ -1,7 +1,11 @@
 #!/bin/bash
 
-source lib/board.sh
+. ./lib/player.sh
+. ./lib/board.sh
 
 init_board
+current_player="X"
 
-draw_board
+while true; do
+  player_turn
+done
