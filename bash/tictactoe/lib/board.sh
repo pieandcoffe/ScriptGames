@@ -14,19 +14,13 @@ RESET=$'\e[0m'
 init_board () 
 {
 	BOARD=(" " " " " " " " " " " " " " " " " ")
-	current_player="X"
-  	cursor_row=1
-  	cursor_col=1
 }
 
 draw_board ()
 {
 	echo "${BOARD[@]}"
-	echo "Current player: ${current_player}"
-	echo "Cursor position: (${cursor_row}, ${cursor_col})"
-
-  local cur_row=$1
-  local cur_col=$2
+	echo "Current CURRENT_PLAYER: ${CURRENT_PLAYER}"
+	echo "Cursor position: (${CURSOR_ROW}, ${CURSOR_COL})"
 
   local top_sep="┌─────┬─────┬─────┐"
   local mid_sep="├─────┼─────┼─────┤"
@@ -37,11 +31,11 @@ draw_board ()
     local line="│"
     for col in 0 1 2; do
       local idx=$(( row * BOARD_SIZE + col ))
-      local cell="${BOARD[$idx]}"
-      if [[ $row -eq $cur_row && $col -eq $cur_col ]]; then
-        line+="  ${HIGHLIGHT}$(draw_cell "${cell:-}" )${RESET}  "
+      local cell=$(draw_cell "${BOARD[$idx]}") 
+      if [[ $row -eq $CURSOR_ROW && $col -eq $CURSOR_COL ]]; then
+        line+="  ${HIGHLIGHT}${cell:-}${RESET}  "
       else
-        line+="  $(draw_cell "${cell:- }")  "
+        line+="  ${cell:- }  "
       fi
       line+="│"
     done
@@ -65,12 +59,10 @@ draw_cell ()
 
 check_win () 
 {
-	local player=$1
-
 	# Check rows
 	for row in 0 1 2; do
 		local i=$((row * BOARD_SIZE))
-		if [[ "${BOARD[$i]}" == "$player" && "${BOARD[$i+1]}" == "$player" && "${BOARD[$i+2]}" == "$player" ]]; then
+		if [[ "${BOARD[$i]}" == "$CURRENT_PLAYER" && "${BOARD[$i+1]}" == "$CURRENT_PLAYER" && "${BOARD[$i+2]}" == "$CURRENT_PLAYER" ]]; then
 			return 0
 		fi
 	done
@@ -78,17 +70,17 @@ check_win ()
 	# Check columns
 	for col in 0 1 2; do
 		local i=$col
-		if [[ "${BOARD[$i]}" == "$player" && "${BOARD[$i+BOARD_SIZE]}" == "$player" && "${BOARD[$i+2*BOARD_SIZE]}" == "$player" ]]; then
+		if [[ "${BOARD[$i]}" == "$CURRENT_PLAYER" && "${BOARD[$i+BOARD_SIZE]}" == "$CURRENT_PLAYER" && "${BOARD[$i+2*BOARD_SIZE]}" == "$CURRENT_PLAYER" ]]; then
 			return 0
 		fi
 	done
 
 	# Check diagonals
-	if [[ "${BOARD[0]}" == "$player" && "${BOARD[4]}" == "$player" && "${BOARD[8]}" == "$player" ]]; then
+	if [[ "${BOARD[0]}" == "$CURRENT_PLAYER" && "${BOARD[4]}" == "$CURRENT_PLAYER" && "${BOARD[8]}" == "$CURRENT_PLAYER" ]]; then
 		return 0
 	fi
 
-	if [[ "${BOARD[2]}" == "$player" && "${BOARD[4]}" == "$player" && "${BOARD[6]}" == "$player" ]]; then
+	if [[ "${BOARD[2]}" == "$CURRENT_PLAYER" && "${BOARD[4]}" == "$CURRENT_PLAYER" && "${BOARD[6]}" == "$CURRENT_PLAYER" ]]; then
 		return 0
 	fi
 
@@ -107,10 +99,9 @@ check_draw ()
 
 check ()
 {
-    local player=$1
-    if check_win "$player"; then
-        echo "$(draw_cell "${player}") wins!"
-    	return 0
+  if check_win "$CURRENT_PLAYER"; then 
+    echo "$(draw_cell "${CURRENT_PLAYER}") wins!"
+    return 0
 	fi
 	if check_draw; then
 		echo "Draw!"
@@ -122,35 +113,32 @@ check ()
 
 update_board () 
 {
-	local row=$1
-	local col=$2
-	local player=$3
-	local index=$(coords_to_index $row $col)
-	BOARD[$index]=$player
+	local index=$(coords_to_index)
+	BOARD[$index]=$CURRENT_PLAYER
 }
 
 is_cell_empty () 
 {
-	local row=$1
-	local col=$2
-	local index=$(coords_to_index $row $col)
+	local index=$(coords_to_index)
 	[[ "${BOARD[$index]}" == " " ]]
 }
 
 coords_to_index () 
 {
-	local row=$1
-	local col=$2
-	echo $(( row * BOARD_SIZE + col ))
+	echo $(( CURSOR_ROW * BOARD_SIZE + CURSOR_COL ))
 }
 
 save_game () {
 	local save_file="${SAVE_FILE:-$HOME/.tictactoe_save}"
     {
         declare -p BOARD
-        declare -p current_player
-        declare -p cursor_row
-        declare -p cursor_col
+        declare -p CURRENT_PLAYER
+        declare -p X_SCORE
+        declare -p O_SCORE
+        declare -p CURSOR_ROW
+        declare -p CURSOR_COL
+        declare -p SAVE_DATE
+        declare -p PLAYER_NAME
     } > "$save_file"
     echo "Game saved to $save_file"
 }
@@ -159,9 +147,8 @@ load_game () {
     local save_file="${SAVE_FILE:-$HOME/.tictactoe_save}"
     if [[ -f "$save_file" ]]; then
         source "$save_file"
-
-		(( cursor_row < 0 || cursor_row > 2 )) && cursor_row=1
-		(( cursor_col < 0 || cursor_col > 2 )) && cursor_col=1
+        (( CURSOR_ROW < 0 || CURSOR_ROW > 2 )) && CURSOR_ROW=1
+        (( CURSOR_COL < 0 || CURSOR_COL > 2 )) && CURSOR_COL=1
 
         # sanity check
         if [[ ${#BOARD[@]} -ne 9 ]]; then
@@ -171,6 +158,11 @@ load_game () {
         fi
 
         return 0
+    else
+        init_board 
+        
+        printf "Who is playing? (enter your nickname) XO\n"
+		read -p "" PLAYER_NAME
     fi
     return 1
 }
