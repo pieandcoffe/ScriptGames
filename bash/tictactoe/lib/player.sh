@@ -1,4 +1,3 @@
->>>>>>> ee889ef (feat: colors)
 cursor_row=0
 cursor_col=0
 

@@ -2,8 +2,6 @@
 
 readonly BOARD_SIZE=3
 
-declare -a BOARD
-
 RED=$'\e[31m'
 BLUE=$'\e[34m'
 WHITE=$'\e[97m'
@@ -16,10 +14,17 @@ RESET=$'\e[0m'
 init_board () 
 {
 	BOARD=(" " " " " " " " " " " " " " " " " ")
+	current_player="X"
+  	cursor_row=1
+  	cursor_col=1
 }
 
 draw_board ()
 {
+	echo "${BOARD[@]}"
+	echo "Current player: ${current_player}"
+	echo "Cursor position: (${cursor_row}, ${cursor_col})"
+
   local cur_row=$1
   local cur_col=$2
 
@@ -102,9 +107,9 @@ check_draw ()
 
 check ()
 {
-	local current_player=$1
-	if check_win "$current_player"; then
-    	echo "$(draw_cell "${current_player}") wins!"
+    local player=$1
+    if check_win "$player"; then
+        echo "$(draw_cell "${player}") wins!"
     	return 0
 	fi
 	if check_draw; then
@@ -137,4 +142,35 @@ coords_to_index ()
 	local row=$1
 	local col=$2
 	echo $(( row * BOARD_SIZE + col ))
+}
+
+save_game () {
+	local save_file="${SAVE_FILE:-$HOME/.tictactoe_save}"
+    {
+        declare -p BOARD
+        declare -p current_player
+        declare -p cursor_row
+        declare -p cursor_col
+    } > "$save_file"
+    echo "Game saved to $save_file"
+}
+ 
+load_game () {
+    local save_file="${SAVE_FILE:-$HOME/.tictactoe_save}"
+    if [[ -f "$save_file" ]]; then
+        source "$save_file"
+
+		(( cursor_row < 0 || cursor_row > 2 )) && cursor_row=1
+		(( cursor_col < 0 || cursor_col > 2 )) && cursor_col=1
+
+        # sanity check
+        if [[ ${#BOARD[@]} -ne 9 ]]; then
+            echo "Save corrupted, reinitializing..."
+            init_board
+            return 1
+        fi
+
+        return 0
+    fi
+    return 1
 }
