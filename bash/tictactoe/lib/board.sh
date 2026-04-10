@@ -18,36 +18,25 @@ init_board ()
 	BOARD=(" " " " " " " " " " " " " " " " " ")
 }
 
-check_win () 
-{
-	local player=$1
+_check_line() {
+    local p="$1" a=$2 b=$3 c=$4
+    [[ "${BOARD[$a]}" == "$p" && "${BOARD[$b]}" == "$p" && "${BOARD[$c]}" == "$p" ]]
+}
 
-	# Check rows
-	for row in 0 1 2; do
-		local i=$((row * BOARD_SIZE))
-		if [[ "${BOARD[$i]}" == "$player" && "${BOARD[$i+1]}" == "$player" && "${BOARD[$i+2]}" == "$player" ]]; then
-			return 0
-		fi
-	done
-
-	# Check columns
-	for col in 0 1 2; do
-		local i=$col
-		if [[ "${BOARD[$i]}" == "$player" && "${BOARD[$i+BOARD_SIZE]}" == "$player" && "${BOARD[$i+2*BOARD_SIZE]}" == "$player" ]]; then
-			return 0
-		fi
-	done
-
-	# Check diagonals
-	if [[ "${BOARD[0]}" == "$player" && "${BOARD[4]}" == "$player" && "${BOARD[8]}" == "$player" ]]; then
-		return 0
-	fi
-
-	if [[ "${BOARD[2]}" == "$player" && "${BOARD[4]}" == "$player" && "${BOARD[6]}" == "$player" ]]; then
-		return 0
-	fi
-
-	return 1
+check_win() {
+    local player="$1"
+    # rows
+    _check_line "$player" 0 1 2 && return 0
+    _check_line "$player" 3 4 5 && return 0
+    _check_line "$player" 6 7 8 && return 0
+    # columns
+    _check_line "$player" 0 3 6 && return 0
+    _check_line "$player" 1 4 7 && return 0
+    _check_line "$player" 2 5 8 && return 0
+    # diagonals
+    _check_line "$player" 0 4 8 && return 0
+    _check_line "$player" 2 4 6 && return 0
+    return 1
 }
 
 check_draw () 
@@ -60,19 +49,17 @@ check_draw ()
 	return 0
 }
 
-check ()
-{
-	local current_player=$1
-	if check_win "$current_player"; then
-    	echo "$(draw_cell "${current_player}") wins!"
-    	return 0
-	fi
-	if check_draw; then
-		echo "Draw!"
-		return 0
-	fi
-
-	return 1
+check_game_over() {
+    if check_win "$CURRENT_PLAYER"; then
+        LAST_RESULT="${CURRENT_PLAYER}_WIN"
+        return 0
+    fi
+    if check_draw; then
+        LAST_RESULT="DRAW"
+        return 0
+    fi
+    LAST_RESULT=""
+    return 1
 }
 
 update_board () 

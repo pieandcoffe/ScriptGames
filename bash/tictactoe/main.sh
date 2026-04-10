@@ -4,8 +4,11 @@
 . ./lib/board.sh
 . ./lib/player.sh
 
+declare -a BOARD
+declare    CURRENT_PLAYER="X"
+declare    LAST_RESULT=""
+
 init_board
-current_player="X"
 
 while true; do
   player_turn

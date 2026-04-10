@@ -3,13 +3,11 @@
 cursor_row=0
 cursor_col=0
 
-current_player="X"
-
 player_input ()
 {
   while true; do
     clear
-    echo "$(draw_cell "${current_player}")'s turn"
+    echo "$(draw_cell "${CURRENT_PLAYER}")'s turn"
     draw_board $cursor_row $cursor_col
 
     read -rsn1 key
@@ -23,7 +21,7 @@ player_input ()
       esac
     elif [[ $key == $'\n' || $key == $'\r' || $key == '' ]]; then
       if is_cell_empty $cursor_row $cursor_col; then
-        update_board $cursor_row $cursor_col "$current_player"
+        update_board $cursor_row $cursor_col "$CURRENT_PLAYER"
         break
       else
         printf '\a'
@@ -36,13 +34,13 @@ player_turn ()
 {
   player_input
 
-  if check "$current_player"; then
+  if check_game_over "$CURRENT_PLAYER"; then
     echo "Game over. Thanks for playing!"
     read -rsn1 -p $'Press any key to exit...\n'
     echo
     exit 0
   fi
 
-  [[ $current_player == "X" ]] && current_player="O" || current_player="X"
+  [[ $CURRENT_PLAYER == "X" ]] && CURRENT_PLAYER="O" || CURRENT_PLAYER="X"
 }
 
