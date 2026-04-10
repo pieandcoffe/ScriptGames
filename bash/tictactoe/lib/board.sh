@@ -4,15 +4,6 @@ readonly BOARD_SIZE=3
 
 declare -a BOARD
 
-RED=$'\e[31m'
-BLUE=$'\e[34m'
-WHITE=$'\e[97m'
-GRAY=$'\e[90m'
-BOLD=$'\e[1m'
-
-HIGHLIGHT=$'\e[7m'
-RESET=$'\e[0m'
-
 init_board () 
 {
 	BOARD=(" " " " " " " " " " " " " " " " " ")

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. ./lib/colors.sh
+
 draw_board ()
 {
   local cur_row=$1
@@ -9,9 +11,9 @@ draw_board ()
   local mid_sep="├─────┼─────┼─────┤"
   local bot_sep="└─────┴─────┴─────┘"
 
-  echo -e "$top_sep"
+  echo -e "${DIM}$top_sep${RESET}"
 	for row in 0 1 2; do
-    local line="│"
+    local line="${DIM}│${RESET}"
     for col in 0 1 2; do
       local idx=$(( row * BOARD_SIZE + col ))
       local cell="${BOARD[$idx]}"
@@ -20,14 +22,14 @@ draw_board ()
       else
         line+="  $(draw_cell "${cell:- }")  "
       fi
-      line+="│"
+      line+="${DIM}│${RESET}"
     done
     echo -e "$line"
     if [[ $row -lt $((BOARD_SIZE - 1)) ]]; then
-      echo -e "$mid_sep"
+      echo -e "${DIM}$mid_sep${RESET}"
     fi
 	done
-	echo -e "$bot_sep"
+	echo -e "${DIM}$bot_sep${RESET}"
 }
 
 draw_cell () 
