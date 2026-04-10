@@ -19,7 +19,7 @@ player_input ()
         '[C') (( cursor_col < 2 )) && (( cursor_col++ )) ;;
         '[D') (( cursor_col > 0 )) && (( cursor_col-- )) ;;
       esac
-    elif [[ $key == $'\n' || $key == $'\r' || $key == '' ]]; then
+    elif [[ $key == $'\n' || $key == $'\r' || $key == '' || $key == $' ' ]]; then
       if is_cell_empty $cursor_row $cursor_col; then
         update_board $cursor_row $cursor_col "$CURRENT_PLAYER"
         break
