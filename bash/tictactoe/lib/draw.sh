@@ -55,3 +55,25 @@ draw_cell ()
     *) printf " " ;;
   esac
 }
+
+draw_pause_menu() {
+    local selected=$1
+    shift
+    local items=("$@")
+    clear
+    echo -e "${BOLD}Game paused${RESET}"
+    echo
+    local i
+    for i in "${!items[@]}"; do
+        if [[ $i -eq $selected ]]; then
+            printf "${HIGHLIGHT} ${items[$i]} ${RESET}\n"
+        else
+            printf "  ${items[$i]}\n"
+        fi
+    done
+}
+
+draw_hud() {
+    echo -e " $(draw_cell "${CURRENT_PLAYER}")'s turn  |  ${PLAYER_NAME}  |  X: ${X_SCORE}  O: ${O_SCORE}"
+    echo -e "${DIM}  arrows: move   enter/space: place   q: pause${RESET}"
+}

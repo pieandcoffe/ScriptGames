@@ -11,6 +11,7 @@ declare -i CURSOR_ROW=0
 declare -i CURSOR_COL=0
 declare    LAST_RESULT=""
 
+prompt_player_name
 init_board
 
 while true; do

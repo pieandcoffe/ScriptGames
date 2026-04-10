@@ -1,35 +1,76 @@
 #!/bin/bash
 
-player_input ()
-{
-  while true; do
-    clear
-    echo "$(draw_cell "${CURRENT_PLAYER}")'s turn"
-    draw_board $CURSOR_ROW $CURSOR_COL
+prompt_player_name() {
+    printf "Who is playing? (enter your nickname): "
+    read -r PLAYER_NAME
+    PLAYER_NAME="${PLAYER_NAME:-"John Doe"}"
+}
 
-    read -rsn1 key
-    if [[ $key == $'\x1b' ]]; then
-      read -rsn2 key
-      case $key in
-        '[A') (( CURSOR_ROW > 0 )) && (( CURSOR_ROW-- )) ;;
-        '[B') (( CURSOR_ROW < BOARD_SIZE - 1 )) && (( CURSOR_ROW++ )) ;;
-        '[C') (( CURSOR_COL < BOARD_SIZE - 1 )) && (( CURSOR_COL++ )) ;;
-        '[D') (( CURSOR_COL > 0 )) && (( CURSOR_COL-- )) ;;
-      esac
-    elif [[ $key == $'\n' || $key == $'\r' || $key == '' || $key == $' ' ]]; then
-      if is_cell_empty $CURSOR_ROW $CURSOR_COL; then
-        update_board $CURSOR_ROW $CURSOR_COL "$CURRENT_PLAYER"
-        break
-      else
-        printf '\a'
-      fi
-    fi
-  done
+show_pause_menu() {
+    local items=("Resume" "Save & Quit" "Quit without saving")
+    local selected=0
+
+    while true; do
+        draw_pause_menu "$selected" "${items[@]}"
+
+        IFS= read -rsn1 pkey
+        if [[ $pkey == $'\x1b' ]]; then
+            IFS= read -rsn2 pkey
+            case $pkey in
+                '[A') (( selected > 0 ))                && (( selected-- )) ;;
+                '[B') (( selected < ${#items[@]} - 1 )) && (( selected++ )) ;;
+            esac
+        else
+            case $pkey in
+                ''|$'\n'|$'\r') return $selected ;;
+            esac
+        fi
+    done
+}
+
+player_input() {
+    while true; do
+        clear
+        draw_hud
+        draw_board "$CURSOR_ROW" "$CURSOR_COL"
+
+        IFS= read -rsn1 key
+
+        if [[ $key == $'\x1b' ]]; then
+            IFS= read -rsn2 key2
+            case $key2 in
+                '[A') (( CURSOR_ROW > 0 )) && (( CURSOR_ROW-- )) ;;
+                '[B') (( CURSOR_ROW < BOARD_SIZE - 1 )) && (( CURSOR_ROW++ )) ;;
+                '[C') (( CURSOR_COL < BOARD_SIZE - 1 )) && (( CURSOR_COL++ )) ;;
+                '[D') (( CURSOR_COL > 0 )) && (( CURSOR_COL-- )) ;;
+            esac
+        else
+            case $key in
+                q|Q)
+                    show_pause_menu
+                    local choice=$?
+                    case $choice in
+                        0) ;;
+                        1) save_game; return 1 ;;
+                        2) return 1            ;;
+                    esac
+                    ;;
+                ''|$'\n'|$'\r'|' ')
+                    if is_cell_empty; then
+                        update_board
+                        return 0
+                    else
+                        printf '\a'
+                    fi
+                    ;;
+            esac
+        fi
+    done
 }
 
 player_turn ()
 {
-  player_input
+  player_input || return 1
 
   if check_game_over "$CURRENT_PLAYER"; then
     echo "Game over. Thanks for playing!"
