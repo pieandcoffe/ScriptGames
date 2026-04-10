@@ -79,24 +79,17 @@ check_game_over() {
 
 update_board () 
 {
-	local row=$1
-	local col=$2
-	local player=$3
-	local index=$(coords_to_index $row $col)
-	BOARD[$index]=$player
+	local index=$(coords_to_index $CURSOR_ROW $CURSOR_COL)
+	BOARD[$index]=$CURRENT_PLAYER
 }
 
 is_cell_empty () 
 {
-	local row=$1
-	local col=$2
-	local index=$(coords_to_index $row $col)
+	local index=$(coords_to_index $CURSOR_ROW $CURSOR_COL)
 	[[ "${BOARD[$index]}" == " " ]]
 }
 
 coords_to_index () 
 {
-	local row=$1
-	local col=$2
-	echo $(( row * BOARD_SIZE + col ))
+	echo $(( CURSOR_ROW * BOARD_SIZE + CURSOR_COL ))
 }
