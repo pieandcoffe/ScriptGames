@@ -1,48 +1,81 @@
 #!/bin/bash
+#
+# player.sh — Human-player input handling.
+#
+# Exports:
+#   prompt_player_name   — asks for a nickname, sets PLAYER_NAME
+#   show_pause_menu      — interactive pause overlay; returns exit code:
+#                            0 = Resume
+#                            1 = Save & Quit
+#                            2 = Quit without saving
+#   player_input         — one full turn of input; returns:
+#                            0 = valid move placed
+#                            1 = player chose to quit
 
-cursor_row=0
-cursor_col=0
-
-current_player="X"
-
-player_input ()
-{
-  while true; do
-    clear
-    echo "$(draw_cell "${current_player}")'s turn"
-    draw_board $cursor_row $cursor_col
-
-    read -rsn1 key
-    if [[ $key == $'\x1b' ]]; then
-      read -rsn2 key
-      case $key in
-        '[A') (( cursor_row > 0 )) && (( cursor_row-- )) ;;
-        '[B') (( cursor_row < 2 )) && (( cursor_row++ )) ;;
-        '[C') (( cursor_col < 2 )) && (( cursor_col++ )) ;;
-        '[D') (( cursor_col > 0 )) && (( cursor_col-- )) ;;
-      esac
-    elif [[ $key == $'\n' || $key == $'\r' || $key == '' ]]; then
-      if is_cell_empty $cursor_row $cursor_col; then
-        update_board $cursor_row $cursor_col "$current_player"
-        break
-      else
-        printf '\a'
-      fi
-    fi
-  done
+prompt_player_name() {
+    printf "Who is playing? (enter your nickname): "
+    read -r PLAYER_NAME
+    PLAYER_NAME="${PLAYER_NAME:-Anonymous}"
 }
 
-player_turn ()
-{
-  player_input
+show_pause_menu() {
+    local items=("Resume" "Save & Quit" "Quit without saving")
+    local selected=0
 
-  if check "$current_player"; then
-    echo "Game over. Thanks for playing!"
-    read -rsn1 -p $'Press any key to exit...\n'
-    echo
-    exit 0
-  fi
+    while true; do
+        draw_pause_menu "$selected"
 
-  [[ $current_player == "X" ]] && current_player="O" || current_player="X"
+        IFS= read -rsn1 pkey
+        if [[ $pkey == $'\x1b' ]]; then
+            IFS= read -rsn2 pkey
+            case $pkey in
+                '[A') (( selected > 0 ))                && (( selected-- )) ;;
+                '[B') (( selected < ${#items[@]} - 1 )) && (( selected++ )) ;;
+            esac
+        else
+            case $pkey in
+                ''|$'\n'|$'\r') return $selected ;;
+            esac
+        fi
+    done
 }
 
+player_input() {
+    while true; do
+        clear
+        draw_hud
+        draw_board
+
+        IFS= read -rsn1 key
+
+        if [[ $key == $'\x1b' ]]; then
+            IFS= read -rsn2 key2
+            case $key2 in
+                '[A') (( CURSOR_ROW > 0 )) && (( CURSOR_ROW-- )) ;;
+                '[B') (( CURSOR_ROW < 2 )) && (( CURSOR_ROW++ )) ;;
+                '[C') (( CURSOR_COL < 2 )) && (( CURSOR_COL++ )) ;;
+                '[D') (( CURSOR_COL > 0 )) && (( CURSOR_COL-- )) ;;
+            esac
+        else
+            case $key in
+                q|Q)
+                    show_pause_menu
+                    local choice=$?
+                    case $choice in
+                        0) ;;                      # Resume — loop back
+                        1) save_game; return 1 ;;  # Save & Quit
+                        2) return 1             ;;  # Quit without saving
+                    esac
+                    ;;
+                ''|$'\n'|$'\r'|' ')
+                    if is_cell_empty; then
+                        update_board
+                        return 0
+                    else
+                        printf '\a'
+                    fi
+                    ;;
+            esac
+        fi
+    done
+}

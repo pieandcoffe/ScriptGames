@@ -1,0 +1,13 @@
+#!/bin/bash
+
+RESET="\033[0m"
+BOLD="\033[1m"
+DIM="\033[2m"
+HIGHLIGHT="\033[7m"
+
+RED="\033[31m"
+BLUE="\033[34m"
+WHITE="\033[97m"
+GRAY="\033[90m"
+
+C_BG="\033[48;5;235m"
