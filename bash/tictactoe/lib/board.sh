@@ -18,46 +18,6 @@ init_board ()
 	BOARD=(" " " " " " " " " " " " " " " " " ")
 }
 
-draw_board ()
-{
-  local cur_row=$1
-  local cur_col=$2
-
-  local top_sep="┌─────┬─────┬─────┐"
-  local mid_sep="├─────┼─────┼─────┤"
-  local bot_sep="└─────┴─────┴─────┘"
-
-  echo -e "$top_sep"
-	for row in 0 1 2; do
-    local line="│"
-    for col in 0 1 2; do
-      local idx=$(( row * BOARD_SIZE + col ))
-      local cell="${BOARD[$idx]}"
-      if [[ $row -eq $cur_row && $col -eq $cur_col ]]; then
-        line+="  ${HIGHLIGHT}$(draw_cell "${cell:-}" )${RESET}  "
-      else
-        line+="  $(draw_cell "${cell:- }")  "
-      fi
-      line+="│"
-    done
-    echo -e "$line"
-    if [[ $row -lt $((BOARD_SIZE - 1)) ]]; then
-      echo -e "$mid_sep"
-    fi
-	done
-	echo -e "$bot_sep"
-}
-
-draw_cell () 
-{
-  local cell=$1
-  case $cell in
-    X) printf "${BLUE}${BOLD}X${RESET}" ;;
-    O) printf "${RED}${BOLD}O${RESET}" ;;
-    *) printf " " ;;
-  esac
-}
-
 check_win () 
 {
 	local player=$1

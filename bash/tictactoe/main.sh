@@ -1,5 +1,6 @@
 #!/bin/bash
 
+. ./lib/draw.sh
 . ./lib/board.sh
 . ./lib/player.sh
 
