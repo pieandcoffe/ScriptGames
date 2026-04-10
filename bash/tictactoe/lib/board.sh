@@ -1,168 +1,86 @@
 #!/bin/bash
+#
+# board.sh — Board state and game logic.
+# No rendering, no I/O, no save/load.
+#
+# Exports:
+#   BOARD[]          9-cell array, " " | "X" | "O"
+#   LAST_RESULT      set by check_game_over: "X_WIN" | "O_WIN" | "DRAW" | ""
+#
+#   init_board
+#   update_board          — places CURRENT_PLAYER at (CURSOR_ROW, CURSOR_COL)
+#   is_cell_empty         — returns 0 if the cell at cursor is free
+#   coords_to_index       — echoes the flat index for (CURSOR_ROW, CURSOR_COL)
+#   check_win <player>    — returns 0 if <player> has won
+#   check_draw            — returns 0 if the board is full (no " " left)
+#   check_game_over       — sets LAST_RESULT; returns 0 if the game ended
 
 readonly BOARD_SIZE=3
 
-RED=$'\e[31m'
-BLUE=$'\e[34m'
-WHITE=$'\e[97m'
-GRAY=$'\e[90m'
-BOLD=$'\e[1m'
-
-HIGHLIGHT=$'\e[7m'
-RESET=$'\e[0m'
-
-init_board () 
-{
-	BOARD=(" " " " " " " " " " " " " " " " " ")
+init_board() {
+    BOARD=(" " " " " " " " " " " " " " " " " ")
 }
 
-draw_board ()
-{
-	echo "${BOARD[@]}"
-	echo "Current CURRENT_PLAYER: ${CURRENT_PLAYER}"
-	echo "Cursor position: (${CURSOR_ROW}, ${CURSOR_COL})"
+# ── Win / draw detection ──────────────────────────────────────────────────────
 
-  local top_sep="┌─────┬─────┬─────┐"
-  local mid_sep="├─────┼─────┼─────┤"
-  local bot_sep="└─────┴─────┴─────┘"
-
-  echo -e "$top_sep"
-	for row in 0 1 2; do
-    local line="│"
-    for col in 0 1 2; do
-      local idx=$(( row * BOARD_SIZE + col ))
-      local cell=$(draw_cell "${BOARD[$idx]}") 
-      if [[ $row -eq $CURSOR_ROW && $col -eq $CURSOR_COL ]]; then
-        line+="  ${HIGHLIGHT}${cell:-}${RESET}  "
-      else
-        line+="  ${cell:- }  "
-      fi
-      line+="│"
-    done
-    echo -e "$line"
-    if [[ $row -lt $((BOARD_SIZE - 1)) ]]; then
-      echo -e "$mid_sep"
-    fi
-	done
-	echo -e "$bot_sep"
+_check_line() {
+    local p="$1" a=$2 b=$3 c=$4
+    [[ "${BOARD[$a]}" == "$p" && "${BOARD[$b]}" == "$p" && "${BOARD[$c]}" == "$p" ]]
 }
 
-draw_cell () 
-{
-  local cell=$1
-  case $cell in
-    X) printf "${BLUE}${BOLD}X${RESET}" ;;
-    O) printf "${RED}${BOLD}O${RESET}" ;;
-    *) printf " " ;;
-  esac
-}
-
-check_win () 
-{
-	# Check rows
-	for row in 0 1 2; do
-		local i=$((row * BOARD_SIZE))
-		if [[ "${BOARD[$i]}" == "$CURRENT_PLAYER" && "${BOARD[$i+1]}" == "$CURRENT_PLAYER" && "${BOARD[$i+2]}" == "$CURRENT_PLAYER" ]]; then
-			return 0
-		fi
-	done
-
-	# Check columns
-	for col in 0 1 2; do
-		local i=$col
-		if [[ "${BOARD[$i]}" == "$CURRENT_PLAYER" && "${BOARD[$i+BOARD_SIZE]}" == "$CURRENT_PLAYER" && "${BOARD[$i+2*BOARD_SIZE]}" == "$CURRENT_PLAYER" ]]; then
-			return 0
-		fi
-	done
-
-	# Check diagonals
-	if [[ "${BOARD[0]}" == "$CURRENT_PLAYER" && "${BOARD[4]}" == "$CURRENT_PLAYER" && "${BOARD[8]}" == "$CURRENT_PLAYER" ]]; then
-		return 0
-	fi
-
-	if [[ "${BOARD[2]}" == "$CURRENT_PLAYER" && "${BOARD[4]}" == "$CURRENT_PLAYER" && "${BOARD[6]}" == "$CURRENT_PLAYER" ]]; then
-		return 0
-	fi
-
-	return 1
-}
-
-check_draw () 
-{
-	for cell in "${BOARD[@]}"; do
-		if [[ "$cell" == " " ]]; then
-			return 1
-		fi
-	done
-	return 0
-}
-
-check ()
-{
-  if check_win "$CURRENT_PLAYER"; then 
-    echo "$(draw_cell "${CURRENT_PLAYER}") wins!"
-    return 0
-	fi
-	if check_draw; then
-		echo "Draw!"
-		return 0
-	fi
-
-	return 1
-}
-
-update_board () 
-{
-	local index=$(coords_to_index)
-	BOARD[$index]=$CURRENT_PLAYER
-}
-
-is_cell_empty () 
-{
-	local index=$(coords_to_index)
-	[[ "${BOARD[$index]}" == " " ]]
-}
-
-coords_to_index () 
-{
-	echo $(( CURSOR_ROW * BOARD_SIZE + CURSOR_COL ))
-}
-
-save_game () {
-	local save_file="${SAVE_FILE:-$HOME/.tictactoe_save}"
-    {
-        declare -p BOARD
-        declare -p CURRENT_PLAYER
-        declare -p X_SCORE
-        declare -p O_SCORE
-        declare -p CURSOR_ROW
-        declare -p CURSOR_COL
-        declare -p SAVE_DATE
-        declare -p PLAYER_NAME
-    } > "$save_file"
-    echo "Game saved to $save_file"
-}
- 
-load_game () {
-    local save_file="${SAVE_FILE:-$HOME/.tictactoe_save}"
-    if [[ -f "$save_file" ]]; then
-        source "$save_file"
-        (( CURSOR_ROW < 0 || CURSOR_ROW > 2 )) && CURSOR_ROW=1
-        (( CURSOR_COL < 0 || CURSOR_COL > 2 )) && CURSOR_COL=1
-
-        # sanity check
-        if [[ ${#BOARD[@]} -ne 9 ]]; then
-            echo "Save corrupted, reinitializing..."
-            init_board
-            return 1
-        fi
-
-        return 0
-    else
-        init_board 
-        
-        printf "Who is playing? (enter your nickname) XO\n"
-		read -p "" PLAYER_NAME
-    fi
+check_win() {
+    local player="$1"
+    # rows
+    _check_line "$player" 0 1 2 && return 0
+    _check_line "$player" 3 4 5 && return 0
+    _check_line "$player" 6 7 8 && return 0
+    # columns
+    _check_line "$player" 0 3 6 && return 0
+    _check_line "$player" 1 4 7 && return 0
+    _check_line "$player" 2 5 8 && return 0
+    # diagonals
+    _check_line "$player" 0 4 8 && return 0
+    _check_line "$player" 2 4 6 && return 0
     return 1
+}
+
+check_draw() {
+    local cell
+    for cell in "${BOARD[@]}"; do
+        [[ "$cell" == " " ]] && return 1
+    done
+    return 0
+}
+
+# Sets LAST_RESULT to "X_WIN", "O_WIN", "DRAW", or "" (game ongoing).
+# Returns 0 if the game is over, 1 if it continues.
+check_game_over() {
+    if check_win "$CURRENT_PLAYER"; then
+        LAST_RESULT="${CURRENT_PLAYER}_WIN"
+        return 0
+    fi
+    if check_draw; then
+        LAST_RESULT="DRAW"
+        return 0
+    fi
+    LAST_RESULT=""
+    return 1
+}
+
+# ── Board mutation ────────────────────────────────────────────────────────────
+
+coords_to_index() {
+    echo $(( CURSOR_ROW * BOARD_SIZE + CURSOR_COL ))
+}
+
+is_cell_empty() {
+    local index
+    index=$(coords_to_index)
+    [[ "${BOARD[$index]}" == " " ]]
+}
+
+update_board() {
+    local index
+    index=$(coords_to_index)
+    BOARD[$index]=$CURRENT_PLAYER
 }
