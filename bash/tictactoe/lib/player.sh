@@ -1,27 +1,24 @@
 #!/bin/bash
 
-cursor_row=0
-cursor_col=0
-
 player_input ()
 {
   while true; do
     clear
     echo "$(draw_cell "${CURRENT_PLAYER}")'s turn"
-    draw_board $cursor_row $cursor_col
+    draw_board $CURSOR_ROW $CURSOR_COL
 
     read -rsn1 key
     if [[ $key == $'\x1b' ]]; then
       read -rsn2 key
       case $key in
-        '[A') (( cursor_row > 0 )) && (( cursor_row-- )) ;;
-        '[B') (( cursor_row < 2 )) && (( cursor_row++ )) ;;
-        '[C') (( cursor_col < 2 )) && (( cursor_col++ )) ;;
-        '[D') (( cursor_col > 0 )) && (( cursor_col-- )) ;;
+        '[A') (( CURSOR_ROW > 0 )) && (( CURSOR_ROW-- )) ;;
+        '[B') (( CURSOR_ROW < 2 )) && (( CURSOR_ROW++ )) ;;
+        '[C') (( CURSOR_COL < 2 )) && (( CURSOR_COL++ )) ;;
+        '[D') (( CURSOR_COL > 0 )) && (( CURSOR_COL-- )) ;;
       esac
     elif [[ $key == $'\n' || $key == $'\r' || $key == '' || $key == $' ' ]]; then
-      if is_cell_empty $cursor_row $cursor_col; then
-        update_board $cursor_row $cursor_col "$CURRENT_PLAYER"
+      if is_cell_empty $CURSOR_ROW $CURSOR_COL; then
+        update_board $CURSOR_ROW $CURSOR_COL "$CURRENT_PLAYER"
         break
       else
         printf '\a'
