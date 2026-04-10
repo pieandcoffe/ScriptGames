@@ -1,32 +1,56 @@
 #!/bin/bash
 
-readonly BOARD_SIZE=3
-
-declare -a BOARD
-
 init_board () 
 {
-	BOARD=(" " " " " " " " " " " " " " " " " ")
+	local size=$((BOARD_SIZE * BOARD_SIZE))
+	BOARD=()
+	for ((i=0; i<size; i++)); do
+		BOARD+=(" ")
+	done
 }
 
 _check_line() {
-    local p="$1" a=$2 b=$3 c=$4
-    [[ "${BOARD[$a]}" == "$p" && "${BOARD[$b]}" == "$p" && "${BOARD[$c]}" == "$p" ]]
+    local player="$1"
+    shift
+    local indices=("$@")
+    for idx in "${indices[@]}"; do
+        if [[ "${BOARD[$idx]}" != "$player" ]]; then
+            return 1
+        fi
+    done
+    return 0
 }
 
 check_win() {
     local player="$1"
-    # rows
-    _check_line "$player" 0 1 2 && return 0
-    _check_line "$player" 3 4 5 && return 0
-    _check_line "$player" 6 7 8 && return 0
-    # columns
-    _check_line "$player" 0 3 6 && return 0
-    _check_line "$player" 1 4 7 && return 0
-    _check_line "$player" 2 5 8 && return 0
-    # diagonals
-    _check_line "$player" 0 4 8 && return 0
-    _check_line "$player" 2 4 6 && return 0
+    # Check rows
+    for ((r=0; r<BOARD_SIZE; r++)); do
+        local indices=()
+        for ((c=0; c<BOARD_SIZE; c++)); do
+            indices+=($((r*BOARD_SIZE + c)))
+        done
+        if _check_line "$player" "${indices[@]}"; then return 0; fi
+    done
+    # Check columns
+    for ((c=0; c<BOARD_SIZE; c++)); do
+        local indices=()
+        for ((r=0; r<BOARD_SIZE; r++)); do
+            indices+=($((r*BOARD_SIZE + c)))
+        done
+        if _check_line "$player" "${indices[@]}"; then return 0; fi
+    done
+    # Check main diagonal
+    local indices=()
+    for ((i=0; i<BOARD_SIZE; i++)); do
+        indices+=($((i*BOARD_SIZE + i)))
+    done
+    if _check_line "$player" "${indices[@]}"; then return 0; fi
+    # Check anti-diagonal
+    local indices=()
+    for ((i=0; i<BOARD_SIZE; i++)); do
+        indices+=($((i*BOARD_SIZE + (BOARD_SIZE-1-i))))
+    done
+    if _check_line "$player" "${indices[@]}"; then return 0; fi
     return 1
 }
 

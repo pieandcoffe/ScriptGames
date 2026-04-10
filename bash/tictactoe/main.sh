@@ -4,10 +4,11 @@
 . ./lib/board.sh
 . ./lib/player.sh
 
+declare -i BOARD_SIZE=3
 declare -a BOARD
 declare    CURRENT_PLAYER="X"
-declare -i CURSOR_ROW=1
-declare -i CURSOR_COL=1
+declare -i CURSOR_ROW=0
+declare -i CURSOR_COL=0
 declare    LAST_RESULT=""
 
 init_board

@@ -2,19 +2,33 @@
 
 . ./lib/colors.sh
 
+build_sep() {
+    local left="$1" mid="$2" right="$3"
+    local sep="─────"
+    local s="$left"
+    for ((i=0; i<BOARD_SIZE; i++)); do
+        s+="$sep"
+        if ((i < BOARD_SIZE-1)); then
+            s+="$mid"
+        fi
+    done
+    s+="$right"
+    echo "$s"
+}
+
 draw_board ()
 {
   local cur_row=$1
   local cur_col=$2
 
-  local top_sep="┌─────┬─────┬─────┐"
-  local mid_sep="├─────┼─────┼─────┤"
-  local bot_sep="└─────┴─────┴─────┘"
+  local top_sep=$(build_sep "┌" "┬" "┐")
+  local mid_sep=$(build_sep "├" "┼" "┤")
+  local bot_sep=$(build_sep "└" "┴" "┘")
 
   echo -e "${DIM}$top_sep${RESET}"
-	for row in 0 1 2; do
+	for ((row=0; row<BOARD_SIZE; row++)); do
     local line="${DIM}│${RESET}"
-    for col in 0 1 2; do
+    for ((col=0; col<BOARD_SIZE; col++)); do
       local idx=$(( row * BOARD_SIZE + col ))
       local cell="${BOARD[$idx]}"
       if [[ $row -eq $cur_row && $col -eq $cur_col ]]; then

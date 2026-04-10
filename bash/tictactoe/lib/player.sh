@@ -12,8 +12,8 @@ player_input ()
       read -rsn2 key
       case $key in
         '[A') (( CURSOR_ROW > 0 )) && (( CURSOR_ROW-- )) ;;
-        '[B') (( CURSOR_ROW < 2 )) && (( CURSOR_ROW++ )) ;;
-        '[C') (( CURSOR_COL < 2 )) && (( CURSOR_COL++ )) ;;
+        '[B') (( CURSOR_ROW < BOARD_SIZE - 1 )) && (( CURSOR_ROW++ )) ;;
+        '[C') (( CURSOR_COL < BOARD_SIZE - 1 )) && (( CURSOR_COL++ )) ;;
         '[D') (( CURSOR_COL > 0 )) && (( CURSOR_COL-- )) ;;
       esac
     elif [[ $key == $'\n' || $key == $'\r' || $key == '' || $key == $' ' ]]; then
