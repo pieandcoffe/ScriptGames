@@ -93,5 +93,5 @@ draw_pause_menu() {
 
 draw_hud() {
     echo -e " Turn: $(draw_cell "${CURRENT_PLAYER}") | Player: ${PLAYER_NAME} | Scores X: ${X_SCORE}  O: ${O_SCORE}"
-    echo -e "${DIM}  ↑↓←→: move   ↵/␣: place   Q: pause${RESET}"
+    echo -e "${DIM}  ↑↓/←→: move   ↵/␣: place   Q: pause${RESET}"
 }
