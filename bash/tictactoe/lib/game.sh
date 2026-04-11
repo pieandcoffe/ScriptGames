@@ -31,6 +31,6 @@ init_game() {
 
 game_loop() {
     while true; do
-        player_turn
+        player_turn || return
     done
 }
