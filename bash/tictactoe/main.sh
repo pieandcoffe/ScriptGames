@@ -9,6 +9,8 @@ declare -a BOARD
 declare    CURRENT_PLAYER="X"
 declare -i CURSOR_ROW=0
 declare -i CURSOR_COL=0
+declare -i X_SCORE=0
+declare -i O_SCORE=0
 declare    LAST_RESULT=""
 
 prompt_player_name
