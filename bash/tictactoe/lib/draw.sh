@@ -31,10 +31,18 @@ draw_board ()
     for ((col=0; col<BOARD_SIZE; col++)); do
       local idx=$(( row * BOARD_SIZE + col ))
       local cell="${BOARD[$idx]}"
-      if [[ $row -eq $cur_row && $col -eq $cur_col ]]; then
-        line+="  ${HIGHLIGHT}$(draw_cell "${cell:-}" )${RESET}  "
+      if (( ${#WIN_COMBO[@]} > 0 )); then
+        if [[ " ${WIN_COMBO[*]} " == *" $idx "* ]]; then
+          line+="  $(draw_cell "${cell:-}" )  "
+        else
+          line+="  $(draw_cell_dim "${cell:- }")  "
+        fi
       else
-        line+="  $(draw_cell "${cell:- }")  "
+        if [[ $row -eq $cur_row && $col -eq $cur_col ]]; then
+          line+="  ${HIGHLIGHT}$(draw_cell "${cell:-}" )${RESET}  "
+        else
+          line+="  $(draw_cell "${cell:- }")  "
+        fi
       fi
       line+="${DIM}│${RESET}"
     done
@@ -52,6 +60,16 @@ draw_cell ()
   case $cell in
     X) printf "${BLUE}${BOLD}X${RESET}" ;;
     O) printf "${RED}${BOLD}O${RESET}" ;;
+    *) printf " " ;;
+  esac
+}
+
+draw_cell_dim () 
+{
+  local cell=$1
+  case $cell in
+    X) printf "${BLUE}${DIM}X${RESET}" ;;
+    O) printf "${RED}${DIM}O${RESET}" ;;
     *) printf " " ;;
   esac
 }

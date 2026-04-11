@@ -76,6 +76,11 @@ player_turn ()
   player_input || return 1
 
   if check_game_over "$CURRENT_PLAYER"; then
+    if [[ $LAST_RESULT == *_WIN ]]; then
+      clear
+      draw_hud
+      draw_board -1 -1
+    fi
     echo "Game over. Thanks for playing!"
     read -rsn1 -p $'Press any key to exit...\n'
     echo

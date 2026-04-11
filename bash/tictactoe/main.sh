@@ -13,6 +13,7 @@ declare -i CURSOR_COL=0
 declare -i X_SCORE=0
 declare -i O_SCORE=0
 declare    LAST_RESULT=""
+declare -a WIN_COMBO
 
 if has_saved_game; then
     printf "Saved game found. Load it? [Y/n]: "

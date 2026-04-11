@@ -29,7 +29,7 @@ check_win() {
         for ((c=0; c<BOARD_SIZE; c++)); do
             indices+=($((r*BOARD_SIZE + c)))
         done
-        if _check_line "$player" "${indices[@]}"; then return 0; fi
+        if _check_line "$player" "${indices[@]}"; then WIN_COMBO=("${indices[@]}"); return 0; fi
     done
     # Check columns
     for ((c=0; c<BOARD_SIZE; c++)); do
@@ -37,20 +37,20 @@ check_win() {
         for ((r=0; r<BOARD_SIZE; r++)); do
             indices+=($((r*BOARD_SIZE + c)))
         done
-        if _check_line "$player" "${indices[@]}"; then return 0; fi
+        if _check_line "$player" "${indices[@]}"; then WIN_COMBO=("${indices[@]}"); return 0; fi
     done
     # Check main diagonal
     local indices=()
     for ((i=0; i<BOARD_SIZE; i++)); do
         indices+=($((i*BOARD_SIZE + i)))
     done
-    if _check_line "$player" "${indices[@]}"; then return 0; fi
+    if _check_line "$player" "${indices[@]}"; then WIN_COMBO=("${indices[@]}"); return 0; fi
     # Check anti-diagonal
     local indices=()
     for ((i=0; i<BOARD_SIZE; i++)); do
         indices+=($((i*BOARD_SIZE + (BOARD_SIZE-1-i))))
     done
-    if _check_line "$player" "${indices[@]}"; then return 0; fi
+    if _check_line "$player" "${indices[@]}"; then WIN_COMBO=("${indices[@]}"); return 0; fi
     return 1
 }
 
