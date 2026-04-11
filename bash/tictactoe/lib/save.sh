@@ -25,11 +25,11 @@ save_game() {
     } > "$file"
 
     if [[ $? -ne 0 ]]; then
-        echo "Failed to save game to $file."
+        printf "Failed to save game to %q." "$file"
         return 1
     fi
 
-    echo "Game saved to $file."
+    printf "Game saved to %q." "$file"
     return 0
 }
 
