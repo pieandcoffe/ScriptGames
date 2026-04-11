@@ -21,7 +21,7 @@ _check_line() {
     return 0
 }
 
-check_win() {
+_check_win() {
     local player="$1"
     # Check rows
     for ((r=0; r<BOARD_SIZE; r++)); do
@@ -54,7 +54,7 @@ check_win() {
     return 1
 }
 
-check_draw () 
+_check_draw () 
 {
 	for cell in "${BOARD[@]}"; do
 		if [[ "$cell" == " " ]]; then
@@ -65,7 +65,7 @@ check_draw ()
 }
 
 check_game_over() {
-    if check_win "$CURRENT_PLAYER"; then
+    if _check_win "$CURRENT_PLAYER"; then
         LAST_RESULT="${CURRENT_PLAYER}_WIN"
         return 0
     fi
@@ -77,19 +77,19 @@ check_game_over() {
     return 1
 }
 
+_coords_to_index () 
+{
+	echo $(( CURSOR_ROW * BOARD_SIZE + CURSOR_COL ))
+}
+
 update_board () 
 {
-	local index=$(coords_to_index $CURSOR_ROW $CURSOR_COL)
+	local index=$(_coords_to_index $CURSOR_ROW $CURSOR_COL)
 	BOARD[$index]=$CURRENT_PLAYER
 }
 
 is_cell_empty () 
 {
-	local index=$(coords_to_index $CURSOR_ROW $CURSOR_COL)
+	local index=$(_coords_to_index $CURSOR_ROW $CURSOR_COL)
 	[[ "${BOARD[$index]}" == " " ]]
-}
-
-coords_to_index () 
-{
-	echo $(( CURSOR_ROW * BOARD_SIZE + CURSOR_COL ))
 }
