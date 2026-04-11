@@ -81,8 +81,6 @@ player_turn ()
       draw_hud
       draw_board -1 -1
     fi
-    echo "Game over. Thanks for playing!"
-    read -rsn1 -p $'Press any key to exit...\n'
     echo
     exit 0
   fi
