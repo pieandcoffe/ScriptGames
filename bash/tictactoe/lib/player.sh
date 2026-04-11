@@ -1,9 +1,12 @@
 #!/bin/bash
 
 prompt_player_name() {
-    printf "Who is playing? (enter your nickname): "
-    read -r PLAYER_NAME
-    PLAYER_NAME="${PLAYER_NAME:-"John Doe"}"
+    local default_name="John"
+
+    printf "Enter player name: "
+    IFS= read -r PLAYER_NAME
+    PLAYER_NAME="${PLAYER_NAME:-$default_name}"
+    echo
 }
 
 show_pause_menu() {
