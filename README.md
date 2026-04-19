@@ -6,7 +6,10 @@ W ramach pierwszego zadania proszę wykonać grę kółko i krzyżyk w
 Bashu, który:
 - [X] 3.0 - działa w trybie gry turowej,
 - [X] 4.0 - pozwala na zapis i odtwarzanie przerwanej gry (save game),
-- [ ] 5.0 - pozwala na grę z komputerem.
+- [X] 5.0 - pozwala na grę z komputerem.
+
+### Demo
+![Demo](bash/tictactoe/Demo.gif)
 
 # Assignment 2 JS: Mario in PhaserJS
 
