@@ -11,6 +11,24 @@ Bashu, który:
 ### Demo
 ![Demo](bash/tictactoe/Demo.gif)
 
+### Install the binary with Make
+Clone the repository
+```bash
+git clone git@github.com:pieandcoffe/ScriptGames.git
+```
+Navigate to the tictactoe directory
+```bash
+cd ScriptGames/bash/tictactoe
+```
+Install the binary to the user's local bin directory (Make will compile bash scripts into a binary)
+```bash
+make install
+```
+Run the game
+```bash
+tictactoe
+```
+
 # Assignment 2 JS: Mario in PhaserJS
 
 ## Mario w PhaserJS
