@@ -105,7 +105,21 @@ draw_game_over_menu() {
     done
 }
 
+draw_load_menu() {
+    local selected=$1
+    shift
+    local items=("$@")
+    local i
+    for i in "${!items[@]}"; do
+        if [[ $i -eq $selected ]]; then
+            printf "${HIGHLIGHT} ${items[$i]} ${RESET}\n"
+        else
+            printf "  ${items[$i]}\n"
+        fi
+    done
+}
+
 draw_hud() {
-    echo -e " Turn: $(draw_cell "${CURRENT_PLAYER}") | Scores X: ${X_SCORE}  O: ${O_SCORE}"
+    echo -e " Turn: $(draw_cell "${CURRENT_PLAYER}") | Scores $(draw_cell "X"): ${X_SCORE} | $(draw_cell "O"): ${O_SCORE}"
     echo -e "${DIM}  ↑↓/←→: move   ↵/␣: place   Q: pause${RESET}"
 }

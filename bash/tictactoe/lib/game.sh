@@ -18,15 +18,45 @@ declare -a WIN_COMBO
 
 init_game() {
     if has_saved_game; then
-        printf "Saved game found. Load it? [Y/n]: "
-        read -r load_choice
-        if [[ -z "$load_choice" || "$load_choice" =~ ^[Yy]$ ]] && load_game; then
-            echo "Saved game loaded."
+        if handle_load_game; then
             return
         fi
     fi
 
     init_board
+}
+
+handle_load_game() {
+    local items=("Load Game" "New Game")
+    local selected=0
+
+    while true; do
+        clear
+        echo -e "${BOLD}Tic Tac Toe${RESET}"
+        echo -e  ${DIM}by Kyrylo Pylinskyi${RESET}
+        echo
+        draw_load_menu "$selected" "${items[@]}"
+
+        IFS= read -rsn1 key
+        if [[ $key == $'\x1b' ]]; then
+            IFS= read -rsn2 key2
+            case $key2 in
+                '[A') (( selected > 0 )) && (( selected-- )) ;;
+                '[B') (( selected < ${#items[@]} - 1 )) && (( selected++ )) ;;
+            esac
+        else
+            case $key in
+                ''|$'\n'|$'\r')
+                    if (( selected == 0 )); then
+                        if load_game; then
+                            return 0
+                        fi
+                    fi
+                    return 1
+                    ;;
+            esac
+        fi
+    done
 }
 
 game_loop() {

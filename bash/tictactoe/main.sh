@@ -5,12 +5,14 @@
 
 tput civis
 tput smcup
+stty -echo -icanon -isig
 clear
 
 cleanup() {
     save_game
 
     trap - INT TERM EXIT
+    stty echo icanon isig
     tput rmcup
     tput cnorm
     tput sgr0
