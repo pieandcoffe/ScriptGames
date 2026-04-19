@@ -4,7 +4,6 @@ GAME_DIR	:= .
 ENTRY		:= main.sh
 BINARY		:= tictactoe
 BUNDLE		:= tictactoe.run
-SAVES_DIR	:= $(GAME_DIR)/saves
 
 .PHONY: all run bundle binary clean install uninstall help
 
@@ -15,7 +14,6 @@ run:
 
 bundle:
 	@echo "Packaging Linux .run..."
-	@mkdir -p $(SAVES_DIR)
 	makeself $(GAME_DIR) $(BUNDLE) "Tic Tac Toe" ./$(ENTRY)
 	@echo "Done $(BUNDLE)"
 
@@ -28,7 +26,6 @@ binary:
 clean:
 	@echo "Cleaning"
 	@rm -f $(BINARY) $(BUNDLE) $(GAME_DIR)/$(ENTRY).x.c
-	@rm -f $(SAVES_DIR)/*.sav
 	@echo "Clean"
 
 install: binary
