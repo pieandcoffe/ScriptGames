@@ -17,7 +17,7 @@ save_game() {
         printf 'O_SCORE=%q\n' "$O_SCORE"
         printf 'PLAYER_NAME=%q\n' "$PLAYER_NAME"
         printf 'LAST_RESULT=%q\n' "$LAST_RESULT"
-        printf 'BOARD=('
+        printf 'BOARD=(' 
         for cell in "${BOARD[@]}"; do
             printf '%q ' "$cell"
         done

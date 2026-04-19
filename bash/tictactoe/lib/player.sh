@@ -73,16 +73,21 @@ player_input() {
 
 player_turn ()
 {
-  player_input || return 1
-
   if check_game_over "$CURRENT_PLAYER"; then
-    if [[ $LAST_RESULT == *_WIN ]]; then
-      clear
-      draw_hud
-      draw_board -1 -1
+    case "$LAST_RESULT" in
+      X_WIN) ((X_SCORE++)) ;;
+      O_WIN) ((O_SCORE++)) ;;
+    esac
+    if handle_game_over; then
+      return 0
     fi
-    echo
-    exit 0
+    return 1
+  fi
+
+  if [[ $CURRENT_PLAYER == "X" ]]; then
+    player_input || return 1
+  else
+    ai_move
   fi
 
   [[ $CURRENT_PLAYER == "X" ]] && CURRENT_PLAYER="O" || CURRENT_PLAYER="X"
