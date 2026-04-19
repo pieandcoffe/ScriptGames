@@ -1,14 +1,5 @@
 #!/bin/bash
 
-prompt_player_name() {
-    local default_name="John"
-
-    printf "Enter player name: "
-    IFS= read -r PLAYER_NAME
-    PLAYER_NAME="${PLAYER_NAME:-$default_name}"
-    echo
-}
-
 show_pause_menu() {
     local items=("Resume" "Save & Quit" "Quit without saving")
     local selected=0

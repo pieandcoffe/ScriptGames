@@ -15,7 +15,6 @@ save_game() {
         printf 'CURSOR_COL=%q\n' "$CURSOR_COL"
         printf 'X_SCORE=%q\n' "$X_SCORE"
         printf 'O_SCORE=%q\n' "$O_SCORE"
-        printf 'PLAYER_NAME=%q\n' "$PLAYER_NAME"
         printf 'LAST_RESULT=%q\n' "$LAST_RESULT"
         printf 'BOARD=(' 
         for cell in "${BOARD[@]}"; do

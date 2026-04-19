@@ -26,7 +26,6 @@ init_game() {
         fi
     fi
 
-    prompt_player_name
     init_board
 }
 
