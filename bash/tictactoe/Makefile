@@ -4,7 +4,6 @@ GAME_DIR	:= .
 ENTRY		:= main.sh
 BINARY		:= tictactoe
 BUNDLE		:= tictactoe.run
-APP		:= tictactoe.app
 SAVES_DIR	:= $(GAME_DIR)/saves
 
 .PHONY: all run bundle binary clean install uninstall help
@@ -19,31 +18,6 @@ bundle:
 	@mkdir -p $(SAVES_DIR)
 	makeself $(GAME_DIR) $(BUNDLE) "Tic Tac Toe" ./$(ENTRY)
 	@echo "Done $(BUNDLE)"
-
-app:
-	@echo "Packeging macOS .app..."
-	@mkdir -p $(APP)/Contents/MacOS
-	@mkdir -p $(APP)/Contents/Resources
-
-	@cp -r $(GAME_DIR)/* $(APP)/Contents/MacOS/
-	@mkdir -p $(APP)/Contents/MacOS/saves
-
-	@echo '#!/bin/bash' > $(APP)/Contents/MacOS/launcher
-	@echo 'DIR="$$(cd "$$(dirname "$$0")" && pwd)"' >> $(APP)/Contents/MacOS/launcher
-	@echo 'open -a Terminal "$$DIR/$(ENTRY)"' >> $(APP)/Contents/MacOS/launcher
-	@chmod +x $(APP)/Contents/MacOS/launcher
-
-	@echo '<?xml version="1.0" encoding="UTF-8"?>' > $(APP)/Contents/Info.plist
-	@echo '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"' >> $(APP)/Contents/Info.plist
-	@echo '  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' >> $(APP)/Contents/Info.plist
-	@echo '<plist version="1.0"><dict>' >> $(APP)/Contents/Info.plist
-	@echo '  <key>CFBundleName</key><string>TicTacToe</string>' >> $(APP)/Contents/Info.plist
-	@echo '  <key>CFBundleExecutable</key><string>launcher</string>' >> $(APP)/Contents/Info.plist
-	@echo '  <key>CFBundleIdentifier</key><string>com.yourname.tictactoe</string>' >> $(APP)/Contents/Info.plist
-	@echo '  <key>CFBundleVersion</key><string>1.0</string>' >> $(APP)/Contents/Info.plist
-	@echo '</dict></plist>' >> $(APP)/Contents/Info.plist
-
-	@echo "Done $(APP)"
 
 binary:
 	@echo "Cleaning"
