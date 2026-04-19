@@ -62,25 +62,25 @@ player_input() {
     done
 }
 
-player_turn ()
-{
-  if check_game_over "$CURRENT_PLAYER"; then
-    case "$LAST_RESULT" in
-      X_WIN) ((X_SCORE++)) ;;
-      O_WIN) ((O_SCORE++)) ;;
-    esac
-    if handle_game_over; then
-      return 0
+player_turn() {
+    if [[ $CURRENT_PLAYER == "X" ]]; then
+        player_input || return 1
+    else
+        ai_move
     fi
-    return 1
-  fi
 
-  if [[ $CURRENT_PLAYER == "X" ]]; then
-    player_input || return 1
-  else
-    ai_move
-  fi
+    if check_game_over; then
+        case "$LAST_RESULT" in
+            X_WIN) ((X_SCORE++)) ;;
+            O_WIN) ((O_SCORE++)) ;;
+        esac
+        if handle_game_over; then
+            return 0
+        else
+            return 1
+        fi
+    fi
 
-  [[ $CURRENT_PLAYER == "X" ]] && CURRENT_PLAYER="O" || CURRENT_PLAYER="X"
+    [[ $CURRENT_PLAYER == "X" ]] && CURRENT_PLAYER="O" || CURRENT_PLAYER="X"
 }
 

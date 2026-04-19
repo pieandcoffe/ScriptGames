@@ -65,16 +65,17 @@ _check_draw ()
 }
 
 check_game_over() {
-    if _check_win "$CURRENT_PLAYER"; then
-        LAST_RESULT="${CURRENT_PLAYER}_WIN"
-        return 0
-    fi
-    if check_draw; then
+    if _check_win "X"; then
+        LAST_RESULT="X_WIN"
+    elif _check_win "O"; then
+        LAST_RESULT="O_WIN"
+    elif _check_draw; then
         LAST_RESULT="DRAW"
-        return 0
+    else
+        LAST_RESULT=""
+        return 1
     fi
-    LAST_RESULT=""
-    return 1
+    return 0
 }
 
 _coords_to_index () 
