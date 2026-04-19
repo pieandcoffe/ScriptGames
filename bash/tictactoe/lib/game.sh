@@ -1,11 +1,5 @@
 #!/bin/bash
 
-. ./lib/save.sh
-. ./lib/draw.sh
-. ./lib/board.sh
-. ./lib/player.sh
-. ./lib/ai.sh
-
 declare -i BOARD_SIZE=3
 declare -a BOARD
 declare    CURRENT_PLAYER="X"

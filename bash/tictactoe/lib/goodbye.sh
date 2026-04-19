@@ -1,6 +1,6 @@
 #!/bin/bash
 
-declare -i EMOTICONS=(
+declare -a EMOTICONS=(
   "<'(o.o)'>"
   "(^o^)"
   "'o._.o'"

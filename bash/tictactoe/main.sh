@@ -1,7 +1,13 @@
 #!/bin/bash
 
-. ./lib/game.sh
 . ./lib/goodbye.sh
+. ./lib/save.sh
+. ./lib/colors.sh
+. ./lib/draw.sh
+. ./lib/board.sh
+. ./lib/player.sh
+. ./lib/ai.sh
+. ./lib/game.sh
 
 tput civis
 tput smcup

@@ -1,7 +1,5 @@
 #!/bin/bash
 
-. ./lib/colors.sh
-
 build_sep() {
     local left="$1" mid="$2" right="$3"
     local sep="─────"
