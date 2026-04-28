@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { SPRITESHEETS, IMAGES } from './assets';
+import { SPRITESHEETS, IMAGES } from '../assets';
 
 export class Preloader extends Scene
 {
