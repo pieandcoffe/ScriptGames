@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { Player } from '../entities/Player';
+import { Slime } from '../entities/Slime';
 
 export class Game extends Scene
 {
@@ -20,13 +21,16 @@ export class Game extends Scene
             .refreshBody()
             .setVisible(false);
 
-        // Player
         this.player = new Player(this, width / 2, height - 32);
 
-        // Collide player with ground
-        this.physics.add.collider(this.player, this.ground);
+        this.slimes = this.add.group();
 
-        // World bounds — player can't leave the scene
+        const slime = new Slime(this, width / 4, height - 32, 200);
+        this.slimes.add(slime);
+
+        this.physics.add.collider(this.player, this.ground);
+        this.physics.add.collider(this.slimes, this.ground);
+
         this.physics.world.setBounds(0, 0, width, height);
         this.player.body.setCollideWorldBounds(true);
     }
@@ -42,5 +46,6 @@ export class Game extends Scene
         if (this.bg1.x >= 240) this.bg1.x = 0;
         
         this.player.update(delta);
+        this.slimes.getChildren().forEach(slime => slime.update(delta));
     }
 }
