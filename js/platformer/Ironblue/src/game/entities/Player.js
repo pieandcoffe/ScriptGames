@@ -1,8 +1,7 @@
 import { GameObjects, Input } from 'phaser';
 import { SPRITESHEETS } from '../assets';
 
-export class Player extends GameObjects.Sprite 
-{
+export class Player extends GameObjects.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, 'player_idle');
 
@@ -12,22 +11,39 @@ export class Player extends GameObjects.Sprite
         this.body.setCollideWorldBounds(true);
 
         this.state = 'idle';
-        this.direction = 'right';
-        this.wasOnGround = false;
-        
-        this.jumpCount = 0;
-        this.maxJumps = 2;
+
+        this.move = {
+            jump: {
+                count: 0,
+                maxCount: 2,
+                velocity: 200,
+                doubleVelocity: 180,
+                cutMultiplier: 0.35,
+                cutApplied: false,
+                wasOnGround: false,
+                coyoteTime: 100,
+                coyoteTimer: 0,
+                bufferTime: 100,
+                bufferTimer: 0,
+            },
+            gravity: {
+                up: 280,
+                down: 800,
+                apex: 120,
+                apexThreshold: 25,
+            },
+            run: { speed: 100 }
+        };
 
         this._registerAnimations();
         this._registerInput();
     }
 
-    _registerAnimations() 
-    {
+    _registerAnimations() {
         const anims = this.scene.anims;
         const playerAnims = SPRITESHEETS.player;
 
-        const configs = 
+        const configs =
         {
             idle:         { frameRate: 8,  repeat: -1 },
             run:          { frameRate: 12, repeat: -1 },
@@ -44,20 +60,35 @@ export class Player extends GameObjects.Sprite
             const animKey = `player_${key}`;
             if (anims.exists(animKey)) continue;
 
-            anims.create({
-                key: animKey,
-                frames: anims.generateFrameNumbers(`player_${key}`, {
-                    start: 0,
-                    end: playerAnims[key].frameCount - 1
-                }),
-                frameRate: cfg.frameRate,
-                repeat: cfg.repeat
-            });
+            anims.create(
+                {
+                    key: animKey,
+                    frames: anims.generateFrameNumbers(`player_${key}`,
+                        {
+                            start: 0,
+                            end: playerAnims[key].frameCount - 1
+                        }),
+                    frameRate: cfg.frameRate,
+                    repeat: cfg.repeat
+                });
         }
     }
 
-    _registerInput()
-    {
+    onHit() {
+        if (this.state === 'death') return;
+        if (this.state === 'hit') return;
+
+        this._setState('hit');
+        this._onAnimComplete('hit', 'idle');
+    }
+
+    onDie() {
+        if (this.state === 'death') return;
+
+        this._setState('death');
+    }
+
+    _registerInput() {
         const kb = this.scene.input.keyboard;
 
         this.keyboard = kb.addKeys({
@@ -68,28 +99,31 @@ export class Player extends GameObjects.Sprite
         });
     }
 
-    _onJump()
-    {
+    _onJump() {
         if (this.state === 'death') return;
 
-        console.log('_onJump called, jumpCount:', this.jumpCount, 'blocked.down:', this.body.blocked.down);
+        const jump = this.move.jump;
 
-        if (this.jumpCount === 0 && this.body.blocked.down) {
-            console.log('Jump!');
-            this.body.setVelocityY(-150);
-            this.jumpCount = 1;
+        if (jump.count === 0 && (this.body.blocked.down || jump.coyoteTimer > 0)) {
+            this.body.setVelocityY(-jump.velocity);
+            jump.count = 1;
+            jump.cutApplied = false;
+            jump.coyoteTimer = 0;
+            jump.bufferTimer = 0;
             this._setState('jump_up');
-        } else if (this.jumpCount === 1 && !this.body.blocked.down) {
-            console.log('Double jump!');
-            this.body.setVelocityY(-150);
-            this.jumpCount = 2;
+        } else if (jump.count === 1 && !this.body.blocked.down) {
+            this.body.setVelocityY(-jump.doubleVelocity);
+            jump.count = 2;
+            jump.cutApplied = false;
+            jump.bufferTimer = 0;
             this._setState('double_jump');
             this._onAnimComplete('double_jump', 'jump_up');
+        } else {
+            jump.bufferTimer = jump.bufferTime;
         }
     }
 
-    _onAttack()
-    {
+    _onAttack() {
         if (this.state === 'death') return;
 
         this._setState('attack');
@@ -102,29 +136,79 @@ export class Player extends GameObjects.Sprite
         });
     }
 
-    _setState(state)
-    {
+    _setState(state) {
         if (this.state === state) return;
 
         this.state = state;
         this.anims.play(`player_${state}`, true);
     }
 
-    update(delta)
-    {
+    update(delta) {
         if (this.state === 'death') return;
 
-        const { jump, attack } = this.keyboard;
+        const { jump: jumpKey, attack } = this.keyboard;
+        const jumpData = this.move.jump;
 
-        if (Input.Keyboard.JustDown(jump))   this._onJump();
-        if (Input.Keyboard.JustDown(attack))  this._onAttack();
+        jumpData.coyoteTimer = Math.max(0, jumpData.coyoteTimer - delta);
+        jumpData.bufferTimer = Math.max(0, jumpData.bufferTimer - delta);
 
+        if (Input.Keyboard.JustDown(jumpKey)) this._onJump();
+        if (Input.Keyboard.JustDown(attack)) this._onAttack();
+
+        if (jumpKey.isUp && this.body.velocity.y < 0 && jumpData.count > 0 && !jumpData.cutApplied) {
+            this.body.setVelocityY(this.body.velocity.y * jumpData.cutMultiplier);
+            jumpData.cutApplied = true;
+        }
+
+        this._updateGravity();
         this._updateMovement();
-        this._updateAerial();
+        this._updateAerial(delta);
     }
 
-    _updateMovement()
-    {
+    _updateGravity() {
+        const { gravity } = this.move;
+        const vy = this.body.velocity.y;
+        const atApex = Math.abs(vy) < gravity.apexThreshold;
+
+        let g;
+        if (atApex) g = gravity.apex;
+        else if (vy < 0) g = gravity.up;
+        else g = gravity.down;
+
+        this.body.setGravityY(g);
+    }
+
+    _updateAerial(delta) {
+        if (this.state === 'attack') return;
+        if (this.state === 'hit') return;
+        if (this.state === 'double_jump') return;
+
+        const onGround = this.body.blocked.down;
+        const jump = this.move.jump;
+
+        if (!onGround && jump.wasOnGround) {
+            if (jump.count === 0) jump.coyoteTimer = jump.coyoteTime;
+        }
+
+        if (onGround && !jump.wasOnGround) {
+            jump.count = 0;
+
+            if (jump.bufferTimer > 0) {
+                jump.bufferTimer = 0;
+                this._onJump();
+                jump.wasOnGround = onGround;
+                return;
+            }
+        }
+
+        jump.wasOnGround = onGround;
+        if (onGround) return;
+
+        if (this.body.velocity.y < 0) this._setState('jump_up');
+        else if (this.body.velocity.y > 0) this._setState('jump_down');
+    }
+
+    _updateMovement() {
         if (this.state === 'attack') return;
         if (this.state === 'hit') return;
 
@@ -132,40 +216,16 @@ export class Player extends GameObjects.Sprite
         const onGround = this.body.blocked.down;
 
         if (left.isDown) {
-            this.body.setVelocityX(-100);
+            this.body.setVelocityX(-this.move.run.speed);
             this.setFlipX(true);
-            this.direction = 'left';
             if (onGround && this.state !== 'run') this._setState('run');
         } else if (right.isDown) {
-            this.body.setVelocityX(100);
+            this.body.setVelocityX(this.move.run.speed);
             this.setFlipX(false);
-            this.direction = 'right';
             if (onGround && this.state !== 'run') this._setState('run');
         } else {
             if (onGround) this.body.setVelocityX(0);
             if (onGround && this.state !== 'idle') this._setState('idle');
-        }
-    }
-
-    _updateAerial()
-    {
-        if (this.state === 'attack') return;
-        if (this.state === 'hit') return;
-        if (this.state === 'double_jump') return;
-
-        const onGround = this.body.blocked.down;
-
-        if (onGround && !this.wasOnGround) {
-            this.jumpCount = 0;
-        }
-        this.wasOnGround = onGround;
-
-        if (onGround) return;
-
-        if (this.body.velocity.y < 0) {
-            this._setState('jump_up');
-        } else if (this.body.velocity.y > 0) {
-            this._setState('jump_down');
         }
     }
 
