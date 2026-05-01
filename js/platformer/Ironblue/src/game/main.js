@@ -4,6 +4,7 @@ import { Preloader } from './scenes/Preloader';
 import { MainMenu } from './scenes/MainMenu';
 import { Game as MainGame } from './scenes/Game';
 import { GameOver } from './scenes/GameOver';
+import { Hud } from './scenes/Hud';
 
 const config = {
     type: 2, // WEBGL
@@ -30,6 +31,7 @@ const config = {
         MainMenu,
         MainGame,
         GameOver,
+        Hud,
     ],
 };
 

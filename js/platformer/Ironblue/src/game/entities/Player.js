@@ -1,4 +1,4 @@
-import { GameObjects, Input } from 'phaser';
+import { GameObjects, Input, Math as PMath } from 'phaser';
 import { SPRITESHEETS } from '../assets';
 
 export class Player extends GameObjects.Sprite {
@@ -11,6 +11,14 @@ export class Player extends GameObjects.Sprite {
         this.body.setCollideWorldBounds(true);
 
         this.state = 'idle';
+
+        this.combat = {
+            hp:                    4,
+            maxHp:                 4,
+            invincible:            false,
+            invincibilityDuration: 1000,
+            invincibilityTimer:    0,
+        };
 
         this.move = {
             jump: {
@@ -39,6 +47,9 @@ export class Player extends GameObjects.Sprite {
         this._registerInput();
     }
 
+    get hp()    { return this.combat.hp; }
+    get maxHp() { return this.combat.maxHp; }
+
     _registerAnimations() {
         const anims = this.scene.anims;
         const playerAnims = SPRITESHEETS.player;
@@ -60,41 +71,57 @@ export class Player extends GameObjects.Sprite {
             const animKey = `player_${key}`;
             if (anims.exists(animKey)) continue;
 
-            anims.create(
-                {
-                    key: animKey,
-                    frames: anims.generateFrameNumbers(`player_${key}`,
-                        {
-                            start: 0,
-                            end: playerAnims[key].frameCount - 1
-                        }),
-                    frameRate: cfg.frameRate,
-                    repeat: cfg.repeat
-                });
+            anims.create({
+                key: animKey,
+                frames: anims.generateFrameNumbers(`player_${key}`, {
+                    start: 0,
+                    end: playerAnims[key].frameCount - 1
+                }),
+                frameRate: cfg.frameRate,
+                repeat: cfg.repeat
+            });
         }
     }
 
-    onHit() {
+    hit() {
+        const { combat } = this;
+
         if (this.state === 'death') return;
-        if (this.state === 'hit') return;
+        if (this.state === 'hit')   return;
+        if (combat.invincible)      return;
+
+        combat.invincible = true;
+        combat.hp = PMath.Clamp(combat.hp - 1, 0, combat.maxHp);
+        this.emit('hit');
+
+        if (combat.hp <= 0) {
+            this.die();
+            return;
+        }
 
         this._setState('hit');
-        this._onAnimComplete('hit', 'idle');
+        this._onAnimComplete('hit', () => {
+            combat.invincibilityTimer = combat.invincibilityDuration;
+        });
     }
 
-    onDie() {
+    die() {
         if (this.state === 'death') return;
 
         this._setState('death');
+        this._onAnimComplete('death', () => {
+            this.setActive(false);
+            this.setVisible(false);
+        });
     }
 
     _registerInput() {
         const kb = this.scene.input.keyboard;
 
         this.keyboard = kb.addKeys({
-            left: Input.Keyboard.KeyCodes.A,
-            right: Input.Keyboard.KeyCodes.D,
-            jump: Input.Keyboard.KeyCodes.SPACE,
+            left:   Input.Keyboard.KeyCodes.A,
+            right:  Input.Keyboard.KeyCodes.D,
+            jump:   Input.Keyboard.KeyCodes.SPACE,
             attack: Input.Keyboard.KeyCodes.ENTER,
         });
     }
@@ -111,9 +138,9 @@ export class Player extends GameObjects.Sprite {
             jump.coyoteTimer = 0;
             jump.bufferTimer = 0;
             this._setState('jump_up');
-        } else if (jump.count === 1 && !this.body.blocked.down) {
+        } else if (jump.count < jump.maxCount && !this.body.blocked.down) {
             this.body.setVelocityY(-jump.doubleVelocity);
-            jump.count = 2;
+            jump.count++;
             jump.cutApplied = false;
             jump.bufferTimer = 0;
             this._setState('double_jump');
@@ -130,9 +157,16 @@ export class Player extends GameObjects.Sprite {
         this._onAnimComplete('attack', 'idle');
     }
 
-    _onAnimComplete(fromState, toState) {
+    _onAnimComplete(fromState, toStateOrCallback) {
         this.once('animationcomplete', () => {
-            if (this.state === fromState) this._setState(toState);
+            if (this.state !== fromState) return;
+
+            if (typeof toStateOrCallback === 'function') {
+                toStateOrCallback();
+                this._setState('idle');
+            } else {
+                this._setState(toStateOrCallback);
+            }
         });
     }
 
@@ -146,23 +180,45 @@ export class Player extends GameObjects.Sprite {
     update(delta) {
         if (this.state === 'death') return;
 
-        const { jump: jumpKey, attack } = this.keyboard;
-        const jumpData = this.move.jump;
-
-        jumpData.coyoteTimer = Math.max(0, jumpData.coyoteTimer - delta);
-        jumpData.bufferTimer = Math.max(0, jumpData.bufferTimer - delta);
-
-        if (Input.Keyboard.JustDown(jumpKey)) this._onJump();
-        if (Input.Keyboard.JustDown(attack)) this._onAttack();
-
-        if (jumpKey.isUp && this.body.velocity.y < 0 && jumpData.count > 0 && !jumpData.cutApplied) {
-            this.body.setVelocityY(this.body.velocity.y * jumpData.cutMultiplier);
-            jumpData.cutApplied = true;
-        }
-
+        this._tickTimers(delta);
+        this._updateInvincibility(delta);
+        this._handleInput();
         this._updateGravity();
         this._updateMovement();
         this._updateAerial(delta);
+    }
+
+    _tickTimers(delta) {
+        const { jump } = this.move;
+        jump.coyoteTimer = Math.max(0, jump.coyoteTimer - delta);
+        jump.bufferTimer = Math.max(0, jump.bufferTimer - delta);
+    }
+
+    _updateInvincibility(delta) {
+        const { combat } = this;
+        if (!combat.invincible || combat.invincibilityTimer === 0) return;
+
+        combat.invincibilityTimer = Math.max(0, combat.invincibilityTimer - delta);
+        if (combat.invincibilityTimer === 0) {
+            combat.invincible = false;
+            this.setAlpha(1);
+            return;
+        }
+
+        this.setAlpha(Math.sin(combat.invincibilityTimer * 0.05) > 0 ? 1 : 0.3);
+    }
+
+    _handleInput() {
+        const { jump: jumpKey, attack } = this.keyboard;
+        const jump = this.move.jump;
+
+        if (Input.Keyboard.JustDown(jumpKey)) this._onJump();
+        if (Input.Keyboard.JustDown(attack))  this._onAttack();
+
+        if (jumpKey.isUp && this.body.velocity.y < 0 && jump.count > 0 && !jump.cutApplied) {
+            this.body.setVelocityY(this.body.velocity.y * jump.cutMultiplier);
+            jump.cutApplied = true;
+        }
     }
 
     _updateGravity() {
@@ -171,16 +227,16 @@ export class Player extends GameObjects.Sprite {
         const atApex = Math.abs(vy) < gravity.apexThreshold;
 
         let g;
-        if (atApex) g = gravity.apex;
+        if (atApex)      g = gravity.apex;
         else if (vy < 0) g = gravity.up;
-        else g = gravity.down;
+        else             g = gravity.down;
 
         this.body.setGravityY(g);
     }
 
     _updateAerial(delta) {
-        if (this.state === 'attack') return;
-        if (this.state === 'hit') return;
+        if (this.state === 'attack')      return;
+        if (this.state === 'hit')         return;
         if (this.state === 'double_jump') return;
 
         const onGround = this.body.blocked.down;
@@ -204,13 +260,13 @@ export class Player extends GameObjects.Sprite {
         jump.wasOnGround = onGround;
         if (onGround) return;
 
-        if (this.body.velocity.y < 0) this._setState('jump_up');
+        if      (this.body.velocity.y < 0) this._setState('jump_up');
         else if (this.body.velocity.y > 0) this._setState('jump_down');
     }
 
     _updateMovement() {
         if (this.state === 'attack') return;
-        if (this.state === 'hit') return;
+        if (this.state === 'hit')    return;
 
         const { left, right } = this.keyboard;
         const onGround = this.body.blocked.down;
@@ -228,5 +284,4 @@ export class Player extends GameObjects.Sprite {
             if (onGround && this.state !== 'idle') this._setState('idle');
         }
     }
-
 }

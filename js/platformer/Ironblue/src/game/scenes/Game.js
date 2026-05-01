@@ -21,7 +21,14 @@ export class Game extends Scene
             .refreshBody()
             .setVisible(false);
 
+        this.scene.launch('Hud');
+        this.hud = this.scene.get('Hud');
+
         this.player = new Player(this, width / 2, height - 32);
+        this.hud.setup(this.player);
+        this.player.on('hit', () => {
+            this.hud.setHealth(this.player.hp);
+        });
 
         this.slimes = this.add.group();
 

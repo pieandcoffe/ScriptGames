@@ -20,7 +20,7 @@ export class Enemy extends GameObjects.Sprite
     {
         const player = this.scene.player;
         this.scene.physics.add.overlap(this, player, () => {
-            player.onHit();
+            player.hit();
         });
     }
 
