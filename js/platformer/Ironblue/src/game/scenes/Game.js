@@ -2,72 +2,79 @@ import { Scene } from 'phaser';
 import { Player } from '../entities/Player';
 import { Slime } from '../entities/Slime';
 
-export class Game extends Scene
-{
-    constructor ()
-    {
+export class Game extends Scene {
+    constructor() {
         super('Game');
     }
 
-    create ()
-    {
+    create() {
         const { width, height } = this.scale;
 
+        // Backgrounds
         this.bg0 = this.add.tileSprite(0, 0, width, height, 'background_bg_0').setOrigin(0, 0);
         this.bg1 = this.add.tileSprite(0, 0, width, height, 'background_bg_1').setOrigin(0, 0);
-        
+
+        // Ground
         this.ground = this.physics.add.staticImage(width / 2, height - 8, null)
             .setDisplaySize(width, 16)
             .refreshBody()
             .setVisible(false);
 
+        // Player
+        this.player = new Player(this, width / 2, height - 32);
+        this.physics.add.collider(this.player, this.ground);
+        this.player.body.setCollideWorldBounds(true);
+
+        // HUD
+        this.scene.stop('Hud');
         this.scene.launch('Hud');
         this.hud = this.scene.get('Hud');
 
-        this.player = new Player(this, width / 2, height - 32);
-        this.hud.setup(this.player);
-        this.player.on('hit', () => {
-            this.hud.setHealth(this.player.hp);
+        this.scene.get('Hud').events.once('create', () => {
+            this.hud.setup(this.player);
+            this.player.on('hit', () => this.hud.setHealth(this.player.hp));
         });
 
+        // Slimes
         this.slimes = this.add.group();
+        this._spawnSlime(width / 4, height - 32, 200);
 
-        const slime = new Slime(this, width / 4, height - 32, 200);
-        this.slimes.add(slime);
-
-        this.physics.add.collider(this.player, this.ground);
-        this.physics.add.collider(this.slimes, this.ground);
-
+        // Sword overlap
         this.physics.add.overlap(this.player.sword, this.slimes, (sword, enemy) => {
             if (sword.hitTargets.has(enemy)) return;
             sword.hitTargets.add(enemy);
-            enemy.hit(sword);
+            enemy.hit(sword.player);
         });
 
+        // Click to spawn slimes
         this.input.on('pointerdown', (pointer) => {
-            const slime = new Slime(this, pointer.x, pointer.y, 200);
-            this.slimes.add(slime);
-            this.physics.add.collider(slime, this.ground);
+            this._spawnSlime(pointer.x, pointer.y, 200);
         });
 
+        // World bounds
+        this.physics.world.setBounds(0, 0, width, height);
+
+        // Game over
         this.player.on('dead', () => {
+            this.scene.stop('Hud');
             this.scene.start('GameOver');
         });
-
-        this.physics.world.setBounds(0, 0, width, height);
-        this.player.body.setCollideWorldBounds(true);
     }
 
-    update(time, delta) 
-    {
+    /**
+     * Spawns a slime and registers its colliders.
+     */
+    _spawnSlime(x, y, patrolDistance) {
+        const slime = new Slime(this, x, y, patrolDistance);
+        this.slimes.add(slime);
+        this.physics.add.collider(slime, this.ground);
+    }
+
+    update(time, delta) {
         const dt = delta / 16.667;
-
         this.bg0.tilePositionX += 0.25 * dt;
-        this.bg1.tilePositionX += 0.4 * dt;
+        this.bg1.tilePositionX += 0.4  * dt;
 
-        if (this.bg0.x >= 240) this.bg0.x = 0;
-        if (this.bg1.x >= 240) this.bg1.x = 0;
-        
         this.player.update(delta);
         this.slimes.getChildren().forEach(slime => slime.update(time, delta));
     }

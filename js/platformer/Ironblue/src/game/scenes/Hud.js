@@ -6,21 +6,22 @@ export class Hud extends Scene
     constructor()
     {
         super('Hud');
-
-        this.hearts      = [];
-        this.heartsCount = 0;
     }
 
     create()
     {
+        this.hearts      = [];
+        this.heartsCount = 0;
         this._registerAnimations();
     }
 
     setup(player)
     {
-        this.player      = player;
+        this.hearts.forEach(h => h.destroy());
+        this.hearts      = [];
         this.heartsCount = player.hp;
-
+        this.player      = player;
+        
         this._createHearts();
     }
 
