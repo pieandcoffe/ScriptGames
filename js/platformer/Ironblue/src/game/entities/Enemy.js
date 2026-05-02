@@ -1,67 +1,44 @@
-import { GameObjects } from 'phaser';
+import { Entity } from './Entity';
 
-export class Enemy extends GameObjects.Sprite
-{
-    constructor(scene, x, y, spriteKey)
-    {
+export class Enemy extends Entity {
+
+    /**
+     * Creates a new enemy instance.
+     * @param {Phaser.Scene} scene - The scene to which the enemy belongs.
+     * @param {number} x - The x-coordinate of the enemy's position.
+     * @param {number} y - The y-coordinate of the enemy's position.
+     * @param {string} spriteKey - The key for the enemy's sprite.
+     */
+    constructor(scene, x, y, spriteKey) {
         super(scene, x, y, spriteKey);
-
-        scene.add.existing(this);
-        scene.physics.add.existing(this);
-
-        this.body.setCollideWorldBounds(true);
-
-        this.state = 'idle';
         this.direction = -1;
-        this.hp = 1;
     }
 
-    _registerCollisions()
-    {
-        const player = this.scene.player;
+    /**
+     * Registers collisions for the enemy.
+     */
+    _registerCollisions() {
+        const { player } = this.scene;
         this.scene.physics.add.overlap(this, player, () => {
-            player.hit();
+            if (!this.dead && this.state !== 'hit') player.hit(this);
         });
     }
 
-    hit()
-    {
-        if (this.state === 'death') return;
-
-        this.body.setVelocityX(0);
-        this.hp--;
-
-        if (this.hp <= 0) {
-            this.die();
-        } else {
-            this._setState('hit');
-            this._onAnimComplete('hit', 'idle');
-        }
+    /**
+     * Called when the enemy is hit.
+     */
+    _onHitRecover() {
+        this._setState('hit');
+        this._onAnimComplete('hit', 'idle');
     }
 
-    die()
-    {
-        if (this.state === 'death') return;
-
-        this.body.setVelocityX(0);
-        this._setState('death');
-        this.once('animationcomplete', () => this.destroy());
+    /**
+     * Updates the enemy's state and position.
+     * @param {number} time - The current time.
+     * @param {number} delta - The time elapsed since the last update.
+     */
+    update(time, delta) {
+        if (this.dead) return;
+        super.update(time, delta);
     }
-
-    _setState(state)
-    {
-        if (this.state === state) return;
-
-        this.state = state;
-        this.play(`${this.texture.key.split('_')[0]}_${state}`);
-    }
-
-    _onAnimComplete(fromState, toState)
-    {
-        this.once('animationcomplete', () => {
-            if (this.state === fromState) this._setState(toState);
-        });
-    }
-
-    update(time, delta) {}
 }

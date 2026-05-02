@@ -6,7 +6,7 @@ export const SPRITESHEETS = {
     jump_down:        { path: 'assets/herochar_sprites_new/herochar_jump_down_anim_strip_3.png',        frameWidth: 16, frameHeight: 16, frameCount: 3 },
     double_jump:      { path: 'assets/herochar_sprites_new/herochar_jump_double_anim_strip_3.png',      frameWidth: 16, frameHeight: 16, frameCount: 3 },
     attack:           { path: 'assets/herochar_sprites_new/herochar_attack_anim_strip_4_new.png',       frameWidth: 16, frameHeight: 16, frameCount: 4 },
-    sword_attack:     { path: 'assets/herochar_sprites_new/herochar_sword_attack_anim_strip_4.png',     frameWidth: 32, frameHeight: 16, frameCount: 4 },
+    sword_attack:     { path: 'assets/herochar_sprites_new/herochar_sword_attack_anim_strip_4.png',     frameWidth: 16, frameHeight: 16, frameCount: 4 },
     hit:              { path: 'assets/herochar_sprites_new/herochar_hit_anim_strip_3.png',              frameWidth: 16, frameHeight: 16, frameCount: 3 },
     death:            { path: 'assets/herochar_sprites_new/herochar_death_anim_strip_8.png',            frameWidth: 16, frameHeight: 16, frameCount: 8 },
     before_jump_dust: { path: 'assets/herochar_sprites_new/herochar_before_jump_dust_anim_strip_4.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },

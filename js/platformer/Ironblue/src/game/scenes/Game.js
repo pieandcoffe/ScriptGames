@@ -38,6 +38,22 @@ export class Game extends Scene
         this.physics.add.collider(this.player, this.ground);
         this.physics.add.collider(this.slimes, this.ground);
 
+        this.physics.add.overlap(this.player.sword, this.slimes, (sword, enemy) => {
+            if (sword.hitTargets.has(enemy)) return;
+            sword.hitTargets.add(enemy);
+            enemy.hit(sword);
+        });
+
+        this.input.on('pointerdown', (pointer) => {
+            const slime = new Slime(this, pointer.x, pointer.y, 200);
+            this.slimes.add(slime);
+            this.physics.add.collider(slime, this.ground);
+        });
+
+        this.player.on('dead', () => {
+            this.scene.start('GameOver');
+        });
+
         this.physics.world.setBounds(0, 0, width, height);
         this.player.body.setCollideWorldBounds(true);
     }
@@ -53,6 +69,6 @@ export class Game extends Scene
         if (this.bg1.x >= 240) this.bg1.x = 0;
         
         this.player.update(delta);
-        this.slimes.getChildren().forEach(slime => slime.update(delta));
+        this.slimes.getChildren().forEach(slime => slime.update(time, delta));
     }
 }
