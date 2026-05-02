@@ -269,11 +269,13 @@ export class Player extends Entity {
      * Updates the player's state and position.
      * @param {number} delta - The time elapsed since the last update.
      */
-    update(delta) {
+    update(time, delta) {
+        super.update(time, delta);
+
         if (this.dead) return;
+        if (this._knockbackTimer > 0) return;
 
         this._tickTimers(delta);
-        this._updateInvincibility(delta);
         this._handleInput();
         this._updateGravity();
         this._updateMovement();

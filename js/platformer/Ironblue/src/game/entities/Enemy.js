@@ -38,6 +38,8 @@ export class Enemy extends Entity {
      * @param {number} delta - The time elapsed since the last update.
      */
     update(time, delta) {
+        super.update(time, delta);
+        
         if (this.dead) return;
         super.update(time, delta);
     }

@@ -104,7 +104,7 @@ export class Slime extends Enemy {
 
         patrol.isStopped = true;
         this.body.setVelocityX(0);
-        
+
         if (patrol.stopTimer) patrol.stopTimer.remove();
 
         patrol.stopTimer = this.scene.time.delayedCall(1000, () => {
@@ -122,6 +122,8 @@ export class Slime extends Enemy {
      * @param {number} delta
      */
     update(time, delta) {
+        super.update(time, delta);
+
         if (this.dead)            return;
         if (this.state === 'hit') return;
 

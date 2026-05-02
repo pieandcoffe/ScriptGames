@@ -18,9 +18,10 @@ export class Entity extends GameObjects.Sprite {
         scene.physics.add.existing(this);
         this.body.setCollideWorldBounds(true);
 
-        this.state     = 'idle';
-        this.direction = 1;
-        this.dead      = false;
+        this.state              = 'idle';
+        this.direction          = 1;
+        this.dead               = false;
+        this._knockbackTimer    = 0;
 
         this.combat = {
             hp:                    1,
@@ -95,16 +96,12 @@ export class Entity extends GameObjects.Sprite {
         const dy = this.y - source.y;
         const len = Math.sqrt(dx * dx + dy * dy) || 1;
 
-        const nx = dx / len;
-        const ny = dy / len;
+        this.body.setVelocity(
+            (dx / len) * KNOCKBACK_FORCE, 
+            (dy / len) * KNOCKBACK_FORCE
+        );
 
-        this.body.setVelocity(nx * KNOCKBACK_FORCE, ny * KNOCKBACK_FORCE);
-
-        this.scene.time.delayedCall(KNOCKBACK_DURATION, () => {
-            if (this.body) {
-                this.body.setVelocity(0, 0);
-            }
-        });
+        this._knockbackTimer = KNOCKBACK_DURATION;
     }
 
     /**
@@ -165,8 +162,22 @@ export class Entity extends GameObjects.Sprite {
      * @param {number} delta - The time elapsed since the last update.
      */
     update(time, delta) {
+        if(!this.dead) {
+            this._updateInvincibility(delta);
+        }
+
+        if (this._knockbackTimer > 0) {
+            this._knockbackTimer -= delta;
+            const drag = Math.pow(0.001, delta / 1000);
+
+            this.body.setVelocity(
+                this.body.velocity.x * drag, 
+                this.body.velocity.y * drag
+            );
+            return;
+        }
+
         if (this.dead) return;
-        this._updateInvincibility(delta);
     }
 
     /**

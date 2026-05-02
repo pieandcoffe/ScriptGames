@@ -81,7 +81,7 @@ export class Game extends Scene {
         this.bg0.tilePositionX += 0.25 * dt;
         this.bg1.tilePositionX += 0.4  * dt;
 
-        this.player.update(delta);
+        this.player.update(time, delta);
         this.playerLight.setPosition(this.player.x, this.player.y);
         this.slimes.getChildren().forEach(slime => slime.update(time, delta));
     }
