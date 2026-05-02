@@ -43,7 +43,7 @@ export class Game extends Scene {
         this.physics.add.overlap(this.player.sword, this.slimes, (sword, enemy) => {
             if (sword.hitTargets.has(enemy)) return;
             sword.hitTargets.add(enemy);
-            enemy.hit(sword.player);
+            enemy.hit(sword);
         });
 
         // Click to spawn slimes
