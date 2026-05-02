@@ -12,6 +12,8 @@ export class Entity extends GameObjects.Sprite {
     constructor(scene, x, y, spriteKey) {
         super(scene, x, y, spriteKey);
 
+        this.setLighting(true);
+
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.body.setCollideWorldBounds(true);

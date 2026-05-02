@@ -34,8 +34,9 @@ export class Preloader extends Scene
             for (const [animKey, cfg] of Object.entries(animations)) {
                 const key = `${entityKey}_${animKey}`;
                 this.load.spritesheet(key, cfg.path, {
-                frameWidth: cfg.frameWidth,
-                frameHeight: cfg.frameHeight,
+                    frameWidth: cfg.frameWidth,
+                    frameHeight: cfg.frameHeight,
+                    normalMap: cfg.normal_map,
                 });
             }
         }

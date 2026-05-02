@@ -14,6 +14,12 @@ export class Game extends Scene {
         this.bg0 = this.add.tileSprite(0, 0, width, height, 'background_bg_0').setOrigin(0, 0);
         this.bg1 = this.add.tileSprite(0, 0, width, height, 'background_bg_1').setOrigin(0, 0);
 
+        // Lights
+        this.lights.enable().setAmbientColor(0x333333);
+        this.playerLight = this.lights.addLight(0, 0, 250, 0x333333, 2.0);
+        this.torchLight = this.lights.addLight(width / 3, height / 1.5, 180, 0x333333, 2.5);
+        this.torchLight = this.lights.addLight(width / 3, height / 1.5, 180, 0x333333, 2.5);
+
         // Ground
         this.ground = this.physics.add.staticImage(width / 2, height - 8, null)
             .setDisplaySize(width, 16)
@@ -76,6 +82,7 @@ export class Game extends Scene {
         this.bg1.tilePositionX += 0.4  * dt;
 
         this.player.update(delta);
+        this.playerLight.setPosition(this.player.x, this.player.y);
         this.slimes.getChildren().forEach(slime => slime.update(time, delta));
     }
 }

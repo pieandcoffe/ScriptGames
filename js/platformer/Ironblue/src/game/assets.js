@@ -1,158 +1,158 @@
 export const SPRITESHEETS = {
   player: {
-    idle:             { path: 'assets/herochar_sprites_new/herochar_idle_anim_strip_4.png',             frameWidth: 16, frameHeight: 16, frameCount: 4 },
-    run:              { path: 'assets/herochar_sprites_new/herochar_run_anim_strip_6.png',              frameWidth: 16, frameHeight: 16, frameCount: 6 },
-    jump_up:          { path: 'assets/herochar_sprites_new/herochar_jump_up_anim_strip_3.png',          frameWidth: 16, frameHeight: 16, frameCount: 3 },
-    jump_down:        { path: 'assets/herochar_sprites_new/herochar_jump_down_anim_strip_3.png',        frameWidth: 16, frameHeight: 16, frameCount: 3 },
-    double_jump:      { path: 'assets/herochar_sprites_new/herochar_jump_double_anim_strip_3.png',      frameWidth: 16, frameHeight: 16, frameCount: 3 },
-    attack:           { path: 'assets/herochar_sprites_new/herochar_attack_anim_strip_4_new.png',       frameWidth: 16, frameHeight: 16, frameCount: 4 },
-    sword_attack:     { path: 'assets/herochar_sprites_new/herochar_sword_attack_anim_strip_4.png',     frameWidth: 16, frameHeight: 16, frameCount: 4 },
-    hit:              { path: 'assets/herochar_sprites_new/herochar_hit_anim_strip_3.png',              frameWidth: 16, frameHeight: 16, frameCount: 3 },
-    death:            { path: 'assets/herochar_sprites_new/herochar_death_anim_strip_8.png',            frameWidth: 16, frameHeight: 16, frameCount: 8 },
-    before_jump_dust: { path: 'assets/herochar_sprites_new/herochar_before_jump_dust_anim_strip_4.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
-    after_jump_dust:  { path: 'assets/herochar_sprites_new/herochar_after_jump_dust_anim_strip_4.png',  frameWidth: 16, frameHeight: 16, frameCount: 4 },
-    push_forward:     { path: 'assets/herochar_sprites_new/herochar_pushing_foward_anim_strip_6.png',   frameWidth: 16, frameHeight: 16, frameCount: 6 },
+    idle:             { path: 'assets/herochar_sprites_new/herochar_idle_anim_strip_4.png', normal_map: 'assets/herochar_sprites_new/herochar_idle_anim_strip_4_n.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
+    run:              { path: 'assets/herochar_sprites_new/herochar_run_anim_strip_6.png', normal_map: 'assets/herochar_sprites_new/herochar_run_anim_strip_6_n.png', frameWidth: 16, frameHeight: 16, frameCount: 6 },
+    jump_up:          { path: 'assets/herochar_sprites_new/herochar_jump_up_anim_strip_3.png', normal_map: 'assets/herochar_sprites_new/herochar_jump_up_anim_strip_3_n.png', frameWidth: 16, frameHeight: 16, frameCount: 3 },
+    jump_down:        { path: 'assets/herochar_sprites_new/herochar_jump_down_anim_strip_3.png', normal_map: 'assets/herochar_sprites_new/herochar_jump_down_anim_strip_3_n.png', frameWidth: 16, frameHeight: 16, frameCount: 3 },
+    double_jump:      { path: 'assets/herochar_sprites_new/herochar_jump_double_anim_strip_3.png', normal_map: 'assets/herochar_sprites_new/herochar_jump_double_anim_strip_3_n.png', frameWidth: 16, frameHeight: 16, frameCount: 3 },
+    attack:           { path: 'assets/herochar_sprites_new/herochar_attack_anim_strip_4_new.png', normal_map: 'assets/herochar_sprites_new/herochar_attack_anim_strip_4_new_n.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
+    sword_attack:     { path: 'assets/herochar_sprites_new/herochar_sword_attack_anim_strip_4.png', normal_map: 'assets/herochar_sprites_new/herochar_sword_attack_anim_strip_4_n.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
+    hit:              { path: 'assets/herochar_sprites_new/herochar_hit_anim_strip_3.png', normal_map: 'assets/herochar_sprites_new/herochar_hit_anim_strip_3_n.png', frameWidth: 16, frameHeight: 16, frameCount: 3 },
+    death:            { path: 'assets/herochar_sprites_new/herochar_death_anim_strip_8.png', normal_map: 'assets/herochar_sprites_new/herochar_death_anim_strip_8_n.png', frameWidth: 16, frameHeight: 16, frameCount: 8 },
+    before_jump_dust: { path: 'assets/herochar_sprites_new/herochar_before_jump_dust_anim_strip_4.png', normal_map: 'assets/herochar_sprites_new/herochar_before_jump_dust_anim_strip_4_n.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
+    after_jump_dust:  { path: 'assets/herochar_sprites_new/herochar_after_jump_dust_anim_strip_4.png', normal_map: 'assets/herochar_sprites_new/herochar_after_jump_dust_anim_strip_4_n.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
+    push_forward:     { path: 'assets/herochar_sprites_new/herochar_pushing_foward_anim_strip_6.png', normal_map: 'assets/herochar_sprites_new/herochar_pushing_foward_anim_strip_6_n.png', frameWidth: 16, frameHeight: 16, frameCount: 6 },
   },
 
   goblin: {
-    idle:   { path: 'assets/enemies_sprites/goblin/goblin_idle_anim_strip_4.png',   frameWidth: 16, frameHeight: 16, frameCount: 4 },
-    run:    { path: 'assets/enemies_sprites/goblin/goblin_run_anim_strip_6.png',    frameWidth: 16, frameHeight: 16, frameCount: 6 },
-    attack: { path: 'assets/enemies_sprites/goblin/goblin_attack_anim_strip_4.png', frameWidth: 24, frameHeight: 16, frameCount: 4 },
-    hit:    { path: 'assets/enemies_sprites/goblin/goblin_hit_anim_strip_3.png',    frameWidth: 16, frameHeight: 16, frameCount: 3 },
-    death:  { path: 'assets/enemies_sprites/goblin/goblin_death_anim_strip_6.png',  frameWidth: 16, frameHeight: 16, frameCount: 6 },
+    idle:   { path: 'assets/enemies_sprites/goblin/goblin_idle_anim_strip_4.png', normal_map: 'assets/enemies_sprites/goblin/goblin_idle_anim_strip_4_n.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
+    run:    { path: 'assets/enemies_sprites/goblin/goblin_run_anim_strip_6.png', normal_map: 'assets/enemies_sprites/goblin/goblin_run_anim_strip_6_n.png', frameWidth: 16, frameHeight: 16, frameCount: 6 },
+    attack: { path: 'assets/enemies_sprites/goblin/goblin_attack_anim_strip_4.png', normal_map: 'assets/enemies_sprites/goblin/goblin_attack_anim_strip_4_n.png', frameWidth: 24, frameHeight: 16, frameCount: 4 },
+    hit:    { path: 'assets/enemies_sprites/goblin/goblin_hit_anim_strip_3.png', normal_map: 'assets/enemies_sprites/goblin/goblin_hit_anim_strip_3_n.png', frameWidth: 16, frameHeight: 16, frameCount: 3 },
+    death:  { path: 'assets/enemies_sprites/goblin/goblin_death_anim_strip_6.png', normal_map: 'assets/enemies_sprites/goblin/goblin_death_anim_strip_6_n.png', frameWidth: 16, frameHeight: 16, frameCount: 6 },
   },
 
   bomber_goblin: {
-    idle:   { path: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_idle_anim_strip_4.png',   frameWidth: 16, frameHeight: 16, frameCount: 4 },
-    attack: { path: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_attack_anim_strip_6.png', frameWidth: 16, frameHeight: 16, frameCount: 6 },
-    hit:    { path: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_hit_anim_strip_3.png',    frameWidth: 16, frameHeight: 16, frameCount: 3 },
-    death:  { path: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_death_anim_strip_6.png',  frameWidth: 16, frameHeight: 16, frameCount: 6 },
+    idle:   { path: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_idle_anim_strip_4.png',   normal_map: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_idle_anim_strip_4_n.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
+    attack: { path: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_attack_anim_strip_6.png', normal_map: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_attack_anim_strip_6_n.png', frameWidth: 16, frameHeight: 16, frameCount: 6 },
+    hit:    { path: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_hit_anim_strip_3.png',    normal_map: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_hit_anim_strip_3_n.png', frameWidth: 16, frameHeight: 16, frameCount: 3 },
+    death:  { path: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_death_anim_strip_6.png',  normal_map: 'assets/enemies_sprites/bomber_goblin/bomber_goblin_death_anim_strip_6_n.png', frameWidth: 16, frameHeight: 16, frameCount: 6 },
   },
 
   fly_blue: {
-    idle_flying: { path: 'assets/enemies_sprites/fly/blue_fly_idle_or_flying_anim_strip_3.png', frameWidth: 8, frameHeight: 8, frameCount: 3 },
-    attack:      { path: 'assets/enemies_sprites/fly/blue_fly_attack_anim_srip_3.png',          frameWidth: 8, frameHeight: 8, frameCount: 3 },
-    hit:         { path: 'assets/enemies_sprites/fly/blue_fly_hit_anim_strip_3.png',            frameWidth: 8, frameHeight: 8, frameCount: 3 },
-    death:       { path: 'assets/enemies_sprites/fly/blue_fly_death_anim_strip_5.png',          frameWidth: 8, frameHeight: 8, frameCount: 5 },
+    idle_flying: { path: 'assets/enemies_sprites/fly/blue_fly_idle_or_flying_anim_strip_3.png', normal_map: 'assets/enemies_sprites/fly/blue_fly_idle_or_flying_anim_strip_3_n.png', frameWidth: 8, frameHeight: 8, frameCount: 3 },
+    attack:      { path: 'assets/enemies_sprites/fly/blue_fly_attack_anim_srip_3.png',          normal_map: 'assets/enemies_sprites/fly/blue_fly_attack_anim_strip_3_n.png',          frameWidth: 8, frameHeight: 8, frameCount: 3 },
+    hit:         { path: 'assets/enemies_sprites/fly/blue_fly_hit_anim_strip_3.png',            normal_map: 'assets/enemies_sprites/fly/blue_fly_hit_anim_strip_3_n.png',            frameWidth: 8, frameHeight: 8, frameCount: 3 },
+    death:       { path: 'assets/enemies_sprites/fly/blue_fly_death_anim_strip_5.png',          normal_map: 'assets/enemies_sprites/fly/blue_fly_death_anim_strip_5_n.png',          frameWidth: 8, frameHeight: 8, frameCount: 5 },
   },
 
   fly_orange: {
-    idle_flying: { path: 'assets/enemies_sprites/fly/orange_fly_idle_or_flying_anim_strip_3.png', frameWidth: 8, frameHeight: 8, frameCount: 3 },
-    attack:      { path: 'assets/enemies_sprites/fly/orange_fly_atack_anim_srip_3.png',           frameWidth: 8, frameHeight: 8, frameCount: 3 },
-    hit:         { path: 'assets/enemies_sprites/fly/orange_fly_hit_anim_strip_3.png',            frameWidth: 8, frameHeight: 8, frameCount: 3 },
-    death:       { path: 'assets/enemies_sprites/fly/orange_fly_death_anim_strip_5.png',          frameWidth: 8, frameHeight: 8, frameCount: 5 },
+    idle_flying: { path: 'assets/enemies_sprites/fly/orange_fly_idle_or_flying_anim_strip_3.png', normal_map: 'assets/enemies_sprites/fly/orange_fly_idle_or_flying_anim_strip_3_n.png', frameWidth: 8, frameHeight: 8, frameCount: 3 },
+    attack:      { path: 'assets/enemies_sprites/fly/orange_fly_atack_anim_srip_3.png',           normal_map: 'assets/enemies_sprites/fly/orange_fly_attack_anim_strip_3_n.png',           frameWidth: 8, frameHeight: 8, frameCount: 3 },
+    hit:         { path: 'assets/enemies_sprites/fly/orange_fly_hit_anim_strip_3.png',            normal_map: 'assets/enemies_sprites/fly/orange_fly_hit_anim_strip_3_n.png',            frameWidth: 8, frameHeight: 8, frameCount: 3 },
+    death:       { path: 'assets/enemies_sprites/fly/orange_fly_death_anim_strip_5.png',          normal_map: 'assets/enemies_sprites/fly/orange_fly_death_anim_strip_5_n.png',          frameWidth: 8, frameHeight: 8, frameCount: 5 },
   },
 
   slime: {
-    idle:  { path: 'assets/enemies_sprites/slime/slime_idle_anim_strip_5.png',  frameWidth: 16, frameHeight: 16, frameCount: 5 },
-    walk:  { path: 'assets/enemies_sprites/slime/slime_walk_anim_strip_15.png', frameWidth: 16, frameHeight: 24, frameCount: 15 },
-    hit:   { path: 'assets/enemies_sprites/slime/slime_hit_anim_strip_3.png',   frameWidth: 16, frameHeight: 16, frameCount: 3 },
-    death: { path: 'assets/enemies_sprites/slime/slime_death_anim_strip_6.png', frameWidth: 16, frameHeight: 16, frameCount: 6 },
+    idle:  { path: 'assets/enemies_sprites/slime/slime_idle_anim_strip_5.png', normal_map: 'assets/enemies_sprites/slime/slime_idle_anim_strip_5_n.png', frameWidth: 16, frameHeight: 16, frameCount: 5 },
+    walk:  { path: 'assets/enemies_sprites/slime/slime_walk_anim_strip_15.png', normal_map: 'assets/enemies_sprites/slime/slime_walk_anim_strip_15_n.png', frameWidth: 16, frameHeight: 24, frameCount: 15 },
+    hit:   { path: 'assets/enemies_sprites/slime/slime_hit_anim_strip_3.png',   normal_map: 'assets/enemies_sprites/slime/slime_hit_anim_strip_3_n.png',   frameWidth: 16, frameHeight: 16, frameCount: 3 },
+    death: { path: 'assets/enemies_sprites/slime/slime_death_anim_strip_6.png', normal_map: 'assets/enemies_sprites/slime/slime_death_anim_strip_6_n.png', frameWidth: 16, frameHeight: 16, frameCount: 6 },
   },
 
   worm: {
-    walk:  { path: 'assets/enemies_sprites/worm/worm_walk_anim_strip_6.png',  frameWidth: 16, frameHeight: 8, frameCount: 6 },
-    hit:   { path: 'assets/enemies_sprites/worm/worm_hit_anim_strip_3.png',   frameWidth: 16, frameHeight: 8, frameCount: 3 },
-    death: { path: 'assets/enemies_sprites/worm/worm_death_anim_strip_6.png', frameWidth: 16, frameHeight: 8, frameCount: 6 },
+    walk:  { path: 'assets/enemies_sprites/worm/worm_walk_anim_strip_6.png',  normal_map: 'assets/enemies_sprites/worm/worm_walk_anim_strip_6_n.png',  frameWidth: 16, frameHeight: 8, frameCount: 6 },
+    hit:   { path: 'assets/enemies_sprites/worm/worm_hit_anim_strip_3.png',   normal_map: 'assets/enemies_sprites/worm/worm_hit_anim_strip_3_n.png',   frameWidth: 16, frameHeight: 8, frameCount: 3 },
+    death: { path: 'assets/enemies_sprites/worm/worm_death_anim_strip_6.png', normal_map: 'assets/enemies_sprites/worm/worm_death_anim_strip_6_n.png', frameWidth: 16, frameHeight: 8, frameCount: 6 },
   },
 
   mushroom: {
-    walk:    { path: 'assets/enemies_sprites/mushroom/mushroom_walk_anim_strip_8.png',    frameWidth: 16, frameHeight: 16, frameCount: 8 },
-    hit:     { path: 'assets/enemies_sprites/mushroom/mushroom_hit_anim_strip_3.png',     frameWidth: 16, frameHeight: 16, frameCount: 3 },
-    death:   { path: 'assets/enemies_sprites/mushroom/mushroom_death_anim_strip_6.png',   frameWidth: 16, frameHeight: 16, frameCount: 6 },
-    crushed: { path: 'assets/enemies_sprites/mushroom/mushroom_crushed_anim_strip_6.png', frameWidth: 16, frameHeight: 16, frameCount: 6 },
+    walk:    { path: 'assets/enemies_sprites/mushroom/mushroom_walk_anim_strip_8.png',    normal_map: 'assets/enemies_sprites/mushroom/mushroom_walk_anim_strip_8_n.png',    frameWidth: 16, frameHeight: 16, frameCount: 8 },
+    hit:     { path: 'assets/enemies_sprites/mushroom/mushroom_hit_anim_strip_3.png',     normal_map: 'assets/enemies_sprites/mushroom/mushroom_hit_anim_strip_3_n.png',     frameWidth: 16, frameHeight: 16, frameCount: 3 },
+    death:   { path: 'assets/enemies_sprites/mushroom/mushroom_death_anim_strip_6.png',   normal_map: 'assets/enemies_sprites/mushroom/mushroom_death_anim_strip_6_n.png',   frameWidth: 16, frameHeight: 16, frameCount: 6 },
+    crushed: { path: 'assets/enemies_sprites/mushroom/mushroom_crushed_anim_strip_6.png', normal_map: 'assets/enemies_sprites/mushroom/mushroom_crushed_anim_strip_6_n.png', frameWidth: 16, frameHeight: 16, frameCount: 6 },
   },
 
   bird: {
-    idle:   { path: 'assets/fauna_sprites/bird_idle_anim_strip_8.png',   frameWidth: 8, frameHeight: 8, frameCount: 8 },
-    flying: { path: 'assets/fauna_sprites/bird_flying_anim_strip_3.png', frameWidth: 8, frameHeight: 8, frameCount: 3 },
-    walk:   { path: 'assets/fauna_sprites/bird_walk_anim_strip_3.png',   frameWidth: 8, frameHeight: 8, frameCount: 3 },
+    idle:   { path: 'assets/fauna_sprites/bird_idle_anim_strip_8.png',   normal_map: 'assets/fauna_sprites/bird_idle_anim_strip_8_n.png',   frameWidth: 8, frameHeight: 8, frameCount: 8 },
+    flying: { path: 'assets/fauna_sprites/bird_flying_anim_strip_3.png', normal_map: 'assets/fauna_sprites/bird_flying_anim_strip_3_n.png', frameWidth: 8, frameHeight: 8, frameCount: 3 },
+    walk:   { path: 'assets/fauna_sprites/bird_walk_anim_strip_3.png',   normal_map: 'assets/fauna_sprites/bird_walk_anim_strip_3_n.png',   frameWidth: 8, frameHeight: 8, frameCount: 3 },
   },
 
   rabbit: {
-    idle: { path: 'assets/fauna_sprites/rabit_idle_anim_strip_4.png', frameWidth: 16, frameHeight: 8, frameCount: 4 },
-    walk: { path: 'assets/fauna_sprites/rabit_walk_anim_strip_6.png', frameWidth: 16, frameHeight: 8, frameCount: 6 },
+    idle: { path: 'assets/fauna_sprites/rabit_idle_anim_strip_4.png', normal_map: 'assets/fauna_sprites/rabit_idle_anim_strip_4_n.png', frameWidth: 16, frameHeight: 8, frameCount: 4 },
+    walk: { path: 'assets/fauna_sprites/rabit_walk_anim_strip_6.png', normal_map: 'assets/fauna_sprites/rabit_walk_anim_strip_6_n.png', frameWidth: 16, frameHeight: 8, frameCount: 6 },
   },
 
   coin: {
-    spin:   { path: 'assets/miscellaneous_sprites/coin_anim_strip_6.png',        frameWidth: 8, frameHeight: 8, frameCount: 6 },
-    pickup: { path: 'assets/miscellaneous_sprites/coin_pickup_anim_strip_6.png', frameWidth: 8, frameHeight: 16, frameCount: 6 },
+    spin:   { path: 'assets/miscellaneous_sprites/coin_anim_strip_6.png',        normal_map: 'assets/miscellaneous_sprites/coin_anim_strip_6_n.png',        frameWidth: 8, frameHeight: 8, frameCount: 6 },
+    pickup: { path: 'assets/miscellaneous_sprites/coin_pickup_anim_strip_6.png', normal_map: 'assets/miscellaneous_sprites/coin_pickup_anim_strip_6_n.png', frameWidth: 8, frameHeight: 16, frameCount: 6 },
   },
 
   orb: {
-    spin:      { path: 'assets/miscellaneous_sprites/orb_anim_strip_6.png',       frameWidth: 8, frameHeight: 8, frameCount: 6 },
-    collected: { path: 'assets/miscellaneous_sprites/orb_collected_anim_strip_5.png', frameWidth: 8, frameHeight: 8, frameCount: 5 },
+    spin:      { path: 'assets/miscellaneous_sprites/orb_anim_strip_6.png',       normal_map: 'assets/miscellaneous_sprites/orb_anim_strip_6_n.png',       frameWidth: 8, frameHeight: 8, frameCount: 6 },
+    collected: { path: 'assets/miscellaneous_sprites/orb_collected_anim_strip_5.png', normal_map: 'assets/miscellaneous_sprites/orb_collected_anim_strip_5_n.png', frameWidth: 8, frameHeight: 8, frameCount: 5 },
   },
 
   loot_box: {
-    idle:    { path: 'assets/miscellaneous_sprites/loot_box_anim_strip_12.png',         frameWidth: 16, frameHeight: 8,  frameCount: 12 },
-    opening: { path: 'assets/miscellaneous_sprites/loot_box_anim_opening_strip_6.png',  frameWidth: 16, frameHeight: 10, frameCount: 6  },
+    idle:    { path: 'assets/miscellaneous_sprites/loot_box_anim_strip_12.png',         normal_map: 'assets/miscellaneous_sprites/loot_box_anim_strip_12_n.png',         frameWidth: 16, frameHeight: 8,  frameCount: 12 },
+    opening: { path: 'assets/miscellaneous_sprites/loot_box_anim_opening_strip_6.png',  normal_map: 'assets/miscellaneous_sprites/loot_box_anim_opening_strip_6_n.png',  frameWidth: 16, frameHeight: 10, frameCount: 6  },
   },
 
   bomb_ground: {
-    idle: { path: 'assets/miscellaneous_sprites/bomb_on_ground_anim_strip_8.png', frameWidth: 8, frameHeight: 8, frameCount: 8 },
+    idle: { path: 'assets/miscellaneous_sprites/bomb_on_ground_anim_strip_8.png', normal_map: 'assets/miscellaneous_sprites/bomb_on_ground_anim_strip_8_n.png', frameWidth: 8, frameHeight: 8, frameCount: 8 },
   },
 
   bomb_thrown: {
-    flying: { path: 'assets/miscellaneous_sprites/bomb_thrown_anim_strip_3.png', frameWidth: 8, frameHeight: 8, frameCount: 3 },
+    flying: { path: 'assets/miscellaneous_sprites/bomb_thrown_anim_strip_3.png', normal_map: 'assets/miscellaneous_sprites/bomb_thrown_anim_strip_3_n.png', frameWidth: 8, frameHeight: 8, frameCount: 3 },
   },
 
   explosion: {
-    burst: { path: 'assets/miscellaneous_sprites/explosion_anim_strip_10.png', frameWidth: 32, frameHeight: 32, frameCount: 10 },
+    burst: { path: 'assets/miscellaneous_sprites/explosion_anim_strip_10.png', normal_map: 'assets/miscellaneous_sprites/explosion_anim_strip_10_n.png', frameWidth: 32, frameHeight: 32, frameCount: 10 },
   },
 
   trap_spikes: {
-    active: { path: 'assets/miscellaneous_sprites/trap_spikes_anim_strip_7.png', frameWidth: 16, frameHeight: 16, frameCount: 7 },
+    active: { path: 'assets/miscellaneous_sprites/trap_spikes_anim_strip_7.png', normal_map: 'assets/miscellaneous_sprites/trap_spikes_anim_strip_7_n.png', frameWidth: 16, frameHeight: 16, frameCount: 7 },
   },
 
   trap_suspended: {
-    swing: { path: 'assets/miscellaneous_sprites/trap_suspended_anim_strip_18.png', frameWidth: 112, frameHeight: 64, frameCount: 18 },
+    swing: { path: 'assets/miscellaneous_sprites/trap_suspended_anim_strip_18.png', normal_map: 'assets/miscellaneous_sprites/trap_suspended_anim_strip_18_n.png', frameWidth: 112, frameHeight: 64, frameCount: 18 },
   },
 
   save_point: {
-    idle:   { path: 'assets/miscellaneous_sprites/save_point_anim_strip_9.png',        frameWidth: 12, frameHeight: 20, frameCount: 9 },
-    saving: { path: 'assets/miscellaneous_sprites/save_point_saving_anim_strip_3.png', frameWidth: 12, frameHeight: 20, frameCount: 3 },
+    idle:   { path: 'assets/miscellaneous_sprites/save_point_anim_strip_9.png',        normal_map: 'assets/miscellaneous_sprites/save_point_anim_strip_9_n.png',        frameWidth: 12, frameHeight: 20, frameCount: 9 },
+    saving: { path: 'assets/miscellaneous_sprites/save_point_saving_anim_strip_3.png', normal_map: 'assets/miscellaneous_sprites/save_point_saving_anim_strip_3_n.png', frameWidth: 12, frameHeight: 20, frameCount: 3 },
   },
 
   vase: {
-    breaking: { path: 'assets/miscellaneous_sprites/vase_breaking_anim_strip_5.png', frameWidth: 16, frameHeight: 16, frameCount: 5 },
+    breaking: { path: 'assets/miscellaneous_sprites/vase_breaking_anim_strip_5.png', normal_map: 'assets/miscellaneous_sprites/vase_breaking_anim_strip_5_n.png', frameWidth: 16, frameHeight: 16, frameCount: 5 },
   },
 
   strange_door_closed: {
-    opening: { path: 'assets/miscellaneous_sprites/strange_door_opening_anim_strip_14.png', frameWidth: 16, frameHeight: 48, frameCount: 14 },
+    opening: { path: 'assets/miscellaneous_sprites/strange_door_opening_anim_strip_14.png', normal_map: 'assets/miscellaneous_sprites/strange_door_opening_anim_strip_14_n.png', frameWidth: 16, frameHeight: 48, frameCount: 14 },
   },
 
   strange_door_full: {
-    closed_idle: { path: 'assets/miscellaneous_sprites/strange_door_closed_anim_strip_10.png', frameWidth: 16, frameHeight: 48, frameCount: 10 },
+    closed_idle: { path: 'assets/miscellaneous_sprites/strange_door_closed_anim_strip_10.png', normal_map: 'assets/miscellaneous_sprites/strange_door_closed_anim_strip_10_n.png', frameWidth: 16, frameHeight: 48, frameCount: 10 },
   },
 
   tiki_torch: {
-    burning: { path: 'assets/miscellaneous_sprites/tiki_torch_props_strip_12.png', frameWidth: 8, frameHeight: 24, frameCount: 12 },
+    burning: { path: 'assets/miscellaneous_sprites/tiki_torch_props_strip_12.png', normal_map: 'assets/miscellaneous_sprites/tiki_torch_props_strip_12_n.png', frameWidth: 8, frameHeight: 24, frameCount: 12 },
   },
 
   dust_effect: {
-    hit_wall: { path: 'assets/miscellaneous_sprites/spikes_trap_hit_wall_dust_effect_strip_3.png', frameWidth: 16, frameHeight: 4, frameCount: 3 },
+    hit_wall: { path: 'assets/miscellaneous_sprites/spikes_trap_hit_wall_dust_effect_strip_3.png', normal_map: 'assets/miscellaneous_sprites/spikes_trap_hit_wall_dust_effect_anim_strip_3_n.png', frameWidth: 16, frameHeight: 4, frameCount: 3 },
   },
 
   waterfall: {
-    top:    { path: 'assets/tiles_and_background_foreground__new/waterfall_anim_strip_4.png',        frameWidth: 16, frameHeight: 24, frameCount: 4 },
-    bottom: { path: 'assets/tiles_and_background_foreground__new/waterfall_bottom_anim_strip_4.png', frameWidth: 16, frameHeight: 8,  frameCount: 4 },
+    top:    { path: 'assets/tiles_and_background_foreground__new/waterfall_anim_strip_4.png',        normal_map: 'assets/tiles_and_background_foreground__new/waterfall_anim_strip_4_n.png',        frameWidth: 16, frameHeight: 24, frameCount: 4 },
+    bottom: { path: 'assets/tiles_and_background_foreground__new/waterfall_bottom_anim_strip_4.png', normal_map: 'assets/tiles_and_background_foreground__new/waterfall_bottom_anim_strip_4_n.png', frameWidth: 16, frameHeight: 8,  frameCount: 4 },
   },
 
   hit_sparkle: {
-    effect: { path: 'assets/herochar_sprites_new/hit_sparkle_anim_strip_4.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
+    effect: { path: 'assets/herochar_sprites_new/hit_sparkle_anim_strip_4.png', normal_map: 'assets/herochar_sprites_new/hit_sparkle_anim_strip_4_n.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
   },
 
   sword_effect: {
-    slash: { path: 'assets/herochar_sprites_new/sword_effect_strip_4_new.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
+    slash: { path: 'assets/herochar_sprites_new/sword_effect_strip_4_new.png', normal_map: 'assets/herochar_sprites_new/sword_effect_anim_strip_4_n.png', frameWidth: 16, frameHeight: 16, frameCount: 4 },
   },
 
   lost_hearts: {
-    effect: { path: 'assets/hud_elements/lost_hearts_anim_strip_5.png', frameWidth: 16, frameHeight: 16, frameCount: 5 },
+    effect: { path: 'assets/hud_elements/lost_hearts_anim_strip_5.png', normal_map: 'assets/hud_elements/lost_hearts_anim_strip_5_n.png', frameWidth: 16, frameHeight: 16, frameCount: 5 },
   },
 
   select_icon: {
-    bounce: { path: 'assets/hud_elements/select_icon_anim_strip_5.png', frameWidth: 12, frameHeight: 12, frameCount: 5 },
+    bounce: { path: 'assets/hud_elements/select_icon_anim_strip_5.png', normal_map: 'assets/hud_elements/select_icon_anim_strip_5_n.png', frameWidth: 12, frameHeight: 12, frameCount: 5 },
   },
 };
 
