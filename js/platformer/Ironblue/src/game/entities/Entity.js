@@ -269,6 +269,6 @@ export class Entity extends GameObjects.Sprite {
             return;
         }
 
-        this.setAlpha(Math.sin(Date.now() * 0.05) > 0 ? 1 : 0.3);
+        this.setAlpha(Math.sin(Date.now() * 0.05) > 0 ? 1 : 0.1);
     }
 }

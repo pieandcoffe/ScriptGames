@@ -22,7 +22,7 @@ export class Player extends Entity {
             jump: {
                 count:          0,
                 maxCount:       2,
-                velocity:       200,
+                velocity:       250,
                 doubleVelocity: 180,
                 cutMultiplier:  0.35,
                 cutApplied:     false,
@@ -32,17 +32,29 @@ export class Player extends Entity {
                 bufferTime:     100,
                 bufferTimer:    0,
             },
+            dash: {
+                speed:          300,
+                duration:       150,
+                cooldown:       600,  
+                timer:          0, 
+                cooldownTimer:  0,   
+                active:         false,
+                invincible:     true,
+            },
             gravity: {
-                up:            280,
-                down:          800,
-                apex:          120,
-                apexThreshold: 25,
+                up:             280,
+                down:           800,
+                apex:           120,
+                apexThreshold:  25,
             },
             run: { speed: 100 },
         };
 
         this._stepTimer = 0;
         this._stepInterval = 300;
+
+        this._dashBlinkTimer = 0;
+        this._dashBlinkInterval = 5;
 
         this.sword = new Sword(scene, this);
 
@@ -96,6 +108,7 @@ export class Player extends Entity {
         this._addSound('attack',      'player');
         this._addSound('sword_attack','player');
         this._addSound('hit',         'player');
+        this._addSound('dash',        'player');
         this._addSound('death',       'player');
     }
 
@@ -106,7 +119,9 @@ export class Player extends Entity {
         this.keyboard = this.scene.input.keyboard.addKeys({
             left:   Input.Keyboard.KeyCodes.A,
             right:  Input.Keyboard.KeyCodes.D,
+            up:     Input.Keyboard.KeyCodes.W, 
             jump:   Input.Keyboard.KeyCodes.SPACE,
+            dash:   Input.Keyboard.KeyCodes.SHIFT,
             attack: Input.Keyboard.KeyCodes.ENTER,
         });
     }
@@ -172,6 +187,40 @@ export class Player extends Entity {
     }
 
     /**
+     * Called when the player dashes.
+     */
+    _onDash() {
+        if (this.dead)                        return;
+        if (this.state === 'hit')             return;
+        if (this.move.dash.cooldownTimer > 0) return;
+        if (this.move.dash.active)            return;
+
+        const { dash } = this.move;
+        const { up }   = this.keyboard;
+
+        dash.active        = true;
+        dash.timer         = dash.duration;
+        dash.cooldownTimer = dash.cooldown;
+
+        if (dash.invincible) {
+            this.combat.invincible      = true;
+            this.combat.invincibilityTimer = dash.duration;
+        }
+
+        const diagY = up.isDown ? -1 : 0;
+        const diagX = this.direction;
+
+        const len = diagY !== 0 ? Math.SQRT2 : 1;
+
+        this.body.setVelocityX((diagX / len) * dash.speed);
+        this.body.setVelocityY((diagY / len) * dash.speed);
+        this.body.setGravityY(0);
+
+        this._playSound('dash');
+        this._setState('run'); 
+    }
+
+    /**
      * Called when the player attacks.
      */
     _onAttack() {
@@ -199,11 +248,12 @@ export class Player extends Entity {
      * Handles the player's input for movement and actions.
      */        
     _handleInput() {
-        const { jump: jumpKey, attack } = this.keyboard;
+        const { jump: jumpKey, attack, dash: dashKey } = this.keyboard;
         const { jump } = this.move;
 
         if (Input.Keyboard.JustDown(jumpKey)) this._onJump();
         if (Input.Keyboard.JustDown(attack))  this._onAttack();
+        if (Input.Keyboard.JustDown(dashKey)) this._onDash();
 
         if (jumpKey.isUp && this.body.velocity.y < 0 && jump.count > 0 && !jump.cutApplied) {
             this.body.setVelocityY(this.body.velocity.y * jump.cutMultiplier);
@@ -215,6 +265,8 @@ export class Player extends Entity {
      * Updates the player's gravity based on their vertical velocity to create a more responsive jump feel.
      */
     _updateGravity() {
+        if (this.move.dash.active) return; 
+
         const { gravity } = this.move;
         const vy      = this.body.velocity.y;
         const atApex  = Math.abs(vy) < gravity.apexThreshold;
@@ -232,6 +284,7 @@ export class Player extends Entity {
     _updateMovement() {
         if (this.state === 'attack') return;
         if (this.state === 'hit')    return;
+        if (this.move.dash.active)   return;
 
         const { left, right } = this.keyboard;
         const onGround = this.body.blocked.down;
@@ -285,6 +338,25 @@ export class Player extends Entity {
         else if (this.body.velocity.y > 0) this._setState('jump_down');
     }
 
+    _updateDash(delta) {
+        const { dash } = this.move;
+
+        if (dash.cooldownTimer > 0) {
+            dash.cooldownTimer = Math.max(0, dash.cooldownTimer - delta);
+        }
+
+        if (!dash.active) return;
+
+        dash.timer -= delta;
+
+        if (dash.timer <= 0) {
+            dash.active = false;
+            this.setAlpha(1);
+            this.body.setGravityY(this.move.gravity.down);
+            this.body.setVelocityX(0);
+        }
+    }
+
     /**
      * Updates the player's state and position.
      * @param {number} delta - The time elapsed since the last update.
@@ -296,6 +368,7 @@ export class Player extends Entity {
         if (this._knockbackTimer > 0) return;
 
         this._tickTimers(delta);
+        this._updateDash(delta); 
         this._handleInput();
         this._updateGravity();
         this._updateMovement();

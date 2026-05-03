@@ -222,6 +222,7 @@ export const SOUNDS = {
     attack:      'assets/sounds/player/attack/',
     sword_attack: 'assets/sounds/player/sword_attack/',
     hit:         'assets/sounds/player/hit/',
+    dash:        'assets/sounds/player/dash/',
     death:       'assets/sounds/player/death/',
     push:        'assets/sounds/player/push/',
   },
