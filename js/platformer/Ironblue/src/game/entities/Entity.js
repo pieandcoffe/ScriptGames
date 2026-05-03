@@ -80,8 +80,13 @@ export class Entity extends GameObjects.Sprite {
             this._applyKnockback(source);
         }
 
-        this._setState('death');
-        this._onDeath();
+        // play hit anim, then on complete → stop + death
+        this._setState('hit');
+        this._onAnimComplete('hit', () => {
+            this.body.setVelocity(0, 0);
+            this._setState('death');
+            this._onDeath();
+        });
     }
 
     /**
