@@ -31,6 +31,11 @@ export class Player extends Entity {
                 coyoteTimer:    0,
                 bufferTime:     100,
                 bufferTimer:    0,
+
+                wallJumpVelocityX: 200,
+                wallJumpVelocityY: 150,
+                wallJumpDuration:  350,
+                wallJumpTimer:     0,
             },
             dash: {
                 speed:          300,
@@ -52,9 +57,6 @@ export class Player extends Entity {
 
         this._stepTimer = 0;
         this._stepInterval = 300;
-
-        this._dashBlinkTimer = 0;
-        this._dashBlinkInterval = 5;
 
         this.sword = new Sword(scene, this);
 
@@ -164,20 +166,42 @@ export class Player extends Entity {
         if (this.dead) return;
 
         const { jump } = this.move;
+        const onGround = this.body.blocked.down;
+        const onWall   = !onGround && this._isOnWall();
 
-        if (jump.count === 0 && (this.body.blocked.down || jump.coyoteTimer > 0)) {
-            this._playSound('jump'); 
+        // wall jump
+        if (onWall && jump.count > 0) {
+            const wallDir = this._wallDirection();
+
+            this.body.setVelocity(
+                wallDir * jump.wallJumpVelocityX,
+                -jump.wallJumpVelocityY
+            );
+
+            jump.wallJumpTimer = jump.wallJumpDuration;
+            jump.cutApplied    = false;
+            jump.count         = 1;
+            this.direction     = wallDir;
+            this.setFlipX(wallDir < 0);
+            this._playSound('jump');
+            this._setState('jump_up');
+            return;
+        }
+
+        // normal jump
+        if (jump.count === 0 && (onGround || jump.coyoteTimer > 0)) {
+            this._playSound('jump');
             this.body.setVelocityY(-jump.velocity);
-            jump.count      = 1;
-            jump.cutApplied = false;
+            jump.count       = 1;
+            jump.cutApplied  = false;
             jump.coyoteTimer = 0;
             jump.bufferTimer = 0;
             this._setState('jump_up');
-        } else if (jump.count < jump.maxCount && !this.body.blocked.down) {
-            this._playSound('double_jump'); 
+        } else if (jump.count < jump.maxCount && !onGround) {
+            this._playSound('double_jump');
             this.body.setVelocityY(-jump.doubleVelocity);
             jump.count++;
-            jump.cutApplied = false;
+            jump.cutApplied  = false;
             jump.bufferTimer = 0;
             this._setState('double_jump');
             this._onAnimComplete('double_jump', 'jump_up');
@@ -185,7 +209,6 @@ export class Player extends Entity {
             jump.bufferTimer = jump.bufferTime;
         }
     }
-
     /**
      * Called when the player dashes.
      */
@@ -242,6 +265,7 @@ export class Player extends Entity {
         const { jump } = this.move;
         jump.coyoteTimer = Math.max(0, jump.coyoteTimer - delta);
         jump.bufferTimer = Math.max(0, jump.bufferTimer - delta);
+        jump.wallJumpTimer = Math.max(0, jump.wallJumpTimer - delta);
     }
 
     /**
@@ -282,9 +306,11 @@ export class Player extends Entity {
      * Updates the player's horizontal movement based on input and state.
      */
     _updateMovement() {
-        if (this.state === 'attack') return;
-        if (this.state === 'hit')    return;
-        if (this.move.dash.active)   return;
+        if (this.state === 'attack')             return;
+        if (this.state === 'hit')                return;
+        if (this.move.dash.active)               return;
+        
+        if (this.move.jump.wallJumpTimer > 0 && !this.body.blocked.down)    return;
 
         const { left, right } = this.keyboard;
         const onGround = this.body.blocked.down;
@@ -355,6 +381,16 @@ export class Player extends Entity {
             this.body.setGravityY(this.move.gravity.down);
             this.body.setVelocityX(0);
         }
+    }
+
+    _isOnWall() {
+        return this.body.blocked.left || this.body.blocked.right;
+    }
+
+    _wallDirection() {
+        if (this.body.blocked.left)  return  1;
+        if (this.body.blocked.right) return -1;
+        return 0;
     }
 
     /**
