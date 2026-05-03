@@ -1,51 +1,42 @@
 import { Entity } from './Entity';
 
 export class Enemy extends Entity {
-
-    /**
-     * Creates a new enemy instance.
-     * @param {Phaser.Scene} scene - The scene to which the enemy belongs.
-     * @param {number} x - The x-coordinate of the enemy's position.
-     * @param {number} y - The y-coordinate of the enemy's position.
-     * @param {string} spriteKey - The key for the enemy's sprite.
-     */
     constructor(scene, x, y, spriteKey) {
         super(scene, x, y, spriteKey);
         this.direction = -1;
     }
 
-    /**
-     * Registers collisions for the enemy.
-     */
     _registerCollisions() {
         const { player } = this.scene;
-        this.scene.physics.add.overlap(this, player, () => {
-            if (!this.dead && this.state !== 'hit') player.hit(this);
+
+        this.scene.physics.add.collider(player, this, () => {
+            if (this.dead || this.state === 'hit') return;
+
+            const playerBottom = player.body.bottom;
+            const enemyTop     = this.body.top;
+            const onHead       = playerBottom <= enemyTop + 10 && player.body.velocity.y >= 0;
+
+            if (onHead) {
+                this.hit(player);
+                player.body.setVelocityY(-player.move.jump.velocity * 0.8);
+                return;
+            }
+
+            player.hit(this);
         });
     }
 
     _playSound(action, config = {}) {
-        // spatial = true for all enemies
         super._playSound(action, config, true);
     }
 
-    /**
-     * Called when the enemy is hit.
-     */
     _onHitRecover() {
         this._setState('hit');
         this._onAnimComplete('hit', 'idle');
     }
 
-    /**
-     * Updates the enemy's state and position.
-     * @param {number} time - The current time.
-     * @param {number} delta - The time elapsed since the last update.
-     */
     update(time, delta) {
         super.update(time, delta);
-
         if (this.dead) return;
-        super.update(time, delta);
     }
 }
