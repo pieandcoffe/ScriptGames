@@ -64,15 +64,38 @@ export class Entity extends GameObjects.Sprite {
     }
 
     /**
-     * Plays a random variant of a registered sound.
-     * @param {string} action  - e.g. 'hit'
-     * @param {object} config  - optional Phaser sound config
+     * Returns a volume scalar based on distance to the player.
+     * @param {number} maxDist - Distance at which volume reaches 0.
+     * @param {number} maxVol  - Volume at distance 0.
      */
-    _playSound(action, config = {}) {
+    _spatialVolume(maxDist = 240, maxVol = 1.0) {
+        const player = this.scene.player;
+        if (!player) return maxVol;
+
+        const dx   = this.x - player.x;
+        const dy   = this.y - player.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        // linear falloff — 0 at maxDist, maxVol at distance 0
+        return maxVol * Math.max(0, 1 - dist / maxDist);
+    }
+
+    /**
+     * Plays a random variant of a registered sound.
+     * @param {string} action   - e.g. 'hit'
+     * @param {object} config   - optional Phaser sound config
+     * @param {boolean} spatial - whether to apply distance-based volume
+     */
+    _playSound(action, config = {}, spatial = false) {
         const variants = this._sounds[action];
         if (!variants?.length) return;
-        const key = variants[Math.floor(Math.random() * variants.length)];
-        this.scene.sound.play(key, { volume: 0.5, ...config });
+
+        const key    = variants[Math.floor(Math.random() * variants.length)];
+        const volume = spatial
+            ? this._spatialVolume()
+            : (config.volume ?? 0.5);
+
+        this.scene.sound.play(key, { volume, ...config });
     }
 
     /**
@@ -125,7 +148,7 @@ export class Entity extends GameObjects.Sprite {
         }
 
         this._playSound('death');
-        
+
         this._setState('hit');
         this._onAnimComplete('hit', () => {
             this.body.setVelocity(0, 0);

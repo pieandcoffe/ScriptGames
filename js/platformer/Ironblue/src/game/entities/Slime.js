@@ -26,6 +26,7 @@ export class Slime extends Enemy {
         };
 
         this._registerAnimations();
+        this._registerSounds();
         this._registerCollisions();
         this._setState('walk');
     }
@@ -58,6 +59,18 @@ export class Slime extends Enemy {
                 repeat:    cfg.repeat,
             });
         }
+
+        this.on('animationrepeat', (anim) => {
+        if (anim.key === 'slime_walk' && this.state === 'walk') {
+            this._playSound('walk');
+        }
+    });
+    }
+
+    _registerSounds() {
+        this._addSound('walk', 'slime');
+        this._addSound('hit', 'slime');
+        this._addSound('death', 'slime');
     }
 
     /**
@@ -127,7 +140,6 @@ export class Slime extends Enemy {
         if (this.dead)            return;
         if (this.state === 'hit') return;
 
-        super.update(time, delta);
         this._updatePatrol();
     }
 }

@@ -24,6 +24,11 @@ export class Enemy extends Entity {
         });
     }
 
+    _playSound(action, config = {}) {
+        // spatial = true for all enemies
+        super._playSound(action, config, true);
+    }
+
     /**
      * Called when the enemy is hit.
      */
@@ -39,7 +44,7 @@ export class Enemy extends Entity {
      */
     update(time, delta) {
         super.update(time, delta);
-        
+
         if (this.dead) return;
         super.update(time, delta);
     }

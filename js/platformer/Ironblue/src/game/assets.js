@@ -241,6 +241,7 @@ export const SOUNDS = {
     death:  'assets/sounds/enemies/fly_death/',
   },
   slime: {
+    walk: 'assets/sounds/enemies/slime_walk/',
     hit:   'assets/sounds/enemies/slime_hit/',
     death: 'assets/sounds/enemies/slime_death/',
   },
