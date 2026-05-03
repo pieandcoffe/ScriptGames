@@ -1,4 +1,6 @@
 import { defineConfig } from 'vite';
+import { soundManifestPlugin } from './plugins/sound-manifest.js';
+import { SOUNDS }              from '../src/game/assets.js';
 
 const phasermsg = () => {
     return {
@@ -42,6 +44,7 @@ export default defineConfig({
         port: 8080
     },
     plugins: [
+        soundManifestPlugin(SOUNDS),
         phasermsg()
     ]
 });

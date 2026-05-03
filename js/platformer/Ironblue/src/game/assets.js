@@ -213,3 +213,65 @@ export const IMAGES = {
     drygrass:   'assets/art/miscellaneous_sprites/drygrass_props.png',
   },
 };
+
+export const SOUNDS = {
+  player: {
+    walk:        'assets/sounds/player/walk/',
+    jump:       'assets/sounds/player/jump/',
+    double_jump: 'assets/sounds/player/double_jump/',
+    attack:      'assets/sounds/player/attack/',
+    sword_attack: 'assets/sounds/player/sword_attack/',
+    hit:         'assets/sounds/player/hit/',
+    death:       'assets/sounds/player/death/',
+    push:        'assets/sounds/player/push/',
+  },
+  goblin: {
+    attack: 'assets/sounds/enemies/goblin_attack/',
+    hit:    'assets/sounds/enemies/goblin_hit/',
+    death:  'assets/sounds/enemies/goblin_death/',
+  },
+  bomber_goblin: {
+    attack: 'assets/sounds/enemies/bomber_goblin_attack/',
+    hit:    'assets/sounds/enemies/bomber_goblin_hit/',
+    death:  'assets/sounds/enemies/bomber_goblin_death/',
+  },
+  fly: {
+    attack: 'assets/sounds/enemies/fly_attack/',
+    hit:    'assets/sounds/enemies/fly_hit/',
+    death:  'assets/sounds/enemies/fly_death/',
+  },
+  slime: {
+    hit:   'assets/sounds/enemies/slime_hit/',
+    death: 'assets/sounds/enemies/slime_death/',
+  },
+  mushroom: {
+    hit:   'assets/sounds/enemies/mushroom_hit/',
+    death: 'assets/sounds/enemies/mushroom_death/',
+  },
+  coin: {
+    pickup: 'assets/sounds/coin_pickup/',
+  },
+  orb: {
+    pickup: 'assets/sounds/orb_pickup/',
+  },
+  loot_box: {
+    opening: 'assets/sounds/loot_box_opening/',
+  },
+  bomb: {
+    throw: 'assets/sounds/bomb_throw/',
+    burst: 'assets/sounds/bomb_burst/',
+  },
+  trap: {
+    spikes:    'assets/sounds/traps/spikes_trap/',
+    suspended: 'assets/sounds/traps/suspended_trap/',
+  },
+  save_point: {
+    saving: 'assets/sounds/save_point_saving/',
+  },
+  vase: {
+    breaking: 'assets/sounds/vase_breaking/',
+  },
+  strange_door: {
+    opening: 'assets/sounds/strange_door_opening/',
+  },
+};

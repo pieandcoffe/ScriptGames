@@ -41,9 +41,13 @@ export class Player extends Entity {
             run: { speed: 100 },
         };
 
+        this._stepTimer = 0;
+        this._stepInterval = 300;
+
         this.sword = new Sword(scene, this);
 
         this._registerAnimations();
+        this._registerSounds();
         this._registerInput();
     }
 
@@ -80,6 +84,19 @@ export class Player extends Entity {
                 repeat:    cfg.repeat,
             });
         }
+    }
+
+    /**
+     * Registers the player's sounds based on the sound manifest.
+     */
+    _registerSounds() {
+        this._addSound('walk',        'player');
+        this._addSound('jump',        'player');
+        this._addSound('double_jump', 'player');
+        this._addSound('attack',      'player');
+        this._addSound('sword_attack','player');
+        this._addSound('hit',         'player');
+        this._addSound('death',       'player');
     }
 
     /**
@@ -134,6 +151,7 @@ export class Player extends Entity {
         const { jump } = this.move;
 
         if (jump.count === 0 && (this.body.blocked.down || jump.coyoteTimer > 0)) {
+            this._playSound('jump'); 
             this.body.setVelocityY(-jump.velocity);
             jump.count      = 1;
             jump.cutApplied = false;
@@ -141,6 +159,7 @@ export class Player extends Entity {
             jump.bufferTimer = 0;
             this._setState('jump_up');
         } else if (jump.count < jump.maxCount && !this.body.blocked.down) {
+            this._playSound('double_jump'); 
             this.body.setVelocityY(-jump.doubleVelocity);
             jump.count++;
             jump.cutApplied = false;
@@ -161,6 +180,7 @@ export class Player extends Entity {
 
         this.body.setVelocityX(0);
         this.sword.activate();
+        this._playSound('attack');
         this._setState('attack');
         this._onAnimComplete('attack', 'idle');
     }
@@ -281,5 +301,15 @@ export class Player extends Entity {
         this._updateMovement();
         this._updateAerial(delta);
         this.sword.update();
+
+        if (this.state === 'run' && this.body.blocked.down) {
+        this._stepTimer -= delta;
+        if (this._stepTimer <= 0) {
+            this._playSound('walk');
+            this._stepTimer = this._stepInterval;
+        }
+        } else {
+            this._stepTimer = 0; // reset so next step plays immediately
+        }
     }
 }

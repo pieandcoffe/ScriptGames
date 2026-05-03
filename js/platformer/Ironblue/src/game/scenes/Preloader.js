@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { SPRITESHEETS, IMAGES } from '../assets';
+import SOUND_MANIFEST           from 'virtual:sound-manifest';
 
 export class Preloader extends Scene
 {
@@ -45,6 +46,17 @@ export class Preloader extends Scene
         for (const [category, entries] of Object.entries(IMAGES)) {
             for (const [name, path] of Object.entries(entries)) {
                 this.load.image(`${category}_${name}`, path);
+            }
+        }
+
+        // Load all sounds from the manifest
+        console.log('Sound manifest:', SOUND_MANIFEST);
+        for (const [entity, actions] of Object.entries(SOUND_MANIFEST)) {
+            for (const [action, files] of Object.entries(actions)) {
+                files.forEach((filePath, i) => {
+                    console.log(`Loading sound: ${entity}_${action}_${i} from ${filePath}`);
+                    this.load.audio(`${entity}_${action}_${i}`, filePath);
+                });
             }
         }
     }

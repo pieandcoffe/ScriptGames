@@ -30,6 +30,49 @@ export class Entity extends GameObjects.Sprite {
             invincibilityDuration: 300,
             invincibilityTimer:    0,
         };
+
+        this._sounds = {};
+    }
+
+    /**
+     * Override in subclasses to register animations.
+     * Call _addAnim(key, config) for each animation.
+     */
+    // _registerAnimations() {} // TODO
+
+    /**
+     * Override in subclasses to register sounds.
+     * Call _addSound(action, entityKey) for each sound.
+     */
+    _registerSounds() {}
+
+    /**
+     * Registers all variants of a sound action.
+     * @param {string} action    - e.g. 'hit', 'death', 'jump'
+     * @param {string} entityKey - key in SOUNDS, e.g. 'player', 'slime'
+     */
+    _addSound(action, entityKey) {
+        const keys = [];
+        let i = 0;
+        while (this.scene.cache.audio.exists(`${entityKey}_${action}_${i}`)) {
+            keys.push(`${entityKey}_${action}_${i}`);
+            i++;
+        }
+        if (keys.length > 0) {
+            this._sounds[action] = keys;
+        }
+    }
+
+    /**
+     * Plays a random variant of a registered sound.
+     * @param {string} action  - e.g. 'hit'
+     * @param {object} config  - optional Phaser sound config
+     */
+    _playSound(action, config = {}) {
+        const variants = this._sounds[action];
+        if (!variants?.length) return;
+        const key = variants[Math.floor(Math.random() * variants.length)];
+        this.scene.sound.play(key, { volume: 0.5, ...config });
     }
 
     /**
@@ -60,6 +103,7 @@ export class Entity extends GameObjects.Sprite {
             this._applyKnockback(source);
         }
 
+        this._playSound('hit');
         this.emit('hit');
 
         if (this.combat.hp <= 0) {
@@ -80,7 +124,8 @@ export class Entity extends GameObjects.Sprite {
             this._applyKnockback(source);
         }
 
-        // play hit anim, then on complete → stop + death
+        this._playSound('death');
+        
         this._setState('hit');
         this._onAnimComplete('hit', () => {
             this.body.setVelocity(0, 0);
