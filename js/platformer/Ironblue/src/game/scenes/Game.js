@@ -1,18 +1,28 @@
 import { Scene } from 'phaser';
 import { Player } from '../entities/Player';
 import { Slime } from '../entities/Slime';
+import { Camera} from '../camera';
 
 export class Game extends Scene {
     constructor() {
         super('Game');
+
+        this.levelWidth  = 3;
+        this.levelHeight = 1;
     }
 
     create() {
-        const { width, height } = this.scale;
+        const viewportWidth = this.scale.width;
+        const viewportHeight = this.scale.height;
 
-        // Backgrounds
+        const height = viewportHeight * this.levelHeight;
+        const width = viewportWidth * this.levelWidth;
+
+
+        // Backgrounds (repeat across the full world width)
         this.bg0 = this.add.tileSprite(0, 0, width, height, 'background_bg_0').setOrigin(0, 0);
         this.bg1 = this.add.tileSprite(0, 0, width, height, 'background_bg_1').setOrigin(0, 0);
+        this.bg2 = this.add.tileSprite(0, 0, width, height, 'background_bg_2').setOrigin(0, 0);
 
         // Lights
         this.lights.enable().setAmbientColor(0x333333);
@@ -21,15 +31,19 @@ export class Game extends Scene {
         this.torchLight = this.lights.addLight(width / 3, height / 1.5, 180, 0x333333, 2.5);
 
         // Ground
-        this.ground = this.physics.add.staticImage(width / 2, height - 8, null)
-            .setDisplaySize(width, 16)
+        this.ground = this.physics.add.staticImage(0, height - 48, null)
+            .setOrigin(0, 0)
+            .setDisplaySize(width, 48)
             .refreshBody()
             .setVisible(false);
 
         // Player
-        this.player = new Player(this, width / 2, height - 32);
+        this.player = new Player(this, viewportWidth / 2, height - 64);
         this.physics.add.collider(this.player, this.ground);
         this.player.body.setCollideWorldBounds(true);
+
+        // Camera
+        this.camera = new Camera(this, this.player, { worldWidth: width, worldHeight: height });
 
         // HUD
         this.scene.stop('Hud');
@@ -43,7 +57,7 @@ export class Game extends Scene {
 
         // Slimes
         this.slimes = this.add.group();
-        this._spawnSlime(width / 4, height - 32, 200);
+        this._spawnSlime(width / 4, height - 64, 200);
 
         // Sword overlap
         this.physics.add.overlap(this.player.sword, this.slimes, (sword, enemy) => {
@@ -54,7 +68,7 @@ export class Game extends Scene {
 
         // Click to spawn slimes
         this.input.on('pointerdown', (pointer) => {
-            this._spawnSlime(pointer.x, pointer.y, 200);
+            this._spawnSlime(pointer.worldX, pointer.worldY, 200);
         });
 
         // World bounds
@@ -78,8 +92,15 @@ export class Game extends Scene {
 
     update(time, delta) {
         const dt = delta / 16.667;
-        this.bg0.tilePositionX += 0.25 * dt;
-        this.bg1.tilePositionX += 0.4  * dt;
+
+        this.camera.update();
+
+        // Parallax background scrolling based on camera movement
+        const deltaCamX = this.camera.getScrollDeltaX();
+        this.bg0.tilePositionX += deltaCamX * 0.6;
+        this.bg1.tilePositionX += deltaCamX * 0.4;
+        this.bg2.tilePositionX += deltaCamX * 0.2;
+        //this.bg3.tilePositionX += deltaCamX * 0.1;
 
         this.player.update(time, delta);
         this.playerLight.setPosition(this.player.x, this.player.y);
