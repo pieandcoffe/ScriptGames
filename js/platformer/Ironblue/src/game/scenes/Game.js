@@ -1,8 +1,8 @@
 import { Scene } from 'phaser';
 import { Player } from '../entities/Player';
 import { Slime } from '../entities/Slime';
-import { Camera } from '../core/camera';
-import { LevelLoader } from '../core/level';
+import { Camera } from '../core/Camera';
+import { LevelLoader, TILE_SIZE } from '../core/Level';
 
 export class Game extends Scene {
     constructor() {
@@ -17,9 +17,13 @@ export class Game extends Scene {
         const { width, height, playerStart } = this.loader.load(levelData);
 
         // Backgrounds
-        this.bg0 = this.add.tileSprite(0, 0, width, height, 'background_bg_0').setOrigin(0, 0);
-        this.bg1 = this.add.tileSprite(0, 0, width, height, 'background_bg_1').setOrigin(0, 0);
-        this.bg2 = this.add.tileSprite(0, 0, width, height, 'background_bg_2').setOrigin(0, 0);
+        this.bg0 = this.add.tileSprite(0, 0, width, height, 'background_bg_0').setOrigin(0, 0).setDepth(-10);
+        this.bg1 = this.add.tileSprite(0, 0, width, height, 'background_bg_1').setOrigin(0, 0).setDepth(-9);
+        this.bg2 = this.add.tileSprite(0, 0, width, height, 'background_bg_2').setOrigin(0, 0).setDepth(-8);
+
+        // Foreground
+        this.add.tileSprite(0, 0, width, height, 'foreground_fg_0').setOrigin(0, 0).setDepth(-7);
+        // this.add.tileSprite(0, 0, width, height, 'foreground_fg_1').setOrigin(0, 0).setDepth(-6);
 
         // Lights
         this.lights.enable().setAmbientColor(0x333333);
@@ -28,7 +32,7 @@ export class Game extends Scene {
         this.torchLight = this.lights.addLight(width / 3, height / 1.5, 180, 0x333333, 2.5);
 
         // Player
-        this.player = new Player(this, playerStart.x * 16, playerStart.y * 16);
+        this.player = new Player(this, playerStart.x * TILE_SIZE, playerStart.y * TILE_SIZE);
 
         this.physics.add.collider(this.player, this.loader.groundSegments);
         this.physics.add.collider(this.player, this.loader.platforms);
@@ -54,7 +58,7 @@ export class Game extends Scene {
         // Enemies
         this.slimes = this.add.group();
         for (const def of this.loader.enemyDefs) {
-            this._spawnSlime(def.x * 16, def.y * 16, def.patrol);
+            this._spawnSlime(def.x * TILE_SIZE, def.y * TILE_SIZE, def.patrol);
         }
 
         // Sword overlap

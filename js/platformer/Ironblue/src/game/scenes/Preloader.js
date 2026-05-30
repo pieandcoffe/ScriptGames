@@ -44,9 +44,17 @@ export class Preloader extends Scene
 
         // Load all static images
         for (const [category, entries] of Object.entries(IMAGES)) {
+            // Tilemaps are handled below as spritesheets
+            if (category === 'tilemaps') continue;
+            
             for (const [name, path] of Object.entries(entries)) {
                 this.load.image(`${category}_${name}`, path);
             }
+        }
+
+        // Load tilemaps as spritesheets so frame indices work
+        for (const [name, path] of Object.entries(IMAGES.tilemaps)) {
+            this.load.spritesheet(`tilemaps_${name}`, path, { frameWidth: 16, frameHeight: 16 });
         }
 
         // Load all sounds from the manifest

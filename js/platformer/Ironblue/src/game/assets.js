@@ -157,10 +157,12 @@ export const SPRITESHEETS = {
 };
 
 export const IMAGES = {
-  tiles: {
-    tileset_32x32: 'assets/art/tiles_and_background_foreground__new/tileset_32x32_new.png',
-    tileset_64x64: 'assets/art/tiles_and_background_foreground__new/tileset_64x64_new.png',
-    tileset:       'assets/art/tiles_and_background_foreground__new/tileset.png',
+  tilemaps: {
+    ground_grass:    'assets/art/tilemaps/ground_grass.png',
+    ground_dirt:     'assets/art/tilemaps/ground_dirt.png',
+    platform_grass:  'assets/art/tilemaps/platform_grass.png',
+    platform_dirt:   'assets/art/tilemaps/platform_dirt.png',
+    background_rock: 'assets/art/tilemaps/background_rock.png',
   },
   background: {
     background: 'assets/art/tiles_and_background_foreground__new/background.png',
