@@ -16,15 +16,6 @@ export class Game extends Scene {
         this.loader = new LevelLoader(this);
         const { width, height, playerStart } = this.loader.load(levelData);
 
-        // Backgrounds
-        this.bg0 = this.add.tileSprite(0, 0, width, height, 'background_bg_0').setOrigin(0, 0).setDepth(-10);
-        this.bg1 = this.add.tileSprite(0, 0, width, height, 'background_bg_1').setOrigin(0, 0).setDepth(-9);
-        this.bg2 = this.add.tileSprite(0, 0, width, height, 'background_bg_2').setOrigin(0, 0).setDepth(-8);
-
-        // Foreground
-        this.add.tileSprite(0, 0, width, height, 'foreground_fg_0').setOrigin(0, 0).setDepth(-7);
-        // this.add.tileSprite(0, 0, width, height, 'foreground_fg_1').setOrigin(0, 0).setDepth(-6);
-
         // Lights
         this.lights.enable().setAmbientColor(0x333333);
         this.playerLight = this.lights.addLight(0, 0, 250, 0x333333, 2.0);
@@ -112,9 +103,7 @@ export class Game extends Scene {
         this.camera.update();
 
         const deltaCamX = this.camera.getScrollDeltaX();
-        this.bg0.tilePositionX += deltaCamX * 0.6;
-        this.bg1.tilePositionX += deltaCamX * 0.4;
-        this.bg2.tilePositionX += deltaCamX * 0.2;
+        this.loader.updateBackgroundParallax(deltaCamX);
 
         this.player.update(time, delta);
         this.playerLight.setPosition(this.player.x, this.player.y);

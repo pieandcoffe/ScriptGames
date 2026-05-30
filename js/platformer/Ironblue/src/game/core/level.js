@@ -33,6 +33,8 @@ export class LevelLoader {
             ? levelData.groundSegments
             : this._generateRandomGroundSegments(tilesWide);
 
+        this._buildBackgrounds(width, height);
+        this._buildForegrounds(width, height);
         this._buildGround(groundSegments, groundY);
         this._buildPlatforms(levelData.platforms);
         this._buildCoins(levelData.coins);
@@ -41,6 +43,23 @@ export class LevelLoader {
         this.killY = groundY + 40;
 
         return { width, height, playerStart: levelData.playerStart };
+    }
+
+    _buildBackgrounds(width, height) {
+        this.bg0 = this.scene.add.tileSprite(0, 0, width, height, 'background_bg_0').setOrigin(0, 0).setDepth(-10);
+        this.bg1 = this.scene.add.tileSprite(0, 0, width, height, 'background_bg_1').setOrigin(0, 0).setDepth(-9);
+        this.bg2 = this.scene.add.tileSprite(0, 0, width, height, 'background_bg_2').setOrigin(0, 0).setDepth(-8);
+    }
+
+    _buildForegrounds(width, height) {
+        this.fg0 = this.scene.add.tileSprite(0, 0, width, height, 'foreground_fg_0').setOrigin(0, 0).setDepth(-7);
+        // this.fg1 = this.scene.add.tileSprite(0, 0, width, height, 'foreground_fg_1').setOrigin(0, 0).setDepth(-6);
+    }
+
+    updateBackgroundParallax(deltaCamX) {
+        if (this.bg0) this.bg0.tilePositionX += deltaCamX * 0.6;
+        if (this.bg1) this.bg1.tilePositionX += deltaCamX * 0.4;
+        if (this.bg2) this.bg2.tilePositionX += deltaCamX * 0.2;
     }
 
     _buildGround(segments = [], groundY) {
