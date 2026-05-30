@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 import { Player } from '../entities/Player';
 import { Slime } from '../entities/Slime';
-import { Camera} from '../camera';
+import { Camera } from '../core/camera';
 
 export class Game extends Scene {
     constructor() {
