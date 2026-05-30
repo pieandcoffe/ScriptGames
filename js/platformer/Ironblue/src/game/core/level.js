@@ -1,6 +1,7 @@
 import { Math as PMath} from 'phaser';
 import { GroundGrass, GroundDirt } from '../tilemaps/Ground.js';
 import { PlatformGrass, PlatformDirt } from '../tilemaps/Platform.js';
+import { Coin } from '../entities/Coin.js';
 
 export const TILE_SIZE = 16;
 const DEFAULT_GROUND_TYPE = 'ground_grass';
@@ -101,14 +102,14 @@ export class LevelLoader {
     }
 
     _buildCoins(coins = []) {
-        this.coins = this.scene.physics.add.staticGroup();
+        this.coins = this.scene.add.group({ runChildUpdate: true });
 
         for (const coinData of coins) {
-            const coin = this.scene.physics.add.staticSprite(
+            const coin = new Coin(
+                this.scene,
                 coinData.x * TILE_SIZE + TILE_SIZE / 2,
-                coinData.y * TILE_SIZE + TILE_SIZE / 2,
-                'coin'
-            ).setOrigin(0.5, 0.5);
+                coinData.y * TILE_SIZE + TILE_SIZE / 2
+            );
 
             this.coins.add(coin);
         }

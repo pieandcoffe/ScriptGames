@@ -30,8 +30,15 @@ export class Game extends Scene {
 
         // Coins
         this.physics.add.overlap(this.player, this.loader.coins, (_, coin) => {
-            coin.destroy();
-            this.hud?.addScore?.(10);
+            if (typeof coin.collect === 'function') {
+                coin.collect();
+                coin.once('collected', () => {
+                    this.hud?.addScore?.(1);
+                });
+            } else {
+                coin.destroy();
+                this.hud?.addScore?.(1);
+            }
         });
 
         // Camera
