@@ -1,5 +1,5 @@
 import { Scene } from 'phaser';
-import { SPRITESHEETS, IMAGES } from '../assets';
+import { SPRITESHEETS, IMAGES, LEVELS } from '../assets';
 import SOUND_MANIFEST           from 'virtual:sound-manifest';
 
 export class Preloader extends Scene
@@ -59,7 +59,14 @@ export class Preloader extends Scene
                 });
             }
         }
-    }
+
+        // Load levels
+        for (const { key, path } of LEVELS) {
+            if (key && path) {
+                this.load.json(key, path);
+            }
+        }
+}
 
     create ()
     {

@@ -277,3 +277,8 @@ export const SOUNDS = {
     opening: 'assets/sounds/strange_door_opening/',
   },
 };
+
+export const LEVELS = [
+    { key: 'level-01', path: 'assets/levels/level-01.json' },
+    { key: 'level-02', path: 'assets/levels/level-02.json' },
+];

@@ -1,0 +1,35 @@
+{
+  "width": 3,
+  "height": 1,
+  "playerStart": { "x": 120, "y": 50 },
+
+  "groundSegments": [
+    { "x": 0,   "width": 190 },
+    { "x": 230, "width": 70 },
+    { "x": 400, "width": 100 }
+  ],
+
+  "platforms": [
+    { "x": 60,  "y": 110, "width": 64, "height": 10 },
+    { "x": 170, "y": 95,  "width": 64, "height": 10 },
+    { "x": 300, "y": 105, "width": 80, "height": 10 },
+    { "x": 420, "y": 90,  "width": 64, "height": 10 },
+    { "x": 540, "y": 100, "width": 64, "height": 10 },
+    { "x": 640, "y": 85,  "width": 100, "height": 30 }
+  ],
+
+  "enemies": [
+    { "type": "slime", "x": 60, "y": 80, "patrol": 120 },
+    { "type": "slime", "x": 170, "y": 80, "patrol": 120 },
+    { "type": "slime", "x": 190, "y": 80, "patrol": 120 },
+    { "type": "slime", "x": 195, "y": 80, "patrol": 120 },
+    { "type": "slime", "x": 200, "y": 80, "patrol": 120 },
+    { "type": "slime", "x": 400, "y": 80, "patrol": 120 },
+    { "type": "slime", "x": 410, "y": 80, "patrol": 120 },
+    { "type": "slime", "x": 420, "y": 80, "patrol": 120 },
+    { "type": "slime", "x": 600, "y": 80, "patrol": 120 },
+    { "type": "slime", "x": 610, "y": 80, "patrol": 120 }
+  ],
+  
+  "nextLevel": "level-02.json"
+}
