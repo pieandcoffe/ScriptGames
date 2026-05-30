@@ -28,8 +28,8 @@ export class Game extends Scene {
         this.torchLight = this.lights.addLight(width / 3, height / 1.5, 180, 0x333333, 2.5);
 
         // Player
-        this.player = new Player(this, playerStart.x, playerStart.y);
-        this.player.body.setCollideWorldBounds(false); // holes must kill, not block
+        this.player = new Player(this, playerStart.x * 16, playerStart.y * 16);
+
         this.physics.add.collider(this.player, this.loader.groundSegments);
         this.physics.add.collider(this.player, this.loader.platforms);
 
@@ -54,7 +54,7 @@ export class Game extends Scene {
         // Enemies
         this.slimes = this.add.group();
         for (const def of this.loader.enemyDefs) {
-            this._spawnSlime(def.x, def.y, def.patrol);
+            this._spawnSlime(def.x * 16, def.y * 16, def.patrol);
         }
 
         // Sword overlap
@@ -70,7 +70,7 @@ export class Game extends Scene {
         });
 
         // World bounds
-        this.physics.world.setBounds(0, 0, width, height);
+        this.physics.world.setBounds(0, 0, width, height + 500);
 
         // Game over
         this.player.on('dead', () => {

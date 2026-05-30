@@ -1,3 +1,5 @@
+const TILE_SIZE = 16;
+
 export class LevelLoader {
     constructor(scene) {
         this.scene = scene;
@@ -7,7 +9,7 @@ export class LevelLoader {
         const scene = this.scene;
         const width = scene.scale.width  * levelData.width;
         const height = scene.scale.height * levelData.height;
-        const groundY = height - 16;
+        const groundY = height - TILE_SIZE;
 
         this._buildGround(levelData.groundSegments, groundY);
         this._buildPlatforms(levelData.platforms);
@@ -22,7 +24,7 @@ export class LevelLoader {
     _buildGround(segments = [], groundY) {
         this.groundSegments = this.scene.physics.add.staticGroup();
         for (const seg of segments) {
-            const obj = this.scene.add.rectangle(seg.x, groundY, seg.width, 16)
+            const obj = this.scene.add.rectangle(seg.x * TILE_SIZE, groundY, seg.width * TILE_SIZE, TILE_SIZE)
                 .setOrigin(0, 0)
                 .setVisible(true);
             this.scene.physics.add.existing(obj, true); // true = static
@@ -33,7 +35,7 @@ export class LevelLoader {
     _buildPlatforms(platforms = []) {
         this.platforms = this.scene.physics.add.staticGroup();
         for (const p of platforms) {
-            const obj = this.scene.add.rectangle(p.x, p.y, p.width, p.height)
+            const obj = this.scene.add.rectangle(p.x * TILE_SIZE, p.y * TILE_SIZE, p.width * TILE_SIZE, p.height * TILE_SIZE)
                 .setOrigin(0, 0)
                 .setVisible(true);
             this.scene.physics.add.existing(obj, true);
@@ -44,7 +46,7 @@ export class LevelLoader {
     _buildCoins(coins = []) {
         this.coins = this.scene.physics.add.staticGroup();
         for (const c of coins) {
-            const coin = this.scene.physics.add.staticSprite(c.x, c.y, 'coin');
+            const coin = this.scene.physics.add.staticSprite(c.x * TILE_SIZE, c.y * TILE_SIZE, 'coin');
             this.coins.add(coin);
         }
     }

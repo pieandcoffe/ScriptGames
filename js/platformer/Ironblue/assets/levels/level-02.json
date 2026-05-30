@@ -1,46 +1,46 @@
 {
   "width": 6,
   "height": 1,
-  "playerStart": { "x": 30, "y": 100 },
+  "playerStart": { "x": 2, "y": 6 },
   "groundSegments": [
-    { "x": 0,    "width": 150 },
-    { "x": 200,  "width": 120 },
-    { "x": 380,  "width": 100 },
-    { "x": 540,  "width": 120 },
-    { "x": 720,  "width": 200 },
-    { "x": 990,  "width": 150 },
-    { "x": 1200, "width": 240 }
+    { "x": 0,  "width": 9 },
+    { "x": 13, "width": 8 },
+    { "x": 24, "width": 6 },
+    { "x": 34, "width": 8 },
+    { "x": 45, "width": 13 },
+    { "x": 62, "width": 9 },
+    { "x": 75, "width": 15 }
   ],
   "platforms": [
-    { "x": 170,  "y": 100, "width": 60,  "height": 8 },
-    { "x": 340,  "y": 90,  "width": 60,  "height": 8 },
-    { "x": 500,  "y": 105, "width": 70,  "height": 8 },
-    { "x": 680,  "y": 88,  "width": 50,  "height": 8 },
-    { "x": 810,  "y": 100, "width": 80,  "height": 8 },
-    { "x": 960,  "y": 85,  "width": 60,  "height": 8 },
-    { "x": 1100, "y": 95,  "width": 70,  "height": 8 }
+    { "x": 11, "y": 6, "width": 4, "height": 1 },
+    { "x": 21, "y": 6, "width": 4, "height": 1 },
+    { "x": 31, "y": 7, "width": 4, "height": 1 },
+    { "x": 43, "y": 6, "width": 3, "height": 1 },
+    { "x": 51, "y": 6, "width": 5, "height": 1 },
+    { "x": 60, "y": 5, "width": 4, "height": 1 },
+    { "x": 69, "y": 6, "width": 4, "height": 1 }
   ],
   "coins": [
-    { "x": 195,  "y": 88 },
-    { "x": 365,  "y": 78 },
-    { "x": 375,  "y": 78 },
-    { "x": 530,  "y": 93 },
-    { "x": 700,  "y": 76 },
-    { "x": 840,  "y": 88 },
-    { "x": 850,  "y": 88 },
-    { "x": 980,  "y": 73 },
-    { "x": 1130, "y": 83 }
+    { "x": 12, "y": 6 },
+    { "x": 23, "y": 5 },
+    { "x": 23, "y": 5 },
+    { "x": 33, "y": 6 },
+    { "x": 44, "y": 5 },
+    { "x": 53, "y": 6 },
+    { "x": 53, "y": 6 },
+    { "x": 61, "y": 5 },
+    { "x": 71, "y": 5 }
   ],
   "enemies": [
-    { "type": "slime", "x": 60,   "y": 128, "patrol": 80  },
-    { "type": "slime", "x": 250,  "y": 128, "patrol": 60  },
-    { "type": "slime", "x": 430,  "y": 128, "patrol": 60  },
-    { "type": "slime", "x": 570,  "y": 128, "patrol": 50  },
-    { "type": "slime", "x": 760,  "y": 128, "patrol": 100 },
-    { "type": "slime", "x": 780,  "y": 128, "patrol": 100 },
-    { "type": "slime", "x": 1020, "y": 128, "patrol": 70  },
-    { "type": "slime", "x": 1250, "y": 128, "patrol": 80  },
-    { "type": "slime", "x": 1270, "y": 128, "patrol": 80  }
+    { "type": "slime", "x": 4,  "y": 8, "patrol": 5 },
+    { "type": "slime", "x": 16, "y": 8, "patrol": 4 },
+    { "type": "slime", "x": 27, "y": 8, "patrol": 4 },
+    { "type": "slime", "x": 36, "y": 8, "patrol": 3 },
+    { "type": "slime", "x": 48, "y": 8, "patrol": 6 },
+    { "type": "slime", "x": 49, "y": 8, "patrol": 6 },
+    { "type": "slime", "x": 64, "y": 8, "patrol": 4 },
+    { "type": "slime", "x": 78, "y": 8, "patrol": 5 },
+    { "type": "slime", "x": 79, "y": 8, "patrol": 5 }
   ],
   "nextLevel": "level-01.json"
 }
