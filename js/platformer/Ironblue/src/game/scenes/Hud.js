@@ -59,14 +59,14 @@ export class Hud extends Scene
         const x = 4;
         const y = 20;
 
-        this._coinIcon  = this.add.image(x, y, 'hud_coins').setOrigin(0, 0);
+        this._coinIcon  = this.add.image(x, y + 3, 'hud_coins').setOrigin(0, 0);
         this._scoreText = this.add.text(x + this._coinIcon.width + 3, y + 1, '0', {
             fontFamily: 'monospace',
             fontSize:   '10px',
             color:      '#ffffff',
             stroke:     '#000000',
             strokeThickness: 2,
-        }).setOrigin(0, 0);
+        }).setOrigin(0, 0).setResolution(32);
     }
 
     addScore(amount)
