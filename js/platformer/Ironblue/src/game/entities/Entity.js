@@ -140,22 +140,28 @@ export class Entity extends GameObjects.Sprite {
      * Kills the entity.
      */
     die(source) {
-        if (this.dead) return;
-        this.dead = true;
+    if (this.dead) return;
+    this.dead = true;
 
-        if (source && this.body) {
-            this._applyKnockback(source);
-        }
-
-        this._playSound('death');
-
-        this._setState('hit');
-        this._onAnimComplete('hit', () => {
-            this.body.setVelocity(0, 0);
-            this._setState('death');
-            this._onDeath();
-        });
+    // Cancel any pending patrol stop timer
+    if (this.patrol?.stopTimer) {
+        this.patrol.stopTimer.remove();
+        this.patrol.stopTimer = null;
     }
+
+    if (source && this.body) {
+        this._applyKnockback(source);
+    }
+
+    this._playSound('death');
+
+    this._setState('hit');
+    this._onAnimComplete('hit', () => {
+        this.body.setVelocity(0, 0);
+        this._setState('death');
+        this._onDeath();
+    });
+}
 
     /**
      * Applies a velocity-based knockback away from the source.
@@ -190,20 +196,20 @@ export class Entity extends GameObjects.Sprite {
      */
     _onDeath() {
         this.once('animationcomplete', () => { 
-            this.destroy(); 
-        });
-    }
+        this.destroy();
+    });
+}
 
     /**
      * Sets the entity's state.
      * @param {string} state - The new state.
      */
     _setState(state) {
+        if (this.dead && state !== 'hit' && state !== 'death') return;
         if (this.state === state) return;
         this.state = state;
         this._playAnim(state);
     }
-
     /**
      * Plays the entity's animation for the given state.
      * @param {string} state - The state for which to play the animation.
@@ -221,13 +227,13 @@ export class Entity extends GameObjects.Sprite {
     _onAnimComplete(fromState, toStateOrCallback) {
         this.once('animationcomplete', () => {
             if (this.state !== fromState) return;
-            if (typeof toStateOrCallback === 'function') {
-                toStateOrCallback();
-            } else {
-                this._setState(toStateOrCallback);
-            }
-        });
-    }
+        if (typeof toStateOrCallback === 'function') {
+            toStateOrCallback();
+        } else {
+            this._setState(toStateOrCallback);
+        }
+    });
+}
 
     /**
      * Updates the entity's state and position.
