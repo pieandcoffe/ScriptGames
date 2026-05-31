@@ -33,11 +33,11 @@ tictactoe
 
 ## Mario w PhaserJS
 Należy stworzyć prostego runnera (Mario) w PhaserJS.
-- [ ] 3.0 Należy stworzyć jeden poziom z przeszkodami oraz dziurami w które
+- [X] 3.0 Należy stworzyć jeden poziom z przeszkodami oraz dziurami w które
 można wpaść i zginąć
-- [ ] 3.5 Należy dodać opcję zbierania punktów
-- [ ] 4.0 Należy dodać przeciwników, których można zabić oraz 3 życia
-- [ ] 4.5 Ładowanie poziomów z pliku
+- [X] 3.5 Należy dodać opcję zbierania punktów
+- [X] 4.0 Należy dodać przeciwników, których można zabić oraz 3 życia
+- [X] 4.5 Ładowanie poziomów z pliku
 - [ ] 5.0 Generator poziomów
 
 # Assignment 3 Ruby: Crawler
