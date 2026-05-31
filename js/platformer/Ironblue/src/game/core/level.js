@@ -2,6 +2,7 @@ import { Math as PMath} from 'phaser';
 import { GroundGrass, GroundDirt } from '../tilemaps/Ground.js';
 import { PlatformGrass, PlatformDirt } from '../tilemaps/Platform.js';
 import { Coin } from '../entities/Coin.js';
+import { Torch } from '../entities/Torch.js';
 
 export const TILE_SIZE = 16;
 const DEFAULT_GROUND_TYPE = 'ground_grass';
@@ -39,6 +40,7 @@ export class LevelLoader {
         this._buildGround(groundSegments, groundY);
         this._buildPlatforms(levelData.platforms);
         this._buildCoins(levelData.coins);
+        this._buildTorches(levelData.torches);
 
         this.enemyDefs = levelData.enemies ?? [];
         this.killY = groundY + 40;
@@ -112,6 +114,19 @@ export class LevelLoader {
             );
 
             this.coins.add(coin);
+        }
+    }
+
+    _buildTorches(torches = []) {
+        this.torches = this.scene.add.group({ runChildUpdate: true });
+
+        for (const t of torches) {
+            const torch = new Torch(
+                this.scene,
+                t.x * TILE_SIZE + TILE_SIZE / 2,
+                t.y * TILE_SIZE + TILE_SIZE / 2 - 4,
+            );
+            this.torches.add(torch);
         }
     }
 

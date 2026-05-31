@@ -20,8 +20,6 @@ export class Game extends Scene {
         // Lights
         this.lights.enable().setAmbientColor(0x333333);
         this.playerLight = this.lights.addLight(0, 0, 250, 0x333333, 2.0);
-        this.torchLight = this.lights.addLight(width / 3, height / 1.5, 180, 0x333333, 2.5);
-        this.torchLight = this.lights.addLight(width / 3, height / 1.5, 180, 0x333333, 2.5);
 
         // Player
         this.player = new Player(this, playerStart.x * TILE_SIZE, playerStart.y * TILE_SIZE);
