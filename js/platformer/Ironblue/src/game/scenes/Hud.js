@@ -1,10 +1,10 @@
 import { Scene, Math as PMath } from 'phaser';
 import { SPRITESHEETS } from '../assets';
+import { TEXT_STYLES } from '../ui/TextStyles.js';
+import { UI_LAYOUT } from '../ui/UIConstants.js';
 
-export class Hud extends Scene
-{
-    constructor()
-    {
+export class Hud extends Scene {
+    constructor() {
         super('Hud');
     }
 
@@ -19,6 +19,9 @@ export class Hud extends Scene
     setup(player)
     {
         this.hearts.forEach(h => h.destroy());
+        this._coinIcon?.destroy();
+        this._scoreText?.destroy();
+
         this.hearts      = [];
         this.heartsCount = player.hp;
         this.player      = player;
@@ -49,24 +52,18 @@ export class Hud extends Scene
         // this.add.image(4 + 8 + (this.player.maxHp - 1) * 16, 4, 'hud_health_right').setOrigin(0, 0);
         
         for (let i = 0; i < this.player.maxHp; i++) {
-            const heart = this.add.sprite(8 + i * 16, 4, 'hud_hearts').setOrigin(0, 0);
+            const heart = this.add.sprite(UI_LAYOUT.hudHeartX + i * UI_LAYOUT.hudHeartSpacing, UI_LAYOUT.hudHeartY, 'hud_hearts').setOrigin(0, 0);
             this.hearts.push(heart);
         }
     }
 
     _createScoreDisplay()
     {
-        const x = 4;
-        const y = 20;
-
-        this._coinIcon  = this.add.image(x, y + 3, 'hud_coins').setOrigin(0, 0);
-        this._scoreText = this.add.text(x + this._coinIcon.width + 3, y + 1, '0', {
-            fontFamily: 'monospace',
-            fontSize:   '10px',
-            color:      '#ffffff',
-            stroke:     '#000000',
-            strokeThickness: 2,
-        }).setOrigin(0, 0).setResolution(32);
+        this._coinIcon = this.add.image(UI_LAYOUT.hudCoinX, UI_LAYOUT.hudCoinY + 3, 'hud_coins').setOrigin(0, 0);
+        this._scoreText = this.add
+            .text(UI_LAYOUT.hudCoinX + this._coinIcon.width + UI_LAYOUT.hudScoreOffsetX, UI_LAYOUT.hudCoinY + UI_LAYOUT.hudScoreOffsetY, '0', TEXT_STYLES.score)
+            .setOrigin(0, 0)
+            .setResolution(32);
     }
 
     addScore(amount)

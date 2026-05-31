@@ -10,9 +10,10 @@ const config = {
     type: 2, // WEBGL
     width: 240,
     height: 160,
-    zoom: 4,
     pixelArt: true,
     roundPixels: true,
+    antialias: false,
+    antialiasGL: false,
     backgroundColor: '#000000',
     scale: {
         mode: Scale.FIT,
