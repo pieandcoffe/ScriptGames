@@ -72,12 +72,18 @@ export class LevelLoader {
             const type = segment.type || DEFAULT_GROUND_TYPE;
             const tileset = this._createTileset(type, DEFAULT_GROUND_TYPE);
 
+            const segmentTopY = segment.y !== undefined
+                ? segment.y * TILE_SIZE
+                : groundY;
+
+            const heightInTiles = Math.round((groundY - segmentTopY) / TILE_SIZE) + 1;
+
             this._createTileRegion(
                 this.groundSegments,
                 segment.x * TILE_SIZE,
-                groundY,
+                segmentTopY,
                 segment.width,
-                segment.height ?? 1,
+                heightInTiles,
                 tileset,
                 this._groundFrame.bind(this)
             );

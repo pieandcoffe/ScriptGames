@@ -1,48 +1,50 @@
 {
   "width": 3,
   "height": 1,
-  "playerStart": { "x": 8, "y": 3 },
+  "playerStart": { "x": 2, "y": 8 },
   "groundSegments": [
     { "type": "ground_grass", "x": 0,  "width": 12 },
-    { "type": "ground_dirt", "x": 14, "width": 4 },
-    { "type": "ground_grass", "x": 25, "width": 6 }
+    { "type": "ground_dirt",  "x": 14, "y": 8, "width": 6 },
+    { "type": "ground_grass", "x": 23, "y": 8, "width": 8 }
   ],
   "platforms": [
     { "type": "platform_grass", "x": 4,  "y": 7, "width": 4, "height": 1 },
     { "type": "platform_grass", "x": 11, "y": 6, "width": 4, "height": 1 },
-    { "type": "platform_dirt", "x": 19, "y": 7, "width": 5, "height": 1 },
-    { "type": "platform_dirt", "x": 26, "y": 6, "width": 4, "height": 1 },
-    { "type": "platform_grass", "x": 34, "y": 6, "width": 4, "height": 1 },
-    { "type": "platform_grass", "x": 40, "y": 5, "width": 6, "height": 2 }
+    { "type": "platform_dirt",  "x": 17, "y": 4, "width": 4, "height": 1 },
+    { "type": "platform_dirt",  "x": 24, "y": 6, "width": 4, "height": 1 },
+    { "type": "platform_grass", "x": 31, "y": 6, "width": 5, "height": 1 },
+    { "type": "platform_grass", "x": 38, "y": 5, "width": 8, "height": 1 }
   ],
   "coins": [
+    { "x": 4,  "y": 6 },
+    { "x": 5,  "y": 6 },
+    { "x": 6,  "y": 6 },
     { "x": 11, "y": 5 },
     { "x": 12, "y": 5 },
     { "x": 13, "y": 5 },
-    { "x": 14, "y": 5 },
-
-    { "x": 22, "y": 6 },
-    { "x": 23, "y": 6 },
+    { "x": 17, "y": 6 },
+    { "x": 18, "y": 6 },
     { "x": 24, "y": 5 },
-    { "x": 25, "y": 4 },
-    { "x": 26, "y": 4 },
-
-    { "x": 53, "y": 6 },
-    { "x": 53, "y": 6 },
-    { "x": 61, "y": 5 },
-    { "x": 71, "y": 5 }
+    { "x": 25, "y": 5 },
+    { "x": 26, "y": 5 },
+    { "x": 31, "y": 5 },
+    { "x": 32, "y": 5 },
+    { "x": 39, "y": 4 },
+    { "x": 40, "y": 4 },
+    { "x": 41, "y": 4 }
+  ],
+  "torches": [
+    { "x": 7,  "y": 6 },
+    { "x": 27, "y": 5 },
+    { "x": 43, "y": 4 }
   ],
   "enemies": [
-    { "type": "slime", "x": 4,  "y": 5, "patrol": 8 },
-    { "type": "slime", "x": 11, "y": 5, "patrol": 8 },
-    { "type": "slime", "x": 12, "y": 5, "patrol": 8 },
-    { "type": "slime", "x": 12, "y": 5, "patrol": 8 },
-    { "type": "slime", "x": 13, "y": 5, "patrol": 8 },
-    { "type": "slime", "x": 25, "y": 5, "patrol": 8 },
-    { "type": "slime", "x": 26, "y": 5, "patrol": 8 },
-    { "type": "slime", "x": 26, "y": 5, "patrol": 8 },
-    { "type": "slime", "x": 38, "y": 5, "patrol": 8 },
-    { "type": "slime", "x": 38, "y": 5, "patrol": 8 }
+    { "type": "slime", "x": 5,  "y": 6, "patrol": 3 },
+    { "type": "slime", "x": 12, "y": 5, "patrol": 3 },
+    { "type": "slime", "x": 18, "y": 6, "patrol": 3 },
+    { "type": "slime", "x": 25, "y": 5, "patrol": 3 },
+    { "type": "goblin", "x": 32, "y": 5, "patrol": 3 },
+    { "type": "goblin", "x": 40, "y": 4, "patrol": 2 }
   ],
   "nextLevel": "level-02.json"
 }
