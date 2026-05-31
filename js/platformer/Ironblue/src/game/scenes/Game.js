@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { Player } from '../entities/Player';
 import { Slime } from '../entities/Slime';
+import { Goblin } from '../entities/Goblin';
 import { Camera } from '../core/Camera';
 import { LevelLoader, TILE_SIZE } from '../core/Level';
 
@@ -54,13 +55,13 @@ export class Game extends Scene {
         });
 
         // Enemies
-        this.slimes = this.add.group();
+        this.enemies = this.add.group();
         for (const def of this.loader.enemyDefs) {
-            this._spawnSlime(def.x * TILE_SIZE, def.y * TILE_SIZE, def.patrol);
+            this._spawnEnemy(def);
         }
 
         // Sword overlap
-        this.physics.add.overlap(this.player.sword, this.slimes, (sword, enemy) => {
+        this.physics.add.overlap(this.player.sword, this.enemies, (sword, enemy) => {
             if (sword.hitTargets.has(enemy)) return;
             sword.hitTargets.add(enemy);
             enemy.hit(sword);
@@ -68,7 +69,7 @@ export class Game extends Scene {
 
         // Click to spawn slimes
         this.input.on('pointerdown', (pointer) => {
-            this._spawnSlime(pointer.worldX, pointer.worldY, 200);
+            this._spawnEnemy({ type: 'goblin', x: pointer.worldX / TILE_SIZE, y: pointer.worldY / TILE_SIZE, patrol: 200 });
         });
 
         // World bounds
@@ -82,13 +83,28 @@ export class Game extends Scene {
     }
 
     /**
-     * Spawns a slime and registers its colliders.
+     * Spawns an enemy by definition object from the level data.
+     * def: { type, x, y, patrol }
      */
-    _spawnSlime(x, y, patrolDistance) {
-        const slime = new Slime(this, x, y, patrolDistance);
-        this.slimes.add(slime);
-        this.physics.add.collider(slime, this.loader.groundSegments);
-        this.physics.add.collider(slime, this.loader.platforms);
+    _spawnEnemy(def) {
+        const x = def.x * TILE_SIZE;
+        const y = def.y * TILE_SIZE;
+        let ent = null;
+
+        switch ((def.type || 'slime')) {
+            case 'goblin':
+                ent = new Goblin(this, x, y, def.patrol);
+                break;
+            case 'slime':
+            default:
+                ent = new Slime(this, x, y, def.patrol);
+        }
+
+        if (!ent) return;
+
+        this.enemies.add(ent);
+        this.physics.add.collider(ent, this.loader.groundSegments);
+        this.physics.add.collider(ent, this.loader.platforms);
     }
 
     _checkFallDeath() {
@@ -114,7 +130,7 @@ export class Game extends Scene {
 
         this.player.update(time, delta);
         this.playerLight.setPosition(this.player.x, this.player.y);
-        this.slimes.getChildren().forEach(slime => slime.update(time, delta));
+        this.enemies.getChildren().forEach(e => e.update(time, delta));
 
         this._checkFallDeath();
 
