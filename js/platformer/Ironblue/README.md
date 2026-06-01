@@ -2,7 +2,7 @@
 
 Ironblue is an arcade platformer game made with Phaser 4. 
 
-![demo](./demo.gif)
+![demo](./Demo.gif)
 
 # Phaser Vite Template
 

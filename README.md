@@ -40,6 +40,9 @@ można wpaść i zginąć
 - [X] 4.5 Ładowanie poziomów z pliku
 - [ ] 5.0 Generator poziomów
 
+### Demo
+![Demo](js/platformer/Ironblue/Demo.gif)
+
 # Assignment 3 Ruby: Crawler
 
 ## Crawler w Ruby
