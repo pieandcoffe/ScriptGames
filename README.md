@@ -41,6 +41,8 @@ można wpaść i zginąć
 - [ ] 5.0 Generator poziomów
 
 ### Demo
+See [Demo](js/platformer/Ironblue/Demo.gif)
+
 ![Demo](js/platformer/Ironblue/Demo.gif)
 
 # Assignment 3 Ruby: Crawler
