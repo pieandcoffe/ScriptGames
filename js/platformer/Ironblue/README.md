@@ -2,6 +2,8 @@
 
 Ironblue is an arcade platformer game made with Phaser 4. 
 
+![demo](./demo.gif)
+
 # Phaser Vite Template
 
 This is a Phaser 4 project template that uses Vite for bundling. It supports hot-reloading for quick development workflow and includes scripts to generate production-ready builds.
