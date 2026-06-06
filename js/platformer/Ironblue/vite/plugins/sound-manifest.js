@@ -9,17 +9,24 @@ export function soundManifestPlugin(soundsObj) {
     for (const [entity, actions] of Object.entries(obj)) {
       result[entity] = {};
       for (const [action, dirPath] of Object.entries(actions)) {
-        const absDir = path.resolve(dirPath);
-        if (!fs.existsSync(absDir)) {
-          console.warn(`[sound-manifest] directory not found: ${absDir}`);
+        const candidateDirs = [
+          path.resolve(dirPath),
+          path.resolve('public', dirPath)
+        ];
+
+        const absDir = candidateDirs.find(d => fs.existsSync(d));
+
+        if (!absDir) {
+          console.warn(`[sound-manifest] directory not found: ${candidateDirs.join(' or ')}`);
           result[entity][action] = [];
           continue;
         }
+
         result[entity][action] = fs
           .readdirSync(absDir)
           .filter(f => /\.(ogg|mp3|wav)$/i.test(f))
           .sort()
-          .map(f => `/${dirPath}${f}`);
+          .map(f => `${dirPath}${f}`);
       }
     }
     return result;
