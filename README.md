@@ -45,6 +45,8 @@ See [Demo](js/platformer/Ironblue/Demo.gif)
 
 ![Demo](js/platformer/Ironblue/Demo.gif)
 
+[Play game on Itch.io](https://4packharnas.itch.io/ironblue)
+
 # Assignment 3 Ruby: Crawler
 
 ## Crawler w Ruby
