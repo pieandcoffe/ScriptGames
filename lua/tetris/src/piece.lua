@@ -133,6 +133,22 @@ function Piece.getMatrixHeight()
     return getMatrixHeight()
 end
 
+function Piece.getMatrix()
+    return matrix
+end
+
+function Piece.getX()
+    return x
+end
+
+function Piece.getY()
+    return y
+end
+
+function Piece.getColor()
+    return color
+end
+
 function Piece.clearMatrix()
     clearMatrix()
 end
