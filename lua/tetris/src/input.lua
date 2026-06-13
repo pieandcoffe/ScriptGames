@@ -8,9 +8,9 @@ function Input.keypressed(key)
     elseif key == "right" then
         Piece.moveRight()
     elseif key == "up" then
-        Piece.moveUp()
+        Piece.rotate()
     elseif key == "down" then
-        Piece.moveDown()
+        Piece.rotate()
     elseif key == "space" then
         Piece.drop()
     end

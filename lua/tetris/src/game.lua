@@ -13,6 +13,10 @@ function Game.load()
     WINDOW_W = love.graphics.getWidth()
     WINDOW_H = love.graphics.getHeight()
 
+    -- initialize random seed and discard first value
+    math.randomseed(os.time() + os.clock() * 1000)
+    math.random()
+
     Board.load(WINDOW_W, WINDOW_H)
 
     titleFont = love.graphics.newFont(36)
