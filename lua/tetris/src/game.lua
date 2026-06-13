@@ -1,5 +1,4 @@
 local Board = require("src.board")
-local Piece = require("src.piece")
 local Input = require("src.input")
 
 local Game = {}
@@ -13,7 +12,6 @@ local SCALE
 function Game.load()
     WINDOW_W = love.graphics.getWidth()
     WINDOW_H = love.graphics.getHeight()
-    SCALE = 1
 
     Board.load(WINDOW_W, WINDOW_H)
 
