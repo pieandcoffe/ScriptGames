@@ -46,6 +46,28 @@ local function initializeMatrix(height, width)
     end
 end
 
+local function isFilledCell(cell)
+    return type(cell) == "table" and cell[4] and cell[4] > 0
+end
+
+local function canPlacePieceAt(pieceMatrix, pieceX, pieceY)
+    for i = 1, #pieceMatrix do
+        for j = 1, #pieceMatrix[i] do
+            if pieceMatrix[i][j] then
+                local boardRow = pieceY + i
+                local boardCol = pieceX + j
+                if boardRow < 1 or boardRow > rows or boardCol < 1 or boardCol > cols then
+                    return false
+                end
+                if isFilledCell(matrix[boardRow][boardCol]) then
+                    return false
+                end
+            end
+        end
+    end
+    return true
+end
+
 local function projectPieceOntoBoard(pieceMatrix, pieceX, pieceY)
     local projectedMatrix = {}
     for i = 1, rows do
@@ -68,6 +90,17 @@ local function projectPieceOntoBoard(pieceMatrix, pieceX, pieceY)
     return projectedMatrix
 end
 
+local function commitPieceToBoard()
+    for i = 1, rows do
+        for j = 1, cols do
+            local cell = Board.projectedMatrix[i][j]
+            if isFilledCell(cell) then
+                matrix[i][j] = cell
+            end
+        end
+    end
+end
+
 function Board.load(windowW, windowH)
     local boardPadding = 20
     boardW = windowW / 3
@@ -85,8 +118,26 @@ function Board.load(windowW, windowH)
 end
 
 function Board.update(dt)
+    local pieceMatrix = Piece.getMatrix()
+    local pieceX = Piece.getX()
+    local pieceY = Piece.getY()
+    local previousY = pieceY
+
     Piece.update(dt)
-    Board.projectedMatrix = projectPieceOntoBoard(Piece.getMatrix(), Piece.getX(), Piece.getY())
+    local newY = Piece.getY()
+
+    if newY > previousY and not canPlacePieceAt(pieceMatrix, pieceX, newY) then
+        Piece.setY(previousY)
+        Piece.setPlaced(true)
+    end
+
+    Board.projectedMatrix = projectPieceOntoBoard(pieceMatrix, Piece.getX(), Piece.getY())
+
+    if Piece.getPlaced() then
+        commitPieceToBoard()
+        Piece.respawn(cols)
+        Board.projectedMatrix = projectPieceOntoBoard(Piece.getMatrix(), Piece.getX(), Piece.getY())
+    end
 end
 
 local function drawPiece()

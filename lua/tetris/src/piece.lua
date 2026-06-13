@@ -14,11 +14,12 @@ local pieceTypeNames = {"I", "O", "J", "L", "S", "Z", "T"}
 
 local fallTimer = 0
 local fallDelay = 0.5
-local dropFallDelay = 0.1
+local dropFallDelay = 0.05
 
 local x = 0
 local y = 0
 local dropping = false
+local placed = false
 
 local matrix = {}
 local color = {1, 1, 1, 1}
@@ -39,6 +40,10 @@ end
 
 local function getMatrixHeight()
     return #matrix
+end
+
+local function getPlaced()
+    return placed
 end
 
 local function initializeMatrix(height, width, callback, newColor)
@@ -88,6 +93,10 @@ function Piece.update(dt)
     if fallTimer >= delay then
         y = math.max(0, math.min(y + 1, rows - getMatrixHeight()))
         fallTimer = 0
+    end
+
+    if y >= rows - getMatrixHeight() then
+        placed = true
     end
 end
 
@@ -153,11 +162,26 @@ function Piece.clearMatrix()
     clearMatrix()
 end
 
+function Piece.getPlaced()
+    return getPlaced()
+end
+
+function Piece.setY(newY)
+    y = newY
+end
+
+function Piece.setPlaced(value)
+    placed = value
+end
+
 function Piece.respawn(gridWidth)
     local nextType = math.random(1, #pieceTypeNames)
     initializePiece(nextType)
     x = math.max(0, math.min(x, gridWidth - getMatrixWidth()))
     y = 0
+    placed = false
+    dropping = false
+    fallTimer = 0
 end
 
 function Piece.rotate()
