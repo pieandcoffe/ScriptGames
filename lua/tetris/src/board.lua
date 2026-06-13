@@ -74,6 +74,19 @@ local function canPlacePieceAt(pieceMatrix, pieceX, pieceY)
     return true
 end
 
+function Board.canMovePieceLeft()
+    return canPlacePieceAt(Piece.getMatrix(), Piece.getX() - 1, Piece.getY())
+end
+
+function Board.canMovePieceRight()
+    return canPlacePieceAt(Piece.getMatrix(), Piece.getX() + 1, Piece.getY())
+end
+
+function Board.canRotatePiece()
+    return true
+--    return canPlacePieceAt(Piece.getRotatedMatrix(), Piece.getX(), Piece.getY())
+end
+
 local function projectPieceOntoBoard(pieceMatrix, pieceX, pieceY)
     local projectedMatrix = {}
     for i = 1, rows do

@@ -102,7 +102,7 @@ function Piece.update(dt)
 end
 
 function Piece.draw()
-    love.graphics.setColor(color)
+    love.graphics.setColor(Piece.getColor())
     for i = 1, getMatrixHeight() do
         for j = 1, getMatrixWidth() do
             if matrix[i][j] then
@@ -185,7 +185,7 @@ function Piece.respawn(gridWidth)
     fallTimer = 0
 end
 
-function Piece.rotate()
+function Piece.getRotatedMatrix()
     local height = getMatrixHeight()
     local width = getMatrixWidth()
     local rotated = {}
@@ -203,7 +203,11 @@ function Piece.rotate()
         end
     end
 
-    matrix = rotated
+    return rotated
+end
+
+function Piece.rotate()
+    matrix = Piece.getRotatedMatrix()
 end
 
 return Piece
