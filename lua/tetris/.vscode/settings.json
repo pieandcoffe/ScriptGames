@@ -1,0 +1,13 @@
+{
+  "files.associations": {
+    "*.lua": "lua"
+  },
+  "lua.runtime.version": "LuaJIT",
+  "lua.workspace.library": [
+    "${workspaceFolder}",
+    "${workspaceFolder}/src"
+  ],
+  "lua.workspace.maxPreload": 2000,
+  "lua.diagnostics.globals": ["love"],
+  "lua.telemetry.enable": false
+}
