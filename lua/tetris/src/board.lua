@@ -6,8 +6,10 @@ local boardW, boardH
 local boardX, boardY
 
 local cellSize = 0
-local cols = 10
+local cols = 8
 local rows = 0
+
+local linesCleared = 0
 
 local matrix = {}
 
@@ -29,6 +31,10 @@ end
 
 function Board.getRows()
     return rows
+end
+
+function Board.getLinesCleared()
+    return linesCleared
 end
 
 local function clearMatrix()
@@ -101,6 +107,27 @@ local function commitPieceToBoard()
     end
 end
 
+local function clearFullLines()
+    for i = rows, 1, -1 do
+        local isFullLine = true
+        for j = 1, cols do
+            if not isFilledCell(matrix[i][j]) then
+                isFullLine = false
+                break
+            end
+        end
+
+        if isFullLine then
+            table.remove(matrix, i)
+            table.insert(matrix, 1, {})
+            for j = 1, cols do
+                matrix[1][j] = {0, 0, 0, 0}
+            end
+            linesCleared = linesCleared + 1
+        end
+    end
+end
+
 function Board.load(windowW, windowH)
     local boardPadding = 20
     boardW = windowW / 3
@@ -113,7 +140,7 @@ function Board.load(windowW, windowH)
     boardH = rows * cellSize
     
     initializeMatrix(rows, cols)
-    Piece.load(boardX, boardY, cellSize, rows)
+    Piece.load(boardX, boardY, cellSize, rows, cols)
     Board.projectedMatrix = projectPieceOntoBoard(Piece.getMatrix(), Piece.getX(), Piece.getY())
 end
 
@@ -138,6 +165,8 @@ function Board.update(dt)
         Piece.respawn(cols)
         Board.projectedMatrix = projectPieceOntoBoard(Piece.getMatrix(), Piece.getX(), Piece.getY())
     end
+
+    clearFullLines()
 end
 
 local function drawPiece()

@@ -27,7 +27,7 @@ local color = {1, 1, 1, 1}
 local drawX = 0
 local drawY = 0
 local cellSize = 0
-local cols = 10
+local cols = 0
 local rows = 0
 
 local function clearMatrix()
@@ -78,11 +78,12 @@ local function initializePiece(type)
     end
 end
 
-function Piece.load(p_drawX, p_drawY, p_cellSize, p_rows)
+function Piece.load(p_drawX, p_drawY, p_cellSize, p_rows, p_cols)
     drawX = p_drawX
     drawY = p_drawY
     cellSize = p_cellSize
     rows = p_rows
+    cols = p_cols
     clearMatrix()
     Piece.respawn(cols)
 end
