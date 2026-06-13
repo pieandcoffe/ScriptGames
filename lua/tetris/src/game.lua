@@ -1,5 +1,6 @@
 local Board = require("src.board")
 local Piece = require("src.piece")
+local Input = require("src.input")
 
 local Game = {}
 
@@ -39,17 +40,7 @@ function Game.draw()
 end
 
 function Game.keypressed(key)
-    if key == "left" then
-        Piece.moveLeft()
-    elseif key == "right" then
-        Piece.moveRight()
-    elseif key == "up" then
-        Piece.moveUp()
-    elseif key == "down" then
-        Piece.moveDown()
-    elseif key == "space" then
-        -- drop
-    end
+    Input.keypressed(key)
 end
 
 return Game

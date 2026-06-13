@@ -2,9 +2,11 @@ local Piece = {}
 
 local fallTimer = 0
 local fallDelay = 0.5
+local dropFallDelay = 0.1
 
 local x = 0
 local y = 0
+local dropping = false
 
 local drawX = 0
 local drawY = 0
@@ -21,7 +23,8 @@ end
 
 function Piece.update(dt)
     fallTimer = fallTimer + dt
-    if fallTimer >= fallDelay then
+    local delay = dropping and dropFallDelay or fallDelay
+    if fallTimer >= delay then
         y = math.max(0, math.min(y + 1, rows - 1))
         fallTimer = 0
     end
@@ -47,6 +50,10 @@ end
 
 function Piece.moveDown()
     y = math.min(rows - 1, y + 1)
+end
+
+function Piece.drop()
+    dropping = not dropping
 end
 
 return Piece
