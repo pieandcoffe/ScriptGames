@@ -60,14 +60,30 @@ tylko na podstronie o produkcie
 - [ ] 4.5 Należy zapisać linki do produktów
 - [ ] 5.0 Dane należy zapisać w bazie danych np. SQLite via Sequel
 
-# Assignment 4 Lua: Teteis
+# Assignment 4 Lua: Tetris
 
 ## Tetris  w Lua
 Należy stworzyć grę Tetris w Lua na frameworku [Löve](https://love2d.org/).
-- [ ] 3.0 Postawowa wersja dekstopowa z obsługą na klawiaturze - minimum 4
+- [X] 3.0 Postawowa wersja dekstopowa z obsługą na klawiaturze - minimum 4
 rodzaje klocków
 - [ ] 3.5 Zapis i odczyt gier
 - [ ] 4.0 Dodanie efektów dźwiękowych przy akcjach
 - [ ] 4.5 Dodanie animacji przy zbijaniu klocków
 - [ ] 5.0 Wersja na iOS lub Android z implementacją touch zamiast klawiatury
+
+See [Demo](lua/tetris/assets/Demo.gif)
+
+To run the game, navigate to the `lua/tetris` directory 
+
+```bash
+cd ScriptGames/lua/tetris
+```
+
+And run the following command:
+
+```bash
+love .
+```
+
+![Demo](lua/tetris/assets/Demo.gif)
  
