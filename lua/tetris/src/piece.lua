@@ -13,13 +13,13 @@ local PieceType = {
 local pieceTypeNames = {"I", "O", "J", "L", "S", "Z", "T"}
 
 local fallTimer = 0
-local fallDelay = 0.5
-local dropFallDelay = 0.05
+local normalFallDelay = 0.5
+local fastFallDelay = 0.05
+local slowFallDelay = 0.9
 
 local x = 0
 local y = 0
-local dropping = false
-local placed = false
+local fallMode = "normal"
 
 local matrix = {}
 local color = {1, 1, 1, 1}
@@ -90,7 +90,7 @@ end
 
 function Piece.update(dt)
     fallTimer = fallTimer + dt
-    local delay = dropping and dropFallDelay or fallDelay
+    local delay = fallMode == "fast" and fastFallDelay or (fallMode == "slow" and slowFallDelay or normalFallDelay)
     if fallTimer >= delay then
         y = math.max(0, math.min(y + 1, rows - getMatrixHeight()))
         fallTimer = 0
@@ -131,8 +131,8 @@ function Piece.moveDown()
     y = math.min(rows - getMatrixHeight(), y + 1)
 end
 
-function Piece.drop()
-    dropping = not dropping
+function Piece.setFallMode(mode)
+    fallMode = mode
 end
 
 function Piece.getMatrixWidth()
@@ -183,6 +183,7 @@ function Piece.respawn(gridWidth)
     placed = false
     dropping = false
     fallTimer = 0
+    fallMode = "normal"
 end
 
 function Piece.getRotatedMatrix()

@@ -13,6 +13,8 @@ local linesCleared = 0
 
 local matrix = {}
 
+local gameOver = false
+
 function Board.getCellSize()
     return cellSize
 end
@@ -35,6 +37,10 @@ end
 
 function Board.getLinesCleared()
     return linesCleared
+end
+
+function Board.getGameOver()
+    return gameOver
 end
 
 local function clearMatrix()
@@ -156,7 +162,19 @@ function Board.load(windowW, windowH)
     Board.projectedMatrix = projectPieceOntoBoard(Piece.getMatrix(), Piece.getX(), Piece.getY())
 end
 
+function Board.reset()
+    gameOver = false
+    linesCleared = 0
+    initializeMatrix(rows, cols)
+    Piece.load(boardX, boardY, cellSize, rows, cols)
+    Board.projectedMatrix = projectPieceOntoBoard(Piece.getMatrix(), Piece.getX(), Piece.getY())
+end
+
 function Board.update(dt)
+    if gameOver then
+        return
+    end
+
     local pieceMatrix = Piece.getMatrix()
     local pieceX = Piece.getX()
     local pieceY = Piece.getY()
@@ -175,6 +193,11 @@ function Board.update(dt)
     if Piece.getPlaced() then
         commitPieceToBoard()
         Piece.respawn(cols)
+        if not canPlacePieceAt(Piece.getMatrix(), Piece.getX(), Piece.getY()) then
+            -- Game over
+            gameOver = true
+            return
+        end
         Board.projectedMatrix = projectPieceOntoBoard(Piece.getMatrix(), Piece.getX(), Piece.getY())
     end
 
@@ -190,6 +213,8 @@ local function drawPiece()
                 local yPos = boardY + cellSize * (i - 1)
                 love.graphics.setColor(cell)
                 love.graphics.rectangle("fill", xPos, yPos, cellSize, cellSize)
+                love.graphics.setColor(0.8, 0.8, 0.8, 1)
+                love.graphics.rectangle("line", xPos, yPos, cellSize, cellSize)
             end
         end
     end

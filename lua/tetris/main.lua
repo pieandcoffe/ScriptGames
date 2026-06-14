@@ -20,6 +20,10 @@ function love.keypressed(key)
     Game.keypressed(key)
 end
 
+function love.keyreleased(key)
+    Game.keyreleased(key)
+end
+
 local love_errorhandler = love.errorhandler
 
 function love.errorhandler(msg)

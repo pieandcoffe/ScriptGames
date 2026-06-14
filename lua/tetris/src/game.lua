@@ -10,6 +10,7 @@ local WINDOW_H
 local SCALE = 1
 
 local paused = true
+local gameOver = false
 local points = 0
 
 local function drawLogo()
@@ -18,6 +19,15 @@ local function drawLogo()
     love.graphics.printf("TETRIS", 0, WINDOW_H / (2 * SCALE) - 50, WINDOW_W / SCALE, "center")
     love.graphics.setFont(uiFont)
     love.graphics.printf("Press any key", 0, WINDOW_H / (2 * SCALE) + 10, WINDOW_W / SCALE, "center")
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
+local function drawGameOver()
+    love.graphics.setFont(titleFont)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf("Game Over", 0, WINDOW_H / (2 * SCALE) - 50, WINDOW_W / SCALE, "center")
+    love.graphics.setFont(uiFont)
+    love.graphics.printf("Your Score: " .. points, 0, WINDOW_H / (2 * SCALE) + 10, WINDOW_W / SCALE, "center")
     love.graphics.setColor(1, 1, 1, 1)
 end
 
@@ -45,7 +55,12 @@ function Game.load()
 end
 
 function Game.update(dt)
-    if paused then
+    if paused or gameOver then
+        return
+    end
+
+    if Board.getGameOver() then
+        gameOver = true
         return
     end
 
@@ -56,8 +71,13 @@ end
 function Game.draw()
     love.graphics.push()
     love.graphics.scale(SCALE, SCALE)
-
     love.graphics.clear(0.06, 0.12, 0.18)
+
+    if gameOver then
+        drawGameOver()
+        love.graphics.pop()
+        return
+    end
 
     if paused then
         drawLogo()
@@ -66,13 +86,20 @@ function Game.draw()
     end
 
     Board.draw()
-
     drawPoints()
-
     love.graphics.pop()
 end
 
 function Game.keypressed(key)
+    if gameOver then
+        -- restart
+        gameOver = false
+        paused = true
+        points = 0
+        Board.reset()
+        return
+    end
+
     if key == "escape" and not paused then
         paused = true
         return
@@ -84,6 +111,10 @@ function Game.keypressed(key)
     end
 
     Input.keypressed(key)
+end
+
+function Game.keyreleased(key)
+    Input.keyreleased(key)
 end
 
 return Game

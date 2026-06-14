@@ -13,15 +13,19 @@ function Input.keypressed(key)
             Piece.moveRight()
         end
     elseif key == "up" then
-        if Board.canRotatePiece() then
-            Piece.rotate()
-        end
+        Piece.setFallMode("slow")
     elseif key == "down" then
+        Piece.setFallMode("fast")
+    elseif key == "space" then
         if Board.canRotatePiece() then
             Piece.rotate()
         end
-    elseif key == "space" then
-        Piece.drop()
+    end
+end
+
+function Input.keyreleased(key)
+    if key == "up" or key == "down" then
+        Piece.setFallMode("normal")
     end
 end
 
