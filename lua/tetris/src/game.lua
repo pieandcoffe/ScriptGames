@@ -1,5 +1,6 @@
 local Board = require("src.board")
 local Input = require("src.input")
+local Music = require("src.music")
 
 local Game = {}
 
@@ -52,17 +53,23 @@ function Game.load()
 
     love.graphics.setDefaultFilter("nearest", "nearest")
     love.graphics.setFont(titleFont)
+    
+    Music.load()
 end
 
 function Game.update(dt)
     if paused or gameOver then
+        Music.pause()
         return
     end
 
     if Board.getGameOver() then
         gameOver = true
+        Music.stop()
         return
     end
+
+    Music.play()
 
     Board.update(dt)
     points = Board.getLinesCleared() * 100
