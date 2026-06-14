@@ -5,6 +5,8 @@ local Board = {}
 local boardW, boardH
 local boardX, boardY
 
+local boardPadding = 2
+
 local cellSize = 0
 local cols = 8
 local rows = 0
@@ -90,6 +92,18 @@ end
 
 function Board.canRotatePiece()
     return canPlacePieceAt(Piece.getRotatedMatrix(), Piece.getX(), Piece.getY())
+end
+
+local function getGhostY()
+    local pieceMatrix = Piece.getMatrix()
+    local pieceX = Piece.getX()
+    local pieceY = Piece.getY()
+
+    while canPlacePieceAt(pieceMatrix, pieceX, pieceY + 1) do
+        pieceY = pieceY + 1
+    end
+
+    return pieceY
 end
 
 local function projectPieceOntoBoard(pieceMatrix, pieceX, pieceY)
@@ -204,7 +218,7 @@ function Board.update(dt)
     clearFullLines()
 end
 
-local function drawPiece()
+local function drawBoard()
     for i = 1, rows do
         for j = 1, cols do
             local cell = Board.projectedMatrix[i][j]
@@ -213,7 +227,27 @@ local function drawPiece()
                 local yPos = boardY + cellSize * (i - 1)
                 love.graphics.setColor(cell)
                 love.graphics.rectangle("fill", xPos, yPos, cellSize, cellSize)
-                love.graphics.setColor(0.8, 0.8, 0.8, 1)
+                love.graphics.setColor(0.06, 0.12, 0.18)
+                love.graphics.rectangle("line", xPos, yPos, cellSize, cellSize)
+            end
+        end
+    end
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
+local function drawGhostPiece()
+    local ghostY = getGhostY()
+    local pieceMatrix = Piece.getMatrix()
+    local c = Piece.getColor()
+
+    for i = 1, #pieceMatrix do
+        for j = 1, #pieceMatrix[i] do
+            if pieceMatrix[i][j] then
+                local xPos = boardX + cellSize * (Piece.getX() + j - 1)
+                local yPos = boardY + cellSize * (ghostY + i - 1)
+                love.graphics.setColor(c[1], c[2], c[3], 0.25)
+                love.graphics.rectangle("fill", xPos, yPos, cellSize, cellSize)
+                love.graphics.setColor(0.06, 0.12, 0.18)
                 love.graphics.rectangle("line", xPos, yPos, cellSize, cellSize)
             end
         end
@@ -222,9 +256,9 @@ local function drawPiece()
 end
 
 function Board.draw()
-    love.graphics.rectangle("line", boardX, boardY, boardW, boardH)
-
-    drawPiece()
+    love.graphics.rectangle("line", boardX - boardPadding, boardY - boardPadding, boardW + 2 * boardPadding, boardH + 2 * boardPadding)
+    drawGhostPiece()
+    drawBoard()
 end
 
 return Board
