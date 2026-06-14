@@ -30,8 +30,39 @@ local cellSize = 0
 local cols = 0
 local rows = 0
 
-local function clearMatrix()
-    matrix = {}
+local currentType = nil
+local nextType = nil
+local placed = false
+
+local function getPieceData(type)
+    local function build(height, width, callback, c)
+        local m = {}
+        for i = 1, height do
+            m[i] = {}
+            for j = 1, width do
+                m[i][j] = callback(i, j)
+            end
+        end
+        return m, c
+    end
+
+    if type == PieceType.I then
+        return build(4, 1, function(i, j) return true end, {0, 1, 1, 1})
+    elseif type == PieceType.O then
+        return build(2, 2, function(i, j) return true end, {1, 1, 0, 1})
+    elseif type == PieceType.J then
+        return build(2, 3, function(i, j) return (i == 1 and j == 3) or i == 2 end, {0.5, 0, 0.5, 1})
+    elseif type == PieceType.L then
+        return build(2, 3, function(i, j) return (i == 1 and j == 1) or i == 2 end, {0, 1, 0, 1})
+    elseif type == PieceType.S then
+        return build(2, 3, function(i, j) return (i == 1 and j < 3) or (i == 2 and j > 1) end, {1, 0, 0, 1})
+    elseif type == PieceType.Z then
+        return build(2, 3, function(i, j) return (i == 1 and j > 1) or (i == 2 and j < 3) end, {0, 0, 1, 1})
+    elseif type == PieceType.T then
+        return build(2, 3, function(i, j) return (i == 1 and j == 2) or i == 2 end, {1, 0.5, 0, 1})
+    else
+        return build(2, 2, function(i, j) return true end, {1, 1, 1, 1})
+    end
 end
 
 local function getMatrixWidth()
@@ -42,40 +73,8 @@ local function getMatrixHeight()
     return #matrix
 end
 
-local function getPlaced()
-    return placed
-end
-
-local function initializeMatrix(height, width, callback, newColor)
-    color = newColor or color
-    clearMatrix()
-
-    for i = 1, height do
-        matrix[i] = {}
-        for j = 1, width do
-            matrix[i][j] = callback(i - 1, j - 1)
-        end
-    end
-end
-
-local function initializePiece(type)
-    if type == PieceType.I then
-        initializeMatrix(4, 1, function(i, j) return true end, {0, 1, 1, 1})
-    elseif type == PieceType.O then
-        initializeMatrix(2, 2, function(i, j) return true end, {1, 1, 0, 1})
-    elseif type == PieceType.J then
-        initializeMatrix(2, 3, function(i, j) return (i == 0 and j == 2) or i == 1 end, {0.5, 0, 0.5, 1})
-    elseif type == PieceType.L then
-        initializeMatrix(2, 3, function(i, j) return (i == 0 and j == 0) or i == 1 end, {0, 1, 0, 1})
-    elseif type == PieceType.S then
-        initializeMatrix(2, 3, function(i, j) return (i == 0 and j < 2) or (i == 1 and j > 0) end, {1, 0, 0, 1})
-    elseif type == PieceType.Z then
-        initializeMatrix(2, 3, function(i, j) return (i == 0 and j > 0) or (i == 1 and j < 2) end, {0, 0, 1, 1})
-    elseif type == PieceType.T then
-        initializeMatrix(2, 3, function(i, j) return (i == 0 and j == 1) or i == 1 end, {1, 0.5, 0, 1})
-    else
-        initializeMatrix(2, 2, function(i, j) return true end, {1, 1, 1, 1})
-    end
+local function applyPieceData(type)
+    matrix, color = getPieceData(type)
 end
 
 function Piece.load(p_drawX, p_drawY, p_cellSize, p_rows, p_cols)
@@ -84,7 +83,7 @@ function Piece.load(p_drawX, p_drawY, p_cellSize, p_rows, p_cols)
     cellSize = p_cellSize
     rows = p_rows
     cols = p_cols
-    clearMatrix()
+    matrix = {}
     Piece.respawn(cols)
 end
 
@@ -159,12 +158,8 @@ function Piece.getColor()
     return color
 end
 
-function Piece.clearMatrix()
-    clearMatrix()
-end
-
 function Piece.getPlaced()
-    return getPlaced()
+    return placed
 end
 
 function Piece.setY(newY)
@@ -176,14 +171,19 @@ function Piece.setPlaced(value)
 end
 
 function Piece.respawn(gridWidth)
-    local nextType = math.random(1, #pieceTypeNames)
-    initializePiece(nextType)
+    currentType = nextType or math.random(1, #pieceTypeNames)
+    nextType = math.random(1, #pieceTypeNames)
+
+    applyPieceData(currentType)
     x = math.max(0, math.min(x, gridWidth - getMatrixWidth()))
     y = 0
     placed = false
-    dropping = false
     fallTimer = 0
     fallMode = "normal"
+end
+
+function Piece.getNextMatrix()
+    return getPieceData(nextType)
 end
 
 function Piece.getRotatedMatrix()
@@ -209,6 +209,14 @@ end
 
 function Piece.rotate()
     matrix = Piece.getRotatedMatrix()
+end
+
+function Piece.getNextType()
+    return nextType
+end
+
+function Piece.getCurrentType()
+    return currentType
 end
 
 return Piece

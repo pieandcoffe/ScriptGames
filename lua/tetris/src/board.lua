@@ -170,7 +170,7 @@ function Board.load(windowW, windowH)
     cellSize = boardW / cols
     rows = math.floor(boardH / cellSize)
     boardH = rows * cellSize
-    
+
     initializeMatrix(rows, cols)
     Piece.load(boardX, boardY, cellSize, rows, cols)
     Board.projectedMatrix = projectPieceOntoBoard(Piece.getMatrix(), Piece.getX(), Piece.getY())
@@ -255,10 +255,36 @@ local function drawGhostPiece()
     love.graphics.setColor(1, 1, 1, 1)
 end
 
+local function drawNextPiece()
+    local nextMatrix, nextColor = Piece.getNextMatrix()
+    if not nextMatrix then
+        return
+    end
+
+    local previewX = boardX + boardW + boardPadding * 4
+    local previewY = boardY
+
+
+    for i = 1, #nextMatrix do
+        for j = 1, #nextMatrix[i] do
+            if nextMatrix[i][j] then
+                local xPos = previewX + cellSize * (j - 1)
+                local yPos = previewY + cellSize * (i - 1)
+                love.graphics.setColor(nextColor)
+                love.graphics.rectangle("fill", xPos, yPos, cellSize, cellSize)
+                love.graphics.setColor(0.06, 0.12, 0.18)
+                love.graphics.rectangle("line", xPos, yPos, cellSize, cellSize)
+            end
+        end
+    end
+    love.graphics.setColor(1, 1, 1, 1)
+end
+
 function Board.draw()
     love.graphics.rectangle("line", boardX - boardPadding, boardY - boardPadding, boardW + 2 * boardPadding, boardH + 2 * boardPadding)
     drawGhostPiece()
     drawBoard()
+    drawNextPiece()
 end
 
 return Board
