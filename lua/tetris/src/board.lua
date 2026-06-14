@@ -83,8 +83,7 @@ function Board.canMovePieceRight()
 end
 
 function Board.canRotatePiece()
-    return true
---    return canPlacePieceAt(Piece.getRotatedMatrix(), Piece.getX(), Piece.getY())
+    return canPlacePieceAt(Piece.getRotatedMatrix(), Piece.getX(), Piece.getY())
 end
 
 local function projectPieceOntoBoard(pieceMatrix, pieceX, pieceY)
