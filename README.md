@@ -71,7 +71,7 @@ rodzaje klocków
 - [ ] 4.5 Dodanie animacji przy zbijaniu klocków
 - [ ] 5.0 Wersja na iOS lub Android z implementacją touch zamiast klawiatury
 
-See [Demo](lua/tetris/assets/Demo.gif)
+See [Demo](lua/tetris/assets/demo.gif)
 
 To run the game, navigate to the `lua/tetris` directory 
 
@@ -85,5 +85,5 @@ And run the following command:
 love .
 ```
 
-![Demo](lua/tetris/assets/Demo.gif)
+![Demo](lua/tetris/assets/demo.gif)
  
