@@ -8,6 +8,9 @@ Bashu, który:
 - [X] 4.0 - pozwala na zapis i odtwarzanie przerwanej gry (save game),
 - [X] 5.0 - pozwala na grę z komputerem.
 
+### Project
+Go to project [TicTacToe](bash/tictactoe/)
+
 ### Demo
 ![Demo](bash/tictactoe/Demo.gif)
 
@@ -40,6 +43,9 @@ można wpaść i zginąć
 - [X] 4.5 Ładowanie poziomów z pliku
 - [ ] 5.0 Generator poziomów
 
+### Project
+Go to project [Mario](js/platformer/Ironblue/)
+
 ### Demo
 See [Demo](js/platformer/Ironblue/Demo.gif)
 
@@ -52,13 +58,22 @@ See [Demo](js/platformer/Ironblue/Demo.gif)
 ## Crawler w Ruby
 Należy stworzyć crawler produktów na Amazonie lub Allegro w Ruby
 wykorzystują bibliotekę Nokogiri.
-- [ ] 3.0 Należy pobrać podstawowe dane o produktach (tytuł, cena), dowolna
+- [X] 3.0 Należy pobrać podstawowe dane o produktach (tytuł, cena), dowolna
 kategoria
-- [ ] 3.5 Należy pobrać podstawowe dane o produktach wg słów kluczowych
+- [X] 3.5 Należy pobrać podstawowe dane o produktach wg słów kluczowych
 - [ ] 4.0 Należy rozszerzyć dane o produktach o dane szczegółowe widoczne
 tylko na podstronie o produkcie
-- [ ] 4.5 Należy zapisać linki do produktów
+- [X] 4.5 Należy zapisać linki do produktów
 - [ ] 5.0 Dane należy zapisać w bazie danych np. SQLite via Sequel
+
+### Project
+Go to project [Crawler](ruby/crawler/)
+
+### Demo
+See [Demo](ruby/crawler/Demo.gif)
+
+![Demo](ruby/crawler/Demo.gif)
+
 
 # Assignment 4 Lua: Tetris
 
@@ -71,6 +86,10 @@ rodzaje klocków
 - [ ] 4.5 Dodanie animacji przy zbijaniu klocków
 - [ ] 5.0 Wersja na iOS lub Android z implementacją touch zamiast klawiatury
 
+### Project
+Go to project [Tetris](lua/tetris/)
+
+### Demo
 See [Demo](lua/tetris/assets/demo.gif)
 
 To run the game, navigate to the `lua/tetris` directory 
