@@ -10,7 +10,7 @@ module Parser
     PRICE          = 'p[aria-label*="aktualna cena"]'
   end
 
-  def self.parse(html)
+  def self.parse_listing(html)
     doc = Nokogiri::HTML(html)
     doc.css(CSS::ARTICLES).map { |article| parse_article(article) }.compact
   end
@@ -19,9 +19,10 @@ module Parser
     title_node = article.at_css(CSS::TITLE)
     return nil unless title_node
     title = title_node.text.strip
+    url   = title_node['href']
 
     rating_node = article.at_css(CSS::RATING)
-    rating = rating_node&.text&.strip
+    rating = rating_node&.text&.strip&.sub(",", ".").to_f
 
     properties = {}
     dts = article.css(CSS::PROPERTIES_DT)
@@ -31,8 +32,9 @@ module Parser
     end
 
     price_node = article.at_css(CSS::PRICE)
-    price = price_node ? price_node['aria-label'].gsub('aktualna cena', '').strip : nil
+    price = price_node ? price_node['aria-label'].gsub('aktualna cena', '').strip.sub(",", ".").to_f : nil
 
-    { title: title, rating: rating, properties: properties, price: price }
+
+    { title: title, url: url, rating: rating, properties: properties, price: price }
   end
 end

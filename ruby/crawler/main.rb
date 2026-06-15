@@ -10,8 +10,8 @@ unless Storage.exist_html?(page)
 end
 
 unless Storage.exist_json?(page)
-  html = Storage.read_html(page)
-  json = Parser::parse(html)
+  listing = Storage.read_html(page)
+  json = Parser::parse_listing(listing)
 
   Storage::store_json(page, json)
 end

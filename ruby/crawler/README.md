@@ -69,3 +69,7 @@ Run the app using bundle exec.
 ```bash
 bundle exec ruby main.rb
 ```
+
+## Storage
+[storage.zip](storage.zip) contains prefetched HTML and parsed JSON output of the [https://allegro.pl/listing?string=laptop](https://allegro.pl/listing?string=laptop)
+Unpack it to skip the need to call Craweler::fetch("laptop") if you don't want to use zenrows.
