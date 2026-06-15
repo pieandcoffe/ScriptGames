@@ -2,12 +2,19 @@ from src.bot import Bot
 
 def main():
     bot = Bot()
-    while True:
-        user_input: str = input("Message Bot: ")
-        bot.ask(user_input)
 
-        reply: str = bot.reply()
-        print(f"Bot: {reply}")
+    print("Chatbot is ready. Type 'exit' to quit.\n")
+
+    while True:
+        user_input = input("You: ").strip()
+
+        if user_input.lower() in ("exit", "quit", "bye"):
+            print("Bot: Goodbye!")
+            break
+
+        reply = bot.ask(user_input)
+        print(f"Bot: {reply}\n")
+
 
 if __name__ == "__main__":
     main()
