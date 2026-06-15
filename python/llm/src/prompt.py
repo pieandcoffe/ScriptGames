@@ -11,4 +11,4 @@ class Prompt:
 
     def build(self, user_input: str):
         message = Message("user", user_input)
-        return self.history.persistant + self.history.conversation + [message.get()]
+        return self.history.get() + message.get()
