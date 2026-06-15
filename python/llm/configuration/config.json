@@ -1,0 +1,54 @@
+{
+  "opening_hours": {
+    "monday": { "open": "12:00", "close": "22:00" },
+    "tuesday": { "open": "12:00", "close": "22:00" },
+    "wednesday": { "open": "12:00", "close": "22:00" },
+    "thursday": { "open": "12:00", "close": "23:00" },
+    "friday": { "open": "12:00", "close": "23:00" },
+    "saturday": { "open": "11:00", "close": "23:00" },
+    "sunday": { "open": "11:00", "close": "21:00" }
+  },
+  "menu": [
+    {
+      "category": "Antipasti",
+      "items": [
+        { "id": "A01", "name": "Bruschetta al Pomodoro", "price": 18.00, "description": "Toasted bread with fresh tomatoes, garlic, basil and olive oil", "vegetarian": true },
+        { "id": "A02", "name": "Burrata con Prosciutto", "price": 32.00, "description": "Creamy burrata with Parma ham and rocket salad", "vegetarian": false }
+      ]
+    },
+    {
+      "category": "Primi Piatti",
+      "items": [
+        { "id": "P01", "name": "Spaghetti Carbonara", "price": 42.00, "description": "Spaghetti with guanciale, egg yolk, Pecorino Romano and black pepper", "vegetarian": false },
+        { "id": "P02", "name": "Penne all'Arrabbiata", "price": 36.00, "description": "Penne with spicy tomato sauce, garlic and fresh chili", "vegetarian": true },
+        { "id": "P03", "name": "Risotto ai Funghi Porcini", "price": 48.00, "description": "Creamy risotto with wild porcini mushrooms and Parmigiano", "vegetarian": true },
+        { "id": "P04", "name": "Lasagne della Casa", "price": 44.00, "description": "Homemade lasagne with beef ragù, béchamel and Parmigiano", "vegetarian": false }
+      ]
+    },
+    {
+      "category": "Secondi Piatti",
+      "items": [
+        { "id": "S01", "name": "Saltimbocca alla Romana", "price": 68.00, "description": "Veal escalope with prosciutto, sage and white wine sauce", "vegetarian": false },
+        { "id": "S02", "name": "Branzino al Forno", "price": 72.00, "description": "Oven-baked sea bass with lemon, capers and cherry tomatoes", "vegetarian": false }
+      ]
+    },
+    {
+      "category": "Dolci",
+      "items": [
+        { "id": "D01", "name": "Tiramisù", "price": 24.00, "description": "Classic tiramisù with mascarpone, espresso and savoiardi", "vegetarian": true },
+        { "id": "D02", "name": "Panna Cotta", "price": 22.00, "description": "Vanilla panna cotta with mixed berry coulis", "vegetarian": true },
+        { "id": "D03", "name": "Cannoli Siciliani", "price": 20.00, "description": "Crispy pastry shells filled with ricotta and candied orange peel", "vegetarian": true }
+      ]
+    },
+    {
+      "category": "Bevande",
+      "items": [
+        { "id": "B01", "name": "Acqua Naturale", "price": 8.00, "description": "Still mineral water 500ml", "vegetarian": true },
+        { "id": "B02", "name": "Acqua Frizzante", "price": 8.00, "description": "Sparkling mineral water 500ml", "vegetarian": true },
+        { "id": "B03", "name": "Vino della Casa Rosso", "price": 28.00, "description": "House red wine, carafe 500ml", "vegetarian": true },
+        { "id": "B04", "name": "Vino della Casa Bianco", "price": 28.00, "description": "House white wine, carafe 500ml", "vegetarian": true },
+        { "id": "B05", "name": "Espresso", "price": 10.00, "description": "Single shot espresso", "vegetarian": true }
+      ]
+    }
+  ]
+}
