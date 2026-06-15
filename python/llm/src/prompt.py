@@ -1,14 +1,32 @@
-from history import Message
-from history import History
-class Prompt:
-    def __init__(self, system: str = "You are a helpful asisitant"):
-        self.system = system
-        self.history = History()
-        self.add("system", self.system)
+import os
+from history import Message, History
 
-    def add(self, role: str, content: str):
+class Prompt:
+    def __init__(self):
+        self.history = History()
+        self._load_system_prompt()
+
+    def _load_system_prompt(self, path: str = "storage/system_prompt.txt"):
+        system_prompt = "You are a helpful assistant!"
+
+        if os.path.exists(path):
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    text = f.read().strip()
+                    if text:
+                        system_prompt = text
+            except Exception as e:
+                print(f"Failed to read system prompt: {e}")
+
+        # store the system prompt as persistent
+        self.add_persistant_message("system", system_prompt)
+
+    def add_persistant_message(self, role: str, content: str):
         self.history.append(Message(role, content), True)
+
+    def add_conversation_message(self, role: str, content: str):
+        self.history.append(Message(role, content), False)
 
     def build(self, user_input: str):
         message = Message("user", user_input)
-        return self.history.get() + message.get()
+        return self.history.get() + [message.get()]
