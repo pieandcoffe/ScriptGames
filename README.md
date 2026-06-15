@@ -134,9 +134,6 @@ zamówienie).
 - [X] 3.5 Informacje o godzinach otwarcia i pozycjach w menu powinny być
 pobierane z pliku konfiguracyjnego (JSON/YAML) i przekazywane do
 modelu.
-- [ ] 3.5 Informacje o godzinach otwarcia i pozycjach w menu powinny być
-pobierane z pliku konfiguracyjnego (JSON/YAML) i przekazywane do
-modelu.
 - [ ] 4.0 Czatbot musi przetworzyć zamówienie i potwierdzić zakupione
 posiłki, a także obsłużyć dodatkowe prośby (np. alergie, modyfikacje
 dań). Dane o alergiach, składzie, daniach ładowy z api aplikacji
