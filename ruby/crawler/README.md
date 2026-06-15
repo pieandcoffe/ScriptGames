@@ -1,3 +1,22 @@
+# Alegro crawler in Ruby
+
+This is a crawler for Allegro listing page, it scraps the [https://allegro.pl/listing](https://allegro.pl/listing) by keyword and stores HTML into storage/html/keyword.html
+HTML is next parsed and data is writen into storage/json/keyword.json
+
+## Usage
+Run the console app
+```bash
+bundle exec ruby main.rb
+```
+
+Write the keyword when prompted
+
+Find the data in storage/json
+
+## Demo
+
+![Demo](Demo.gif)
+
 # Run on MacOS
 
 ## Prerequisites
