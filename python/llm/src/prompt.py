@@ -1,12 +1,12 @@
 import os
-from history import Message, History
+from src.history import Message, History
 
 class Prompt:
     def __init__(self):
         self.history = History()
         self._load_system_prompt()
 
-    def _load_system_prompt(self, path: str = "storage/system_prompt.txt"):
+    def _load_system_prompt(self, path: str = "configuration/system_prompt.txt"):
         system_prompt = "You are a helpful assistant!"
 
         if os.path.exists(path):
