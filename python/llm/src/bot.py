@@ -3,4 +3,5 @@ import ollama
 from prompt import Prompt
 
 class Bot:
-    pass
+    def __init__(self):
+        pass
