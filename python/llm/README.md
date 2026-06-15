@@ -1,5 +1,10 @@
 # Python LLM chat bot
 
+Configurable chat bot based on Ollama gemma3:4b model.
+
+## Demo
+
+![Demo](Demo.gif)
 
 ## Prerequisites
 
