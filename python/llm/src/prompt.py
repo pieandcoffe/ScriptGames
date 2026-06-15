@@ -1,9 +1,11 @@
 import os
 from src.history import Message, History
+from src.config import Config
 
 class Prompt:
     def __init__(self):
         self.history = History()
+        self.config = Config()
         self._load_system_prompt()
 
     def _load_system_prompt(self, path: str = "configuration/system_prompt.txt"):
@@ -17,6 +19,15 @@ class Prompt:
                         system_prompt = text
             except Exception as e:
                 print(f"Failed to read system prompt: {e}")
+
+        config_text = (
+            "\n\n--- RESTAURANT CONFIGURATION ---\n"
+            f"OPENING HOURS: {self.config.get_opening_hours()}"
+            f"MENU: {self.config.get_menu()}"
+            f"MENU CATEGORIES: {self.config.get_menu_categories()}"
+        )
+
+        system_prompt += config_text
 
         # store the system prompt as persistent
         self.add_persistant_message("system", system_prompt)
